@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<robot name="stereo_pair" xmlns:xacro="http://wiki.ros.org/xacro">
+    <!-- link list -->
+  
+  <xacro:macro name="stereo_pair" params="parent *origin prefix name:=stereo_pair">
+     <xacro:property name="M_PI"     value="3.1415926535897931" />
+    <!-- this is the plate that is mounted to the end of the robot arm, which the camera is mounted to -->
+
+     <joint name="${prefix}ee_coupler" type="fixed">
+            <parent link="${parent}" />
+            <child link="${prefix}${name}/base_link"/>
+            <xacro:insert_block name="origin" />
+        </joint>
+
+    <link name="${prefix}${name}/base_link">
+        <visual>
+            <origin rpy="${pi/2} -${pi} ${pi/2}" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="package://mini_rig_description/meshes/visual/UoA-56mm-lens.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+
+        <collision>
+            <geometry>
+                <mesh filename="package://mini_rig_description/meshes/visual/UoA-56mm-lens.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <origin rpy="${pi/2} -${pi} ${pi/2}" xyz="0.001 0 0"/>
+        </collision>
+    </link>
+
+    <joint name="${prefix}cables_coupler" type="fixed">
+        <parent link="${prefix}${name}/base_link" />
+        <child link="${prefix}cables"/>
+        <origin rpy="0 0 0" xyz="0.0 0 0"/>
+    </joint>
+    <link name="${prefix}cables">
+        <visual>
+            <geometry>
+                <box size="0.035 0.14 0.03"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="-0.018 0.00 -0.06"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="0.035 0.14 0.03"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="-0.018 0.00 -0.06"/>
+        </collision>
+    </link>
+
+      <!-- stereo_pair -->
+    <xacro:property name="stereo_calibration_file" value="$(find mini_rig_description)/config/stereo_handeye.yaml" />
+    <xacro:property name="stereo_calibration" value="${load_yaml(stereo_calibration_file)}"/>
+
+      <joint name="${prefix}${name}/left_joint" type="fixed">
+        <origin xyz="${stereo_calibration['transformation']['x']} ${stereo_calibration['transformation']['y']} ${stereo_calibration['transformation']['z']}" rpy="${stereo_calibration['transformation']['roll']} ${stereo_calibration['transformation']['pitch']} ${stereo_calibration['transformation']['yaw']}"/>
+        <parent link="${prefix}${name}/base_link" />
+        <child link="${prefix}${name}/left_frame" />
+      </joint>
+       
+       <link name="${prefix}${name}/left_frame" />
+    
+        <joint name="${prefix}${name}/left_optical_joint" type="fixed">
+            <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
+            <parent link="${prefix}${name}/left_frame" />
+            <child link="${prefix}${name}/left_optical_frame" />
+        </joint>
+
+        <link name="${prefix}${name}/left_optical_frame" /> 
+    </xacro:macro>
+</robot>

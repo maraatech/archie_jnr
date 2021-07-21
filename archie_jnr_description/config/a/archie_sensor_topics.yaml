@@ -1,0 +1,21 @@
+# Stereo Pair topic Names == "stereo_pair"
+stereo_pair/left_image_topic: "left/image_color"
+stereo_pair/right_image_topic: "right/image_color"
+stereo_pair/left_image_rec_topic: "left/image_rect_color" 
+stereo_pair/right_image_rec_topic: "right/image_rect_color"
+stereo_pair/stereo_info_topic: "stereo_info"
+
+stereo_pair/image_topic: "stereo/image_color"
+stereo_pair/depth_image_topic: "stereo/depth"
+stereo_pair/camera_info_topic: "stereo/camera_info"
+stereo_pair/xyzrgb_topic: "stereo/points"
+
+stereo_pair/sensor_link: "a/stereo_pair/left_frame"
+
+# Zivid Topic Names == "zivid"
+zivid_camera/image_topic: "color/image_color"
+zivid_camera/depth_image_topic: "depth/image"
+zivid_camera/camera_info_topic: "color/camera_info"
+zivid_camera/xyzrgb_topic: "points/xyzrgba"
+
+zivid_camera/sensor_link: "stereo_pair/left_frame"

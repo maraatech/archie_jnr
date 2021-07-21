@@ -1,0 +1,135 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="ur5_robot">
+    
+    <!-- parameters -->
+    <xacro:arg name="prefix"    default=""/>
+    <xacro:arg name="ee_sensor" default="'stereo'"/>
+
+    <!-- parameters -->
+    <xacro:arg name="joint_limit_params" default=""/>
+    <xacro:arg name="kinematics_params" default=""/>
+    <xacro:arg name="physical_params" default=""/>
+    <xacro:arg name="visual_params" default=""/>
+    <!-- legal values:
+         - hardware_interface/PositionJointInterface
+         - hardware_interface/VelocityJointInterface
+         - hardware_interface/EffortJointInterface
+   -->
+    <xacro:arg name="transmission_hw_interface" default="hardware_interface/PositionJointInterface"/>
+    <xacro:arg name="safety_limits" default="false"/>
+    <xacro:arg name="safety_pos_margin" default="0.15"/>
+    <xacro:arg name="safety_k_position" default="20"/>
+
+    <link name="world"/>
+
+    <joint name="world_to_ground" type="fixed">
+        <parent link="world" />
+        <child link = "ground" />
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+    </joint>
+
+    <link name="ground">
+        <visual>
+            <geometry>
+                <box size="2.0 2.0 .01"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 -.005"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="2.0 2.0 .01"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 -.005"/>
+        </collision>
+    </link>
+
+    <xacro:macro name="archie" params="
+        prefix
+        ee_sensor
+        height_of_ur5_base:=0.585"
+    >
+
+        <joint name="${prefix}world_to_frame" type="fixed">
+            <parent link="world" />
+            <child link="${prefix}frame"/>
+            <origin rpy="0 0 0" xyz="0.0 0 0"/>
+        </joint>
+
+        <link name="${prefix}frame">
+            <visual>
+                <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://mini_rig_description/meshes/frame.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+            </visual>
+            <collision>
+                <origin rpy="0  0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://mini_rig_description/meshes/frame.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+            </collision>
+        </link>
+
+        <joint name="${prefix}frame_to_ur5_mount" type="fixed">
+            <parent link="${prefix}frame" />
+            <child link = "${prefix}ur5_mount" />
+            <origin xyz="0.0 0.0 ${height_of_ur5_base}" rpy="0.0 0.0 0.0" />
+        </joint>
+
+        <link name="${prefix}ur5_mount">
+            <visual>
+                <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://mini_rig_description/meshes/ur5_mount.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+            </visual>
+            <collision>
+                <origin rpy="0  0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://mini_rig_description/meshes/ur5_mount.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+            </collision>
+        </link>
+
+        <joint name="${prefix}mount_to_base" type="fixed">
+            <parent link="${prefix}ur5_mount" />
+            <child link="${prefix}base_link"/>
+            <origin rpy="0 0 0" xyz="0.0 0 0"/>
+        </joint>
+
+        <!-- import main UR macro -->
+        <xacro:include filename="$(find ur_description)/urdf/inc/ur_macro.xacro"/>
+
+        <!-- arm -->
+        <xacro:ur_robot prefix="${prefix}" joint_limits_parameters_file="$(arg joint_limit_params)" kinematics_parameters_file="$(arg kinematics_params)" physical_parameters_file="$(arg physical_params)" visual_parameters_file="$(arg visual_params)" transmission_hw_interface="$(arg transmission_hw_interface)" safety_limits="$(arg safety_limits)" safety_pos_margin="$(arg safety_pos_margin)" safety_k_position="$(arg safety_k_position)"/>
+
+
+        <!-- things attached to robot arm-->
+        <xacro:if value ="${ee_sensor=='stereo'}">
+            <xacro:include filename="$(find mini_rig_description)/urdf/ur5_stereo_mount.xacro" />
+            <xacro:stereo_pair parent="${prefix}flange" name="stereo_pair" prefix="$(arg prefix)">
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+            </xacro:stereo_pair>
+
+        </xacro:if>
+        <xacro:if value ="${ee_sensor=='zivid'}">
+            <xacro:include filename="$(find mini_rig_description)/urdf/ur5_zivid_mount.xacro" />
+            <xacro:zivid_mount parent="${prefix}flange" name="zivid_mount">
+                <origin rpy="${5*pi/4.0} 0 0" xyz="0.0 0 0"/>
+            </xacro:zivid_mount>
+
+        </xacro:if>
+    </xacro:macro>
+
+    <xacro:archie prefix="$(arg prefix)" ee_sensor="$(arg ee_sensor)" />
+
+    <!-- <joint name="$(arg prefix)world_to_frame" type="fixed">
+        <parent link="world" />
+        <child link="$(arg prefix)base_link"/>
+        <origin rpy="0 0 0" xyz="0.0 0 0"/>
+    </joint>
+
+    <xacro:include filename="$(find ur_description)/urdf/inc/ur_macro.xacro"/>
+    <xacro:ur_robot prefix="$(arg prefix)" joint_limits_parameters_file="$(arg joint_limit_params)" kinematics_parameters_file="$(arg kinematics_params)" physical_parameters_file="$(arg physical_params)" visual_parameters_file="$(arg visual_params)" transmission_hw_interface="$(arg transmission_hw_interface)" safety_limits="$(arg safety_limits)" safety_pos_margin="$(arg safety_pos_margin)" safety_k_position="$(arg safety_k_position)"/> -->
+</robot>

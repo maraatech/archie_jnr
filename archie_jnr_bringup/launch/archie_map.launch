@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<launch>
+	<group ns="a">
+		<arg name="sensors" default="[stereo_pair]"/>
+		<arg name="sensor_topics" default="$(find archie_jnr_description)/config/a/archie_sensor_topics.yaml"/>
+
+		<!-- Start the canopy mapping node -->
+		<include file="$(find maara_canopy_mapping)/launch/scan.launch">
+			<arg name="platform_server"  default="server"/>
+			
+			<arg name="sensors" value="$(arg sensors)"/>
+			<arg name="sensor_topics" value="$(arg sensor_topics)"/>
+			
+			<arg name="num_captures" default="1"/>
+
+			<arg name="world_link"  default="world"/>
+
+			<!-- Init pose of the arm -->
+			<arg name="init_x"  default="0.00"/>
+			<arg name="init_y"  default="0.7"/>
+			<arg name="init_z"  default="0.7"/>
+		</include>
+
+		<include file="$(find traditional_stereo_ros)/launch/stereo_depth_silent.launch">
+		<!-- <include file="$(find traditional_stereo_ros)/launch/stereo_depth.launch"> -->
+		    <arg name="sensor"        value="stereo_pair"/>
+		    <arg name="sensor_topics" value="$(arg sensor_topics)"/>
+
+		    <arg name="scale"         value="1.0"/>
+		</include>
+	</group>
+	<node type="rviz" name="rviz" pkg="rviz" args="-d $(find archie_jnr_bringup)/rviz/archie_side_a.rviz" />
+</launch>
