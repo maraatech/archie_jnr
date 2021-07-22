@@ -25,7 +25,9 @@
 
   <arg name="ee_sensor" default="stereo"/><!--stereo realsense zivid kea stereo-kea -->
   
-  <param name="robot_description" command="$(find xacro)/xacro '$(find archie_jnr_description)/urdf/archie_robot.xacro'
+  <arg name="sim"         default="false"/>
+  
+  <!-- <param name="robot_description" command="$(find xacro)/xacro '$(find archie_jnr_description)/urdf/archie_robot.xacro'
       prefix_a:=$(arg tf_prefix)
       kinematics_params_a:=$(arg kinematics_config)
       joint_limit_params_a:=$(arg joint_limit_params)
@@ -41,22 +43,25 @@
       safety_pos_margin:=$(arg safety_pos_margin)
       safety_k_position:=$(arg safety_k_position)
       ee_sensor:=$(arg ee_sensor)"
-    />
+    /> -->
 
-  <!-- <param name="robot_description" command="$(find xacro)/xacro '$(find archie_jnr_description)/urdf/archie_robot.xacro'
-    prefix_a:=$(arg tf_prefix_a)
-    kinematics_params_a:=$(arg kinematics_config_a)
-    joint_limit_params_a:=$(arg joint_limit_params_a)
-    prefix_b:=$(arg tf_prefix_b)
-    kinematics_params_b:=$(arg kinematics_config_b)
-    joint_limit_params_b:=$(arg joint_limit_params_b)
-    physical_params:=$(arg physical_params)
-    visual_params:=$(arg visual_params)
-    transmission_hw_interface:=$(arg transmission_hw_interface)
-    safety_limits:=$(arg safety_limits)
-    safety_pos_margin:=$(arg safety_pos_margin)
-    safety_k_position:=$(arg safety_k_position)
-    ee_sensor:=$(arg ee_sensor)"
-  /> -->
+  <param name="robot_description" command="$(find xacro)/xacro '$(find archie_jnr_description)/urdf/archie_robot2.xacro'
+      prefix_a:=$(arg tf_prefix)
+      kinematics_params_a:=$(arg kinematics_config)
+      joint_limit_params_a:=$(arg joint_limit_params)
+      
+      prefix_b:=$(arg tf_prefix)
+      kinematics_params_b:=$(arg kinematics_config)
+      joint_limit_params_b:=$(arg joint_limit_params)
+
+      physical_params:=$(arg physical_params)
+      visual_params:=$(arg visual_params)
+      transmission_hw_interface:=$(arg transmission_hw_interface)
+      safety_limits:=$(arg safety_limits)
+      safety_pos_margin:=$(arg safety_pos_margin)
+      safety_k_position:=$(arg safety_k_position)
+      ee_sensor:=$(arg ee_sensor)
+      sim:=$(arg sim)"
+    />
 
 </launch>

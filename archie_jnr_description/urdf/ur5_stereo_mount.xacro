@@ -16,13 +16,13 @@
         <visual>
             <origin rpy="${pi/2} -${pi} ${pi/2}" xyz="0 0 0"/>
             <geometry>
-                <mesh filename="package://mini_rig_description/meshes/visual/UoA-56mm-lens.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="package://archie_jnr_description/meshes/visual/UoA-56mm-lens.stl" scale="0.001 0.001 0.001"/>
             </geometry>
         </visual>
 
         <collision>
             <geometry>
-                <mesh filename="package://mini_rig_description/meshes/visual/UoA-56mm-lens.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="package://archie_jnr_description/meshes/visual/UoA-56mm-lens.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <origin rpy="${pi/2} -${pi} ${pi/2}" xyz="0.001 0 0"/>
         </collision>
@@ -50,7 +50,8 @@
     </link>
 
       <!-- stereo_pair -->
-    <xacro:property name="stereo_calibration_file" value="$(find mini_rig_description)/config/stereo_handeye.yaml" />
+
+    <xacro:property name="stereo_calibration_file" value="$(find archie_jnr_description)/config/${prefix}stereo_pair_handeye_calibration.yaml" />
     <xacro:property name="stereo_calibration" value="${load_yaml(stereo_calibration_file)}"/>
 
       <joint name="${prefix}${name}/left_joint" type="fixed">
