@@ -1,27 +1,55 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="tf_prefix" default=""/>
 
-  <!--ur5 parameters files -->
-  <!-- archie_jnr_bringup -->
-  <!-- archie_jnr_description -->
+  <arg name="tf_prefix" default="a/"/>
+  <arg name="kinematics_config"  default="$(find archie_jnr_description)/config/$(arg tf_prefix)ur5_calibration.yaml"/>
   <arg name="joint_limit_params" default="$(find archie_jnr_description)/config/$(arg tf_prefix)joint_limits.yaml"/>
-  <arg name="kinematics_params" default="$(find ur_description)/config/ur5/default_kinematics.yaml"/>
-  <arg name="physical_params" default="$(find ur_description)/config/ur5/physical_parameters.yaml"/>
-  <arg name="visual_params" default="$(find ur_description)/config/ur5/visual_parameters.yaml"/>
 
-  <!--common parameters -->
+  <!--ur5 A parameters files -->
+  <!-- <arg name="tf_prefix_a" default="a/"/>
+  <arg name="kinematics_config_a"  default="$(find archie_jnr_description)/config/$(arg tf_prefix_a)ur5_calibration.yaml"/>
+  <arg name="joint_limit_params_a" default="$(find archie_jnr_description)/config/$(arg tf_prefix_a)joint_limits.yaml"/> -->
+
+  <!--ur5 B parameters files -->
+  <!-- <arg name="tf_prefix_b" default="b/"/>
+  <arg name="kinematics_config_b"  default="$(find archie_jnr_description)/config/$(arg tf_prefix_b)ur5_calibration.yaml"/>
+  <arg name="joint_limit_params_b" default="$(find archie_jnr_description)/config/$(arg tf_prefix_b)joint_limits.yaml"/> -->
+
+  <!--ur5 common parameters -->
+  <arg name="physical_params"    default="$(find ur_description)/config/ur5/physical_parameters.yaml"/>
+  <arg name="visual_params"      default="$(find ur_description)/config/ur5/visual_parameters.yaml"/>
   <arg name="transmission_hw_interface" default="hardware_interface/PositionJointInterface" />
-  <arg name="safety_limits" default="false" doc="If True, enable the safety limits controller"/>
-  <arg name="safety_pos_margin" default="0.15" doc="The lower/upper limits in the safety controller" />
-  <arg name="safety_k_position" default="20" doc="Used to set k position in the safety controller" />
+  <arg name="safety_limits"             default="false" doc="If True, enable the safety limits controller"/>
+  <arg name="safety_pos_margin"         default="0.15" doc="The lower/upper limits in the safety controller" />
+  <arg name="safety_k_position"         default="20" doc="Used to set k position in the safety controller" />
 
-  <arg name="ee_sensor" default="stereo"/><!--stereo realsense zivid-->
+  <arg name="ee_sensor" default="stereo"/><!--stereo realsense zivid kea stereo-kea -->
   
   <param name="robot_description" command="$(find xacro)/xacro '$(find archie_jnr_description)/urdf/archie_robot.xacro'
-    prefix:=$(arg tf_prefix)
-    joint_limit_params:=$(arg joint_limit_params)
-    kinematics_params:=$(arg kinematics_params)
+      prefix_a:=$(arg tf_prefix)
+      kinematics_params_a:=$(arg kinematics_config)
+      joint_limit_params_a:=$(arg joint_limit_params)
+      
+      prefix_b:=$(arg tf_prefix)
+      kinematics_params_b:=$(arg kinematics_config)
+      joint_limit_params_b:=$(arg joint_limit_params)
+
+      physical_params:=$(arg physical_params)
+      visual_params:=$(arg visual_params)
+      transmission_hw_interface:=$(arg transmission_hw_interface)
+      safety_limits:=$(arg safety_limits)
+      safety_pos_margin:=$(arg safety_pos_margin)
+      safety_k_position:=$(arg safety_k_position)
+      ee_sensor:=$(arg ee_sensor)"
+    />
+
+  <!-- <param name="robot_description" command="$(find xacro)/xacro '$(find archie_jnr_description)/urdf/archie_robot.xacro'
+    prefix_a:=$(arg tf_prefix_a)
+    kinematics_params_a:=$(arg kinematics_config_a)
+    joint_limit_params_a:=$(arg joint_limit_params_a)
+    prefix_b:=$(arg tf_prefix_b)
+    kinematics_params_b:=$(arg kinematics_config_b)
+    joint_limit_params_b:=$(arg joint_limit_params_b)
     physical_params:=$(arg physical_params)
     visual_params:=$(arg visual_params)
     transmission_hw_interface:=$(arg transmission_hw_interface)
@@ -29,6 +57,6 @@
     safety_pos_margin:=$(arg safety_pos_margin)
     safety_k_position:=$(arg safety_k_position)
     ee_sensor:=$(arg ee_sensor)"
-/>
+  /> -->
 
 </launch>

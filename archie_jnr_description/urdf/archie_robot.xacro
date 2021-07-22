@@ -1,13 +1,17 @@
 <?xml version="1.0" ?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro" name="ur5_robot">
     
-    <!-- parameters -->
-    <xacro:arg name="prefix"    default=""/>
+    <xacro:arg name="prefix_a"    default=""/>
+    <xacro:arg name="joint_limit_params_a" default=""/>
+    <xacro:arg name="kinematics_params_a" default=""/>
+
+    <xacro:arg name="prefix_b"    default=""/>
+    <xacro:arg name="joint_limit_params_b" default=""/>
+    <xacro:arg name="kinematics_params_b" default=""/>
+
+    <!-- common parameters -->
     <xacro:arg name="ee_sensor" default="'stereo'"/>
 
-    <!-- parameters -->
-    <xacro:arg name="joint_limit_params" default=""/>
-    <xacro:arg name="kinematics_params" default=""/>
     <xacro:arg name="physical_params" default=""/>
     <xacro:arg name="visual_params" default=""/>
     <!-- legal values:
@@ -102,13 +106,13 @@
         <xacro:include filename="$(find ur_description)/urdf/inc/ur_macro.xacro"/>
 
         <!-- arm -->
-        <xacro:ur_robot prefix="${prefix}" joint_limits_parameters_file="$(arg joint_limit_params)" kinematics_parameters_file="$(arg kinematics_params)" physical_parameters_file="$(arg physical_params)" visual_parameters_file="$(arg visual_params)" transmission_hw_interface="$(arg transmission_hw_interface)" safety_limits="$(arg safety_limits)" safety_pos_margin="$(arg safety_pos_margin)" safety_k_position="$(arg safety_k_position)"/>
+        <xacro:ur_robot prefix="${prefix}" joint_limits_parameters_file="$(arg joint_limit_params_a)" kinematics_parameters_file="$(arg kinematics_params_a)" physical_parameters_file="$(arg physical_params)" visual_parameters_file="$(arg visual_params)" transmission_hw_interface="$(arg transmission_hw_interface)" safety_limits="$(arg safety_limits)" safety_pos_margin="$(arg safety_pos_margin)" safety_k_position="$(arg safety_k_position)"/>
 
 
         <!-- things attached to robot arm-->
         <xacro:if value ="${ee_sensor=='stereo'}">
             <xacro:include filename="$(find mini_rig_description)/urdf/ur5_stereo_mount.xacro" />
-            <xacro:stereo_pair parent="${prefix}flange" name="stereo_pair" prefix="$(arg prefix)">
+            <xacro:stereo_pair parent="${prefix}flange" name="stereo_pair" prefix="${prefix}">
                 <origin xyz="0 0 0" rpy="0 0 0"/>
             </xacro:stereo_pair>
 
@@ -122,14 +126,6 @@
         </xacro:if>
     </xacro:macro>
 
-    <xacro:archie prefix="$(arg prefix)" ee_sensor="$(arg ee_sensor)" />
-
-    <!-- <joint name="$(arg prefix)world_to_frame" type="fixed">
-        <parent link="world" />
-        <child link="$(arg prefix)base_link"/>
-        <origin rpy="0 0 0" xyz="0.0 0 0"/>
-    </joint>
-
-    <xacro:include filename="$(find ur_description)/urdf/inc/ur_macro.xacro"/>
-    <xacro:ur_robot prefix="$(arg prefix)" joint_limits_parameters_file="$(arg joint_limit_params)" kinematics_parameters_file="$(arg kinematics_params)" physical_parameters_file="$(arg physical_params)" visual_parameters_file="$(arg visual_params)" transmission_hw_interface="$(arg transmission_hw_interface)" safety_limits="$(arg safety_limits)" safety_pos_margin="$(arg safety_pos_margin)" safety_k_position="$(arg safety_k_position)"/> -->
+    <xacro:archie prefix="$(arg prefix_a)" ee_sensor="$(arg ee_sensor)" />
+    <!-- <xacro:archie prefix="$(arg prefix_b)" ee_sensor="$(arg ee_sensor)" /> -->
 </robot>
