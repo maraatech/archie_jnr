@@ -11,3 +11,11 @@ stereo_pair/camera_info_topic: ""
 stereo_pair/xyzrgb_topic: ""
 
 stereo_pair/sensor_link: "stereo_pair/left_frame"
+
+# Zivid Topic Names == "zivid"
+zivid_camera/image_topic: "color/image_color"
+zivid_camera/depth_image_topic: "depth/image"
+zivid_camera/camera_info_topic: "color/camera_info"
+zivid_camera/xyzrgb_topic: "points/xyzrgba"
+
+zivid_camera/sensor_link: "stereo_pair/left_frame"

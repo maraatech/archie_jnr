@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
 <launch>
+	<!-- Default namespace topics: DO NOT EDIT -->
 	<arg name="ns_a" value="a"/>
 	<arg name="tf_prefix_a" default="$(arg ns_a)/"/>
 
@@ -26,13 +27,13 @@
 		<arg name="kinematics_config_b" default="$(find archie_jnr_description)/config/$(arg tf_prefix_b)ur10_calibration.yaml"/>
   	</include> -->
 
-  	<include file="$(find archie_jnr_bringup)/launch/archie_side_bringup.launch">
+  	<!-- <include file="$(find archie_jnr_bringup)/launch/archie_side_bringup.launch">
 		<arg name="ns" value="$(arg ns_b)"/>
 		<arg name="robot_ip"  default="192.168.131.8"/>
-		<!-- Note this is for testing with the UR10 -->
-		<!-- <arg name="kinematics_config"  default="$(find archie_jnr_description)/config/$(arg tf_prefix_b)ur10_calibration.yaml"/>
-		<arg name="joint_limit_params" default="$(find archie_jnr_description)/config/$(arg tf_prefix_b)ur10_joint_limits.yaml"/> -->
-	</include>
+		
+		<arg name="kinematics_config"  default="$(find archie_jnr_description)/config/$(arg tf_prefix_b)ur10_calibration.yaml"/>
+		<arg name="joint_limit_params" default="$(find archie_jnr_description)/config/$(arg tf_prefix_b)ur10_joint_limits.yaml"/>
+	</include> -->
 	
 	<machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/>
 	<include file="$(find archie_jnr_bringup)/launch/archie_side_bringup.launch">

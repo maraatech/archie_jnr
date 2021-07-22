@@ -30,9 +30,9 @@
 		    <arg name="camera_left"  value="left"/>
 		    <arg name="camera_right" value="right"/>
 		    <arg name="trigger_mode" value="1"/>
+		    <arg name="calibration"  default="$(find archie_jnr_description)/config/$(arg tf_prefix)stereo_calibration.json"/>
 		</include>
 
 	    <node name="control_node" pkg="ur_moveit_controller" type="control_node.py" output="screen"/>
 	</group>
-	<!-- <node type="rviz" name="rviz" pkg="rviz" args="-d $(find archie_jnr_bringup)/rviz/archie_side_a.rviz" /> -->
 </launch>
