@@ -19,3 +19,11 @@ zivid_camera/camera_info_topic: "color/camera_info"
 zivid_camera/xyzrgb_topic: "points/xyzrgba"
 
 zivid_camera/sensor_link: "stereo_pair/left_frame"
+
+# kea Topic Names == "zivid"
+kea/image_topic: "color/image_color"
+kea/depth_image_topic: "depth/image"
+kea/camera_info_topic: "color/camera_info"
+kea/xyzrgb_topic: "points/xyzrgba"
+
+kea/sensor_link: "kea/optical_frame"

@@ -10,7 +10,8 @@ stereo_pair/depth_image_topic: "stereo/depth"
 stereo_pair/camera_info_topic: "stereo/camera_info"
 stereo_pair/xyzrgb_topic: "stereo/points"
 
-stereo_pair/sensor_link: "b/stereo_pair/left_frame"
+stereo_pair/sensor_link: "b/stereo_pair/base_link"
+# stereo_pair/sensor_link: "b/stereo_pair/left_frame"
 
 # Zivid Topic Names == "zivid"
 zivid_camera/image_topic: "color/image_color"
@@ -19,3 +20,11 @@ zivid_camera/camera_info_topic: "color/camera_info"
 zivid_camera/xyzrgb_topic: "points/xyzrgba"
 
 zivid_camera/sensor_link: "stereo_pair/left_frame"
+
+# kea Topic Names == "zivid"
+kea/image_topic: "color/image_color"
+kea/depth_image_topic: "depth/image"
+kea/camera_info_topic: "color/camera_info"
+kea/xyzrgb_topic: "points/xyzrgba"
+
+kea/sensor_link: "kea/optical_frame"

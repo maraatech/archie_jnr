@@ -49,6 +49,73 @@
         </collision>
     </link>
 
+ <joint name="world_to_canopy" type="fixed">
+        <parent link="world" />
+        <child link = "canopy" />
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+    </joint>
+
+    <link name="canopy">
+        <visual>
+            <geometry>
+                <box size=".45 2.0 1.6"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 .8"/>
+        </visual>
+
+        <collision>
+          
+             <geometry>
+                <box size=".45 2.0 1.6"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 .8"/>
+        </collision>
+    </link>
+    
+    <joint name="world_to_wall1" type="fixed">
+        <parent link="world" />
+        <child link = "wall1" />
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+    </joint>
+
+    <link name="wall1">
+        <visual>
+            <geometry>
+                <box size="2 .01 2"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 .63 1"/>
+        </visual>
+
+        <collision>
+          
+             <geometry>
+                <box size="2 .01 2"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 .63 1"/>
+        </collision>
+    </link>
+        <joint name="world_to_wall2" type="fixed">
+        <parent link="world" />
+        <child link = "wall2" />
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+    </joint>
+
+    <link name="wall2">
+        <visual>
+            <geometry>
+                <box size="2 .01 2"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 -.63 1"/>
+        </visual>
+
+        <collision>
+          
+             <geometry>
+                <box size="2 .01 2"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 -.63 1"/>
+        </collision>
+    </link>
     <xacro:macro name="archie" params="
         prefix
         ee_sensor
@@ -83,12 +150,12 @@
 
 
  <joint name="${prefix}frame_to_ur5_mount_left" type="fixed">
-    <origin xyz="0.850 -0.75 -1.3978" rpy="1.5708 0 0" />
+    <origin xyz="0.820 -0.75 -1.3978" rpy="1.5708 0 0" />
     <parent link="${prefix}frame" />
-    <child link="${prefix}ur5_mount_a/" />
+    <child link="${prefix}ur5_mount_b/" />
   </joint>
 
-<link name="${prefix}ur5_mount_a/">
+<link name="${prefix}ur5_mount_b/">
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
@@ -107,12 +174,12 @@
 </link>
 
 <joint name="${prefix}frame_to_ur5_mount_right" type="fixed">
-    <origin xyz="-0.850 -0.75 -1.3978" rpy="1.5708 0 3.1416" />
+    <origin xyz="-0.820 -0.75 -1.3978" rpy="1.5708 0 3.1416" />
     <parent link="${prefix}frame" />
-    <child link="${prefix}ur5_mount_b/" />
+    <child link="${prefix}ur5_mount_a/" />
   </joint>
 
-  <link name="${prefix}ur5_mount_b/">
+  <link name="${prefix}ur5_mount_a/">
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
@@ -134,8 +201,14 @@
         <joint name="${prefix}mount_to_base" type="fixed">
             <parent link="${prefix}ur5_mount_${prefix}" />
             <child link="${prefix}base_link"/>
+            <origin rpy="${-pi/2.0} ${3.0*pi/4.0} 0 " xyz="0.0 0 0"/>
+        </joint>
+    <joint name="${prefix}mount_to_planning_link" type="fixed">
+            <parent link="${prefix}ur5_mount_${prefix}" />
+            <child link="${prefix}planning_link"/>
             <origin rpy="${-pi/2.0} ${pi/2.0} 0 " xyz="0.0 0 0"/>
         </joint>
+<link name="${prefix}planning_link"/>
 
         <!-- import main UR macro -->
     <xacro:if value="$(arg sim)">

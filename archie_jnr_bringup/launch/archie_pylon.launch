@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<launch>
+	<arg name="ns"        default="b"/>
+	<arg name="tf_prefix" value="$(arg ns)/"/>
+
+	<group ns="$(arg ns)">
+	    <!-- Future note if both sides are single PC will need to add namespace to the physical cameras as well -->
+	    <include file="$(find pylon_camera)/launch/pylon_camera_node_calibrated.launch">
+			<arg name="display"      value="false"/>
+			<arg name="loop_rate"    value="1"/>
+		    <arg name="camera_left"  value="left"/>
+		    <arg name="camera_right" value="right"/>
+		    <arg name="trigger_mode" value="1"/>
+		    <arg name="calibration"  default="$(find archie_jnr_description)/config/$(arg tf_prefix)stereo_calibration.json"/>
+		</include>
+	</group>
+</launch>

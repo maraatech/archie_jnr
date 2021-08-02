@@ -16,10 +16,9 @@
 
 			<arg name="world_link"  default="world"/>
 
-			<!-- Init pose of the arm -->
-			<arg name="init_x"  default="0.00"/>
-			<arg name="init_y"  default="0.7"/>
-			<arg name="init_z"  default="0.7"/>
+			<arg name="init_x"  default="-0.3"/>
+			<arg name="init_y"  default="0.30"/>
+			<arg name="init_z"  default="0.1"/>
 		</include>
 
 		<include file="$(find traditional_stereo_ros)/launch/stereo_depth_silent.launch">
@@ -28,6 +27,21 @@
 		    <arg name="sensor_topics" value="$(arg sensor_topics)"/>
 
 		    <arg name="scale"         value="1.0"/>
+		</include>
+
+		<include file="$(find aruco_detector)/launch/stereo_detector.launch">
+			  <arg name="ns"            default="stereo_pair"/>
+			  <arg name="image_left"    default="left/image_rect_color"/>
+			  <arg name="image_right"   default="right/image_rect_color"/>
+			  <arg name="markers"       default="markers"/>
+			  <arg name="stereo_info"   default="stereo_info"/>
+			  <arg name="display"       default="false"/>
+			  <arg name="tf_prefix"     default="$(arg ns)/stereo_pair"/>
+			  <!-- <arg name="centre"    default="11"/>
+			  <arg name="top_left"  default="6"/>
+			  <arg name="top_right" default="7"/>
+			  <arg name="bot_right" default="16"/>
+			  <arg name="bot_left"  default="15"/> -->
 		</include>
 	</group>
 </launch>
