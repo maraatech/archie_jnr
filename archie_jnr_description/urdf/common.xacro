@@ -1,0 +1,81 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+  
+  <!-- Basic Cube generation -->
+  <xacro:macro name="cube" params="xyz size rpy=''">
+      <visual>
+        <material name="yellow">
+          <color rgba="1.0 0.84 0.0 1"/>
+        </material>
+
+        <xacro:if value="${rpy == ''}">
+          <origin xyz="${xyz}" rpy="0 0 0"/>
+        </xacro:if>
+        <xacro:if value="${rpy != ''}">
+          <origin xyz="${xyz}" rpy="${rpy}"/>
+        </xacro:if>
+
+        <geometry>
+          <box size="${size}"/>
+        </geometry>
+      </visual>
+
+      <collision>
+        <xacro:if value="${rpy == ''}">
+          <origin xyz="${xyz}" rpy="0 0 0"/>
+        </xacro:if>
+        <xacro:if value="${rpy != ''}">
+          <origin xyz="${xyz}" rpy="${rpy}"/>
+        </xacro:if>
+
+        <geometry>
+          <box size="${size}"/>
+        </geometry>
+      </collision>
+  </xacro:macro>
+
+  <!-- STL link -->
+  <xacro:macro name="link_xacro" params="name='' filename='' scale='1 1 1' rpy:='0 0 0' xyz:='0 0 0'">
+    <link name="${name}">
+      <!-- <inertial>
+        <mass value="1.0" />
+        <inertia ixx="1.0" iyy="1.0" izz="1.0" ixy="0.1" ixz="0.1" iyz="0.1" />
+      </inertial> -->
+      <visual>
+        <origin rpy="${rpy}" xyz="${xyz}" />
+        <geometry>
+          <mesh filename="${filename}" scale="${scale}"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin rpy="${rpy}" xyz="${xyz}" />
+        <geometry>
+          <mesh filename="${filename}" scale="${scale}"/>
+        </geometry>
+      </collision>
+    </link>
+  </xacro:macro>
+
+  <!-- Joint -->
+  <xacro:macro name="joint_xacro" params="name='' parent='' child='' axis='1 0 0' type='' xyz:='0 0 0' rpy:='0 0 0' limit='' mimic='False' mimic_feature=''">
+
+    <joint name="${name}" type="${type}">
+      <parent link="${parent}"/>
+      <child link="${child}"/>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+      <axis xyz="${axis}"/>
+      
+      <dynamics damping="1.0" friction="0.0"/>
+
+      <xacro:if value="${type != 'fixed'}">
+        <limit effort="${limit['effort']}" lower="${limit['lower']}" upper="${limit['upper']}" velocity="${limit['velocity']}"/>
+        <xacro:if value="${mimic != 'False'}">
+          <mimic joint="${mimic}" multiplier="${mimic_feature['mult']}" offset="${mimic_feature['offset']}"/>
+        </xacro:if>
+      </xacro:if>
+    </joint>
+
+  </xacro:macro>
+
+
+</robot>

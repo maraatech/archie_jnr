@@ -28,7 +28,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: Image
+    SyncSource: ""
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -69,13 +69,9 @@ Visualization Manager:
           Value: true
         a/flange:
           Value: true
-        a/forearm_link:
-          Value: true
         a/frame:
           Value: true
         a/planning_link:
-          Value: true
-        a/shoulder_link:
           Value: true
         a/stereo_pair/base_link:
           Value: true
@@ -83,157 +79,13 @@ Visualization Manager:
           Value: true
         a/stereo_pair/left_optical_frame:
           Value: true
-        a/stereo_pair_aruco_0:
-          Value: true
-        a/stereo_pair_aruco_1:
-          Value: true
-        a/stereo_pair_aruco_10:
-          Value: true
-        a/stereo_pair_aruco_11:
-          Value: true
-        a/stereo_pair_aruco_12:
-          Value: true
-        a/stereo_pair_aruco_13:
-          Value: true
-        a/stereo_pair_aruco_14:
-          Value: true
-        a/stereo_pair_aruco_15:
-          Value: true
-        a/stereo_pair_aruco_16:
-          Value: true
-        a/stereo_pair_aruco_17:
-          Value: true
-        a/stereo_pair_aruco_18:
-          Value: true
-        a/stereo_pair_aruco_19:
-          Value: true
-        a/stereo_pair_aruco_2:
-          Value: true
-        a/stereo_pair_aruco_20:
-          Value: true
-        a/stereo_pair_aruco_21:
-          Value: true
-        a/stereo_pair_aruco_22:
-          Value: true
-        a/stereo_pair_aruco_23:
-          Value: true
-        a/stereo_pair_aruco_3:
-          Value: true
-        a/stereo_pair_aruco_4:
-          Value: true
-        a/stereo_pair_aruco_5:
-          Value: true
-        a/stereo_pair_aruco_6:
-          Value: true
-        a/stereo_pair_aruco_7:
-          Value: true
-        a/stereo_pair_aruco_8:
-          Value: true
-        a/stereo_pair_aruco_9:
-          Value: true
         a/tool0:
-          Value: true
-        a/tool0_controller:
-          Value: true
-        a/upper_arm_link:
           Value: true
         a/ur5_mount_a/:
           Value: true
         a/ur5_mount_b/:
           Value: true
-        a/wrist_1_link:
-          Value: true
-        a/wrist_2_link:
-          Value: true
         a/wrist_3_link:
-          Value: true
-        b/base:
-          Value: true
-        b/base_link:
-          Value: true
-        b/base_link_inertia:
-          Value: true
-        b/cables:
-          Value: true
-        b/flange:
-          Value: true
-        b/forearm_link:
-          Value: true
-        b/frame:
-          Value: true
-        b/planning_link:
-          Value: true
-        b/shoulder_link:
-          Value: true
-        b/stereo_pair/base_link:
-          Value: true
-        b/stereo_pair/left_frame:
-          Value: true
-        b/stereo_pair/left_optical_frame:
-          Value: true
-        b/stereo_pair_aruco_0:
-          Value: true
-        b/stereo_pair_aruco_1:
-          Value: true
-        b/stereo_pair_aruco_10:
-          Value: true
-        b/stereo_pair_aruco_11:
-          Value: true
-        b/stereo_pair_aruco_12:
-          Value: true
-        b/stereo_pair_aruco_13:
-          Value: true
-        b/stereo_pair_aruco_14:
-          Value: true
-        b/stereo_pair_aruco_15:
-          Value: true
-        b/stereo_pair_aruco_16:
-          Value: true
-        b/stereo_pair_aruco_17:
-          Value: true
-        b/stereo_pair_aruco_18:
-          Value: true
-        b/stereo_pair_aruco_19:
-          Value: true
-        b/stereo_pair_aruco_2:
-          Value: true
-        b/stereo_pair_aruco_20:
-          Value: true
-        b/stereo_pair_aruco_21:
-          Value: true
-        b/stereo_pair_aruco_22:
-          Value: true
-        b/stereo_pair_aruco_23:
-          Value: true
-        b/stereo_pair_aruco_3:
-          Value: true
-        b/stereo_pair_aruco_4:
-          Value: true
-        b/stereo_pair_aruco_5:
-          Value: true
-        b/stereo_pair_aruco_6:
-          Value: true
-        b/stereo_pair_aruco_7:
-          Value: true
-        b/stereo_pair_aruco_8:
-          Value: true
-        b/stereo_pair_aruco_9:
-          Value: true
-        b/tool0:
-          Value: true
-        b/tool0_controller:
-          Value: true
-        b/upper_arm_link:
-          Value: true
-        b/ur5_mount_a/:
-          Value: true
-        b/ur5_mount_b/:
-          Value: true
-        b/wrist_1_link:
-          Value: true
-        b/wrist_2_link:
-          Value: true
-        b/wrist_3_link:
           Value: true
         canopy:
           Value: true
@@ -257,148 +109,13 @@ Visualization Manager:
             a/ur5_mount_a/:
               a/base_link:
                 a/base:
-                  a/tool0_controller:
-                    {}
+                  {}
                 a/base_link_inertia:
-                  a/shoulder_link:
-                    a/upper_arm_link:
-                      a/forearm_link:
-                        a/wrist_1_link:
-                          a/wrist_2_link:
-                            a/wrist_3_link:
-                              a/flange:
-                                a/stereo_pair/base_link:
-                                  a/cables:
-                                    {}
-                                  a/stereo_pair/left_frame:
-                                    a/stereo_pair/left_optical_frame:
-                                      a/stereo_pair_aruco_0:
-                                        {}
-                                      a/stereo_pair_aruco_1:
-                                        {}
-                                      a/stereo_pair_aruco_10:
-                                        {}
-                                      a/stereo_pair_aruco_11:
-                                        {}
-                                      a/stereo_pair_aruco_12:
-                                        {}
-                                      a/stereo_pair_aruco_13:
-                                        {}
-                                      a/stereo_pair_aruco_14:
-                                        {}
-                                      a/stereo_pair_aruco_15:
-                                        {}
-                                      a/stereo_pair_aruco_16:
-                                        {}
-                                      a/stereo_pair_aruco_17:
-                                        {}
-                                      a/stereo_pair_aruco_18:
-                                        {}
-                                      a/stereo_pair_aruco_19:
-                                        {}
-                                      a/stereo_pair_aruco_2:
-                                        {}
-                                      a/stereo_pair_aruco_20:
-                                        {}
-                                      a/stereo_pair_aruco_21:
-                                        {}
-                                      a/stereo_pair_aruco_22:
-                                        {}
-                                      a/stereo_pair_aruco_23:
-                                        {}
-                                      a/stereo_pair_aruco_3:
-                                        {}
-                                      a/stereo_pair_aruco_4:
-                                        {}
-                                      a/stereo_pair_aruco_5:
-                                        {}
-                                      a/stereo_pair_aruco_6:
-                                        {}
-                                      a/stereo_pair_aruco_7:
-                                        {}
-                                      a/stereo_pair_aruco_8:
-                                        {}
-                                      a/stereo_pair_aruco_9:
-                                        {}
-                                a/tool0:
-                                  {}
+                  {}
               a/planning_link:
                 {}
             a/ur5_mount_b/:
               {}
-          b/frame:
-            b/ur5_mount_a/:
-              {}
-            b/ur5_mount_b/:
-              b/base_link:
-                b/base:
-                  b/tool0_controller:
-                    {}
-                b/base_link_inertia:
-                  b/shoulder_link:
-                    b/upper_arm_link:
-                      b/forearm_link:
-                        b/wrist_1_link:
-                          b/wrist_2_link:
-                            b/wrist_3_link:
-                              b/flange:
-                                b/stereo_pair/base_link:
-                                  b/cables:
-                                    {}
-                                  b/stereo_pair/left_frame:
-                                    b/stereo_pair/left_optical_frame:
-                                      b/stereo_pair_aruco_0:
-                                        {}
-                                      b/stereo_pair_aruco_1:
-                                        {}
-                                      b/stereo_pair_aruco_10:
-                                        {}
-                                      b/stereo_pair_aruco_11:
-                                        {}
-                                      b/stereo_pair_aruco_12:
-                                        {}
-                                      b/stereo_pair_aruco_13:
-                                        {}
-                                      b/stereo_pair_aruco_14:
-                                        {}
-                                      b/stereo_pair_aruco_15:
-                                        {}
-                                      b/stereo_pair_aruco_16:
-                                        {}
-                                      b/stereo_pair_aruco_17:
-                                        {}
-                                      b/stereo_pair_aruco_18:
-                                        {}
-                                      b/stereo_pair_aruco_19:
-                                        {}
-                                      b/stereo_pair_aruco_2:
-                                        {}
-                                      b/stereo_pair_aruco_20:
-                                        {}
-                                      b/stereo_pair_aruco_21:
-                                        {}
-                                      b/stereo_pair_aruco_22:
-                                        {}
-                                      b/stereo_pair_aruco_23:
-                                        {}
-                                      b/stereo_pair_aruco_3:
-                                        {}
-                                      b/stereo_pair_aruco_4:
-                                        {}
-                                      b/stereo_pair_aruco_5:
-                                        {}
-                                      b/stereo_pair_aruco_6:
-                                        {}
-                                      b/stereo_pair_aruco_7:
-                                        {}
-                                      b/stereo_pair_aruco_8:
-                                        {}
-                                      b/stereo_pair_aruco_9:
-                                        {}
-                                b/tool0:
-                                  {}
-              b/planning_link:
-                {}
           canopy:
             {}
           ground:
@@ -417,6 +134,7 @@ Visualization Manager:
       MoveIt_Allow_External_Program: false
       MoveIt_Allow_Replanning: false
       MoveIt_Allow_Sensor_Positioning: false
+      MoveIt_Goal_Tolerance: 0
       MoveIt_Planning_Attempts: 10
       MoveIt_Planning_Time: 5
       MoveIt_Use_Cartesian_Path: false
@@ -442,6 +160,118 @@ Visualization Manager:
           Expand Link Details: false
           Expand Tree: false
           Link Tree Style: Links in Alphabetic Order
+          a/base:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          a/base_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          a/base_link_inertia:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          a/cables:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          a/flange:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          a/forearm_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          a/frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          a/planning_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          a/shoulder_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          a/stereo_pair/base_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          a/stereo_pair/left_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          a/stereo_pair/left_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          a/tool0:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          a/upper_arm_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          a/ur5_mount_a/:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          a/ur5_mount_b/:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          a/wrist_1_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          a/wrist_2_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          a/wrist_3_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          canopy:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          ground:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          wall1:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          wall2:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          world:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
         Loop Animation: false
         Robot Alpha: 0.5
         Robot Color: 150; 50; 150
@@ -464,7 +294,7 @@ Visualization Manager:
         Goal State Color: 250; 128; 0
         Interactive Marker Size: 0
         Joint Violation Color: 255; 0; 255
-        Planning Group: endeffector
+        Planning Group: ""
         Query Goal State: true
         Query Start State: false
         Show Workspace: false
@@ -487,6 +317,118 @@ Visualization Manager:
           Expand Link Details: false
           Expand Tree: false
           Link Tree Style: Links in Alphabetic Order
+          a/base:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          a/base_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          a/base_link_inertia:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          a/cables:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          a/flange:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          a/forearm_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          a/frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          a/planning_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          a/shoulder_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          a/stereo_pair/base_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          a/stereo_pair/left_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          a/stereo_pair/left_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          a/tool0:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          a/upper_arm_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          a/ur5_mount_a/:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          a/ur5_mount_b/:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          a/wrist_1_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          a/wrist_2_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          a/wrist_3_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          canopy:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          ground:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          wall1:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          wall2:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          world:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
         Robot Alpha: 0.5
         Show Robot Collision: false
         Show Robot Visual: true
@@ -497,7 +439,7 @@ Visualization Manager:
       Collision Enabled: false
       Enabled: true
       Links:
-        All Links Enabled: false
+        All Links Enabled: true
         Expand Joint Details: false
         Expand Link Details: false
         Expand Tree: false
@@ -594,7 +536,7 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         ground:
           Alpha: 1
           Show Axes: false
@@ -604,12 +546,12 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         wall2:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         world:
           Alpha: 1
           Show Axes: false
@@ -677,7 +619,7 @@ Visualization Manager:
       Marker Topic: /a/path_marker
       Name: Marker
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
       Value: true
   Enabled: true
@@ -708,7 +650,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 3.1200222969055176
+      Distance: 4.7003679275512695
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -716,17 +658,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 0.009582575410604477
-        Y: 0.01201985590159893
-        Z: 0.5911585688591003
+        X: 0.22224938869476318
+        Y: -0.3323787748813629
+        Z: 0.5046328902244568
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.4497941732406616
+      Pitch: 0.42479419708251953
       Target Frame: <Fixed Frame>
-      Yaw: 1.5413435697555542
+      Yaw: 0.4563440680503845
     Saved: ~
 Window Geometry:
   Displays:
@@ -740,7 +682,7 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd00000004000000000000015600000416fc0200000012fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003d00000213000000c900fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e006701000001fc000001cb0000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000001600000016fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670000000121000002510000017d00fffffffb0000000c00430061006d006500720061000000035d000000870000000000000000fb0000000a0049006d0061006700650100000256000000d70000001600fffffffb0000000a0049006d0061006700650100000333000001200000001600fffffffb000000280020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000000000000000fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006700000002bf000001940000000000000000fb0000000a0049006d00610067006501000001d00000013e0000000000000000fb0000000a0049006d00610067006501000003140000013f0000000000000000000000010000010f00000416fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003d00000416000000a400fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004b00000003efc0100000002fb0000000800540069006d00650000000000000004b0000004f300fffffffb0000000800540069006d00650100000000000004500000000000000000000002400000041600000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd00000004000000000000015600000416fc0200000012fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003d00000213000000c900fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e006701000001fc000001cb0000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000001600000016fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670000000121000002510000019400fffffffb0000000c00430061006d006500720061000000035d000000870000000000000000fb0000000a0049006d0061006700650100000256000000d70000001600fffffffb0000000a0049006d0061006700650100000333000001200000001600fffffffb000000280020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000000000000000fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006700000002bf000001940000000000000000fb0000000a0049006d00610067006501000001d00000013e0000000000000000fb0000000a0049006d00610067006501000003140000013f0000000000000000000000010000010f00000416fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003d00000416000000a400fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004b00000003efc0100000002fb0000000800540069006d00650000000000000004b0000002eb00fffffffb0000000800540069006d00650100000000000004500000000000000000000002450000041600000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
@@ -749,6 +691,6 @@ Window Geometry:
     collapsed: false
   Views:
     collapsed: true
-  Width: 924
+  Width: 929
   X: 72
   Y: 27

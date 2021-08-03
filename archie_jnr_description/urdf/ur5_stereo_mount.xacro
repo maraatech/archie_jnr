@@ -3,71 +3,36 @@
     <!-- link list -->
   
   <xacro:macro name="stereo_pair" params="parent *origin prefix name:=stereo_pair">
-     <xacro:property name="M_PI"     value="3.1415926535897931" />
-    <!-- this is the plate that is mounted to the end of the robot arm, which the camera is mounted to -->
+    <xacro:property name="M_PI"     value="3.1415926535897931" />
+      
+    <!-- Base Link Setup -->
+    <xacro:joint_xacro name="${prefix}ee_coupler" parent="${parent}" child="${prefix}${name}_base_link" type="fixed"/>
 
-     <joint name="${prefix}ee_coupler" type="fixed">
-            <parent link="${parent}" />
-            <child link="${prefix}${name}/base_link"/>
-            <xacro:insert_block name="origin" />
-        </joint>
+    <!-- Add the stereo stl -->
+    <xacro:link_xacro name="${prefix}${name}_base_link" filename="package://archie_jnr_description/meshes/visual/UoA-56mm-lens.stl" rpy="${pi/2} -${pi} ${pi/2}" scale="0.001 0.001 0.001"/> 
 
-    <link name="${prefix}${name}/base_link">
-        <visual>
-            <origin rpy="${pi/2} -${pi} ${pi/2}" xyz="0 0 0"/>
-            <geometry>
-                <mesh filename="package://archie_jnr_description/meshes/visual/UoA-56mm-lens.stl" scale="0.001 0.001 0.001"/>
-            </geometry>
-        </visual>
-
-        <collision>
-            <geometry>
-                <mesh filename="package://archie_jnr_description/meshes/visual/UoA-56mm-lens.stl" scale="0.001 0.001 0.001"/>
-            </geometry>
-            <origin rpy="${pi/2} -${pi} ${pi/2}" xyz="0.001 0 0"/>
-        </collision>
-    </link>
-
-    <joint name="${prefix}cables_coupler" type="fixed">
-        <parent link="${prefix}${name}/base_link" />
-        <child link="${prefix}cables"/>
-        <origin rpy="0 0 0" xyz="0.0 0 0"/>
-    </joint>
+    <!-- Box to protect the cables - maybe move to the stl -->
+    <xacro:joint_xacro name="${prefix}cables_coupler" parent="${prefix}${name}_base_link" child="${prefix}cables" type="fixed"/>      
     <link name="${prefix}cables">
-        <visual>
-            <geometry>
-                <box size="0.035 0.14 0.03"/>
-            </geometry>
-            <origin rpy="0 0 0" xyz="-0.018 0.00 -0.06"/>
-        </visual>
-
-        <collision>
-            <geometry>
-                <box size="0.035 0.14 0.03"/>
-            </geometry>
-            <origin rpy="0 0 0" xyz="-0.018 0.00 -0.06"/>
-        </collision>
+      <xacro:cube xyz="-0.018 0.0 -0.06" size="0.035 0.14 0.03"/>
     </link>
 
-      <!-- stereo_pair -->
-
+    <!-- Load calibration files for the specific stereo pair to set left frame -->
     <xacro:property name="stereo_calibration_file" value="$(find archie_jnr_description)/config/${prefix}stereo_pair_handeye_calibration.yaml" />
-    <xacro:property name="stereo_calibration" value="${load_yaml(stereo_calibration_file)}"/>
+    <xacro:property name="stereo_calibration"      value="${load_yaml(stereo_calibration_file)}"/>
 
-      <joint name="${prefix}${name}/left_joint" type="fixed">
-        <origin xyz="${stereo_calibration['transformation']['x']} ${stereo_calibration['transformation']['y']} ${stereo_calibration['transformation']['z']}" rpy="${stereo_calibration['transformation']['roll']} ${stereo_calibration['transformation']['pitch']} ${stereo_calibration['transformation']['yaw']}"/>
-        <parent link="${prefix}${name}/base_link" />
-        <child link="${prefix}${name}/left_frame" />
-      </joint>
-       
-       <link name="${prefix}${name}/left_frame" />
-    
-        <joint name="${prefix}${name}/left_optical_joint" type="fixed">
-            <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
-            <parent link="${prefix}${name}/left_frame" />
-            <child link="${prefix}${name}/left_optical_frame" />
-        </joint>
+    <!-- Body Frame for the stereo pair calibrated centre -->
+    <link name="${prefix}${name}_left_frame" />
 
-        <link name="${prefix}${name}/left_optical_frame" /> 
-    </xacro:macro>
+    <joint name="${prefix}${name}_left_joint" type="fixed">
+      <origin xyz="${stereo_calibration['transformation']['x']} ${stereo_calibration['transformation']['y']} ${stereo_calibration['transformation']['z']}" rpy="${stereo_calibration['transformation']['roll']} ${stereo_calibration['transformation']['pitch']} ${stereo_calibration['transformation']['yaw']}"/>
+      <parent link="${prefix}${name}_base_link" />
+      <child link="${prefix}${name}_left_frame" />
+    </joint>    
+
+    <!-- Optical Frame for the stereo pair calibrate centre -->    
+    <link name="${prefix}${name}_left_optical_frame" />
+    <xacro:joint_xacro name="${prefix}${name}_left_optical_joint" parent="${prefix}${name}_left_frame" child="${prefix}${name}_left_optical_frame" rpy="${-M_PI/2} 0 ${-M_PI/2}" type="fixed"/>
+
+  </xacro:macro>
 </robot>

@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: archie_jnr_description
+    relative_path: urdf/archie_robot.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/archie_robot.srdf
+  CONFIG:
+    author_name: Henry Williams
+    author_email: henry.williams@auckland.ac.nz
+    generated_timestamp: 1627960799
