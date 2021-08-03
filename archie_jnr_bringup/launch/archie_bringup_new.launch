@@ -24,9 +24,9 @@
   	<!-- Load UR arms -->
   	<group ns="a">
   		<include file="$(find archie_jnr_bringup)/launch/ur5_bringup.launch">
-  			<arg name="tf_prefix" 		  value="$(arg tf_prefix_a)/"/>
-  			<arg name="robot_ip" 		  value="$(arg robot_ip_a)"/>
-			<arg name="kinematics_config" value="$(arg kinematics_config_a)"/>
+  			<arg name="tf_prefix" 		   value="$(arg tf_prefix_a)/"/>
+  			<arg name="robot_ip" 		   value="$(arg robot_ip_a)"/>
+			<arg name="kinematics_config"  value="$(arg kinematics_config_a)"/>
 			<arg name="joint_limit_params" value="$(arg joint_limit_params_a)"/>
 
 			<arg name="controller_config_file" value="$(find archie_jnr_description)/config/$(arg tf_prefix_a)/ur5_controllers.yaml"/>
