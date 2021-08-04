@@ -28,7 +28,7 @@ joint_state_controller:
   type: joint_state_controller/JointStateController
   publish_rate: 50
 controller_list:
-  - name: ur_arm_a_controller
+  - name: a/scaled_pos_joint_traj_controller
     action_ns: follow_joint_trajectory
     default: True
     type: FollowJointTrajectory
@@ -39,7 +39,7 @@ controller_list:
       - a/wrist_1_joint
       - a/wrist_2_joint
       - a/wrist_3_joint
-  - name: ur_arm_b_controller
+  - name: b/scaled_pos_joint_traj_controller
     action_ns: follow_joint_trajectory
     default: True
     type: FollowJointTrajectory

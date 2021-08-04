@@ -12,7 +12,8 @@
 	<arg name="joint_limit_params_a" default="$(find archie_jnr_description)/config/$(arg tf_prefix_a)/joint_limits.yaml"/>
 
 	<arg name="robot_ip_b"           default="192.168.131.8"/>
-	<arg name="kinematics_config_b"  default="$(find archie_jnr_description)/config/$(arg tf_prefix_b)/ur5_calibration.yaml"/>
+	<!-- <arg name="kinematics_config_b"  default="$(find archie_jnr_description)/config/$(arg tf_prefix_b)/ur5_calibration.yaml"/> -->
+	<arg name="kinematics_config_b"  default="$(find archie_jnr_description)/config/$(arg tf_prefix_b)/ur10_calibration.yaml"/>
 	<arg name="joint_limit_params_b" default="$(find archie_jnr_description)/config/$(arg tf_prefix_b)/joint_limits.yaml"/>
 
 	<arg name="debug" default="false" />
@@ -26,23 +27,39 @@
   		<include file="$(find archie_jnr_bringup)/launch/ur5_bringup.launch">
   			<arg name="tf_prefix" 		   value="$(arg tf_prefix_a)/"/>
   			<arg name="robot_ip" 		   value="$(arg robot_ip_a)"/>
+			<arg name="reverse_port"       value="50001"/>
+			<arg name="script_sender_port" value="50002"/>
 			<arg name="kinematics_config"  value="$(arg kinematics_config_a)"/>
 			<arg name="joint_limit_params" value="$(arg joint_limit_params_a)"/>
 
 			<arg name="controller_config_file" value="$(find archie_jnr_description)/config/$(arg tf_prefix_a)/ur5_controllers.yaml"/>
   		</include>
+
+  		<!-- <node name="control_node" pkg="ur_moveit_controller" type="control_node.py" output="screen"/> -->
   	</group>
 
-  	<!-- <group ns="b">
+  	<group ns="b">
   		<include file="$(find archie_jnr_bringup)/launch/ur5_bringup.launch">
-  			<arg name="robot_ip" default="192.168.131.8"/>
-  			<arg name="robot_ip" 		  value="$(arg robot_ip_b)"/>
-			<arg name="kinematics_config" value="$(arg kinematics_config_b)"/>
-			<arg name="joint_limit_param" value="$(arg joint_limit_param_b)"/>
+  			<arg name="tf_prefix" 		   value="$(arg tf_prefix_b)/"/>
+  			<arg name="robot_ip" 		   value="$(arg robot_ip_b)"/>
+  			<arg name="reverse_port"       value="50003"/>
+			<arg name="script_sender_port" value="50004"/>
+			<arg name="kinematics_config"  value="$(arg kinematics_config_b)"/>
+			<arg name="joint_limit_params" value="$(arg joint_limit_params_b)"/>
 
-			<arg name="controller_config_file" value="$(find archie_jnr_description)/config/$(arg tf_prefix_a)/ur5_controllers.yaml"/>
+			<arg name="controller_config_file" value="$(find archie_jnr_description)/config/$(arg tf_prefix_b)/ur5_controllers.yaml"/>
 		</include>
-	</group> -->
+
+		<!-- <node name="control_node" pkg="ur_moveit_controller" type="control_node.py" output="screen"/> -->
+	</group>
+
+	<node name="control_node_a" pkg="ur_moveit_controller" type="control_node.py" output="screen">
+		<param name="move_group_name" value="ur_arm_a"/>
+	</node>
+
+	<node name="control_node_b" pkg="ur_moveit_controller" type="control_node.py" output="screen">
+		<param name="move_group_name" value="ur_arm_b"/>
+	</node>
 
   	<!-- Start joint_state aggregator -->  	
   	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
