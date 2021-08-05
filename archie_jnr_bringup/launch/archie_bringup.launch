@@ -2,57 +2,59 @@
 <launch>
 	<!-- Default namespace topics: DO NOT EDIT -->
 	<arg name="ns_a" value="a"/>
-	<arg name="tf_prefix_a" default="$(arg ns_a)"/>
-
 	<arg name="ns_b" value="b"/>
-	<arg name="tf_prefix_b" default="$(arg ns_b)"/>
-
-  	<!-- <include file="$(find archie_jnr_bringup)/launch/archie_side_bringup.launch">
-		<arg name="ns" value="$(arg ns_b)"/>
-		<arg name="robot_ip"  default="192.168.131.8"/>
-	</include> -->
 	
-	<!-- <machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/> -->
-	<!-- <include file="$(find archie_jnr_bringup)/launch/archie_side_bringup.launch">
-		<arg name="ns" value="$(arg ns_a)"/>
-		<arg name="robot_ip"  default="192.168.131.9"/>
-	</include> -->
+	<arg name="ee_sensor_a" default="stereo"/><!--stereo realsense zivid kea stereo-kea -->
+  	<arg name="ee_sensor_b" default="stereo"/><!--stereo realsense zivid kea stereo-kea -->
 
-	<arg name="robot_ip"           default="192.168.131.9"/>
-	<arg name="kinematics_config"  default="$(find archie_jnr_description)/config/$(arg tf_prefix_a)/ur5_calibration.yaml"/>
-	<arg name="joint_limit_params" default="$(find archie_jnr_description)/config/$(arg tf_prefix_a)/joint_limits.yaml"/>
+	<!-- Load robot description -->
+	<include file="$(find archie_jnr_bringup)/launch/load_archie.launch" pass_all_args="true">
+  	</include>
 
-	<include file="$(find archie_jnr_bringup)/launch/ur5_bringup.launch">
-		<arg name="robot_ip"  value="$(arg robot_ip)"/>
+  	<!-- Load UR arm on local machine -->
+  	<include file="$(find archie_jnr_bringup)/launch/archie_side_bringup.launch">
+  		<arg name="ns"        		   value="$(arg ns_a)"/>
 
-		<arg name="tf_prefix"              value="$(arg tf_prefix_a)/"/>
-		<arg name="kinematics_config"      value="$(arg kinematics_config)"/>
-		<arg name="joint_limit_params"     value="$(arg joint_limit_params)"/>
-		
-		<arg name="robot_description_file" value="$(find archie_jnr_bringup)/launch/load_archie.launch"/>
-		<arg name="controller_config_file" value="$(find archie_jnr_description)/config/$(arg tf_prefix_a)/ur5_controllers.yaml"/>
+		<arg name="robot_ip"           value="192.168.131.9"/>
+		<arg name="reverse_port"       value="50001"/>
+		<arg name="script_sender_port" value="50002"/>
+  	</include>
+
+  	<!-- Start joint_state aggregator -->
+  	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+      <param name="/use_gui" value="false"/>
+      <rosparam param="/source_list">[a/joint_states, b/joint_states]</rosparam>
+    </node>
+
+    <!-- State publishers -->
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
+
+	<!-- Launch moveit -->
+	<arg name="debug" default="false" />
+	<include file="$(find archie_jnr_moveit_config)/launch/move_group.launch">
+		<arg name="debug" default="$(arg debug)" />
+		<arg name="publish_monitored_planning_scene" value="true" />
+		<arg name="load_robot_description" value="false" />
 	</include>
+
+	<!-- Launch rviz -->
+	<node type="rviz" name="rviz_archie" pkg="rviz" args="-d $(find archie_jnr_bringup)/rviz/archie.rviz" />
+
+	<!-- load UR arm on secondary machine -->
+	<!-- NOTE: anything after the machine tag is run on the remote machine - hence this being at the bottom of the launch file -->
+	<!-- <machine name="side-$(arg ns_b)" user="anyone" address="stormtrooper" env-loader="~/archie-environment.sh" default="true"/> -->
+	<include file="$(find archie_jnr_bringup)/launch/archie_side_bringup.launch">
+  		<arg name="ns"        		   value="$(arg ns_b)"/>
+
+  		<arg name="robot_ip"           value="192.168.131.8"/>
+  		<arg name="reverse_port"       value="50003"/>
+		<arg name="script_sender_port" value="50004"/>
+
+		<!-- Testing at UoA with UR10 -->
+		<arg name="kinematics_config"  value="$(find archie_jnr_description)/config/$(arg ns_b)/ur10_calibration.yaml"/>
+		<arg name="joint_limit_params" value="$(find archie_jnr_description)/config/$(arg ns_b)/joint_limits.yaml"/>
+  	</include>
 </launch>
 
 <!-- <machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/> -->
 <!-- <machine name="side-$(arg ns_b)" user="anyone" address="stormtrooper" env-loader="~/archie-environment.sh" default="true"/> -->
-
-<!-- <param name="robot_description_semantic" textfile="$(find archie_jnr_description)/config/archie.srdf" /> -->
-
-  	<!-- Load updated joint limits (override information from URDF) -->
-	<!-- <group ns="robot_description_planning">
-		<rosparam command="load" file="$(find ur5_moveit_config)/config/joint_limits.yaml"/>
-	</group> -->
-
-	<!-- Load default settings for kinematics; these settings are overridden by settings in a node's namespace -->
-	<!-- <group ns="robot_description_kinematics">
-		<rosparam command="load" file="$(find ur5_moveit_config)/config/kinematics.yaml"/>
-	</group> -->
-
-	  <!-- robot model -->
-	<!-- <include file="$(find archie_jnr_bringup)/launch/load_archie.launch">
-		<arg name="tf_prefix_a" value="$(arg tf_prefix_a)"/>
-		<arg name="tf_prefix_b" value="$(arg tf_prefix_b)"/>
-
-		<arg name="kinematics_config_b" default="$(find archie_jnr_description)/config/$(arg tf_prefix_b)ur10_calibration.yaml"/>
-  	</include> -->

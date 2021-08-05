@@ -18,7 +18,9 @@
   <arg name="safety_pos_margin"         default="0.15" doc="The lower/upper limits in the safety controller" />
   <arg name="safety_k_position"         default="20" doc="Used to set k position in the safety controller" />
 
-  <arg name="ee_sensor"   default="stereo"/><!--stereo realsense zivid kea stereo-kea -->
+  <!-- Sensor on the end effector of the arms -->
+  <arg name="ee_sensor_a"   default="stereo"/><!--stereo realsense zivid kea stereo-kea -->
+  <arg name="ee_sensor_b"   default="stereo"/><!--stereo realsense zivid kea stereo-kea -->
   
   <arg name="sim"         default="false"/>
 
@@ -26,12 +28,12 @@
       prefix_a:=$(arg tf_prefix_a)
       kinematics_params_a:=$(arg kinematics_config_a)
       joint_limit_params_a:=$(arg joint_limit_params_a)
-      ee_sensor_a:=$(arg ee_sensor)
+      ee_sensor_a:=$(arg ee_sensor_a)
       
       prefix_b:=$(arg tf_prefix_b)
       kinematics_params_b:=$(arg kinematics_config_b)
       joint_limit_params_b:=$(arg joint_limit_params_b)
-      ee_sensor_b:=$(arg ee_sensor)
+      ee_sensor_b:=$(arg ee_sensor_b)
 
       physical_params:=$(arg physical_params)
       visual_params:=$(arg visual_params)

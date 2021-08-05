@@ -45,9 +45,9 @@ joint_limits:
     #
     # Refer to https://github.com/ros-industrial/universal_robot/issues/265 for
     # more information.
-    max_position: 2.79
-    max_velocity: 3.14
-    min_position: -2.79
+    max_position: !degrees  180.0
+    max_velocity: !degrees  180.0
+    min_position: !degrees -180.0
   wrist_1:
     # acceleration limits are not publicly available
     has_acceleration_limits: false
@@ -78,14 +78,3 @@ joint_limits:
     max_position: 2.09
     max_velocity: 3.14
     min_position: -1.92
-
-  # <xacro:ur5_robot prefix="" joint_limited="true"
-  #       shoulder_pan_lower_limit="${-142/180*pi}" shoulder_pan_upper_limit="${-17/180*pi}" 
-  #       shoulder_lift_lower_limit="${-242/180*pi}" shoulder_lift_upper_limit="${2/180*pi}" 
-  #       elbow_joint_lower_limit="${-160/180*pi}" elbow_joint_upper_limit="${160/180*pi}" 
-  #       wrist_1_lower_limit="${-203/180*pi}" wrist_1_upper_limit="${77/180*pi}"       
-  #       wrist_2_lower_limit="${-95/180*pi}" wrist_2_upper_limit="${270/180*pi}"       
-  #       wrist_3_lower_limit="${-110/180*pi}" wrist_3_upper_limit="${120/180*pi}"     
-  #       transmission_hw_interface="$(arg transmission_hw_interface)"
-  #       kinematics_file="${load_yaml('$(arg kinematics_config)')}"
-  #   />

@@ -1,23 +1,16 @@
 <?xml version="1.0" ?>
 <launch>
 	<arg name="ns_a" value="a"/>
-	<arg name="tf_prefix_a" default="$(arg ns_a)/"/>
-
 	<arg name="ns_b" value="b"/>
-	<arg name="tf_prefix_b" default="$(arg ns_b)/"/>
 
+	<include file="$(find archie_jnr_bringup)/launch/archie_side_map.launch">
+		<arg name="ns" value="$(arg ns_a)"/>
+	</include>
+
+	<!-- <machine name="side-$(arg ns_b)" user="anyone" address="stormtrooper" env-loader="~/archie-environment.sh" default="true"/> -->
 	<include file="$(find archie_jnr_bringup)/launch/archie_side_map.launch">
 		<arg name="ns" value="$(arg ns_b)"/>
 	</include>
-
-	<!-- <node type="rviz" name="rviz_$(arg ns_a)" pkg="rviz" args="-d $(find archie_jnr_bringup)/rviz/archie_side_$(arg ns_a).rviz" /> -->
-	<node type="rviz" name="rviz_$(arg ns_b)" pkg="rviz" args="-d $(find archie_jnr_bringup)/rviz/archie_side_$(arg ns_b).rviz" />
-	<!-- <node type="rviz" name="rviz_archie" pkg="rviz" args="-d $(find archie_jnr_bringup)/rviz/archie.rviz" /> -->
-
-	<!-- <machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/>
-	<include file="$(find archie_jnr_bringup)/launch/archie_side_map.launch">
-		<arg name="ns" value="$(arg ns_a)"/>
-	</include> -->
 </launch>
 
 <!-- <machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/> -->
