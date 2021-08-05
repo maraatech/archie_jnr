@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <launch>
-	<arg name="ns"        default="a"/>
+	<arg name="ns" default="a"/>
 
 	<arg name="robot_ip"           default="192.168.131.9"/>
 	<arg name="reverse_port"       default="50001"/>
@@ -22,14 +22,14 @@
   		</include>
 
   		<!-- Launch pylon cameras -->
-  		<include file="$(find pylon_camera)/launch/pylon_camera_node_calibrated.launch">
+  		<!-- <include file="$(find pylon_camera)/launch/pylon_camera_node_calibrated.launch">
 			<arg name="display"      value="false"/>
 			<arg name="loop_rate"    value="1"/>
 		    <arg name="camera_left"  value="left"/>
 		    <arg name="camera_right" value="right"/>
 		    <arg name="trigger_mode" value="1"/>
 		    <arg name="calibration"  default="$(find archie_jnr_description)/config/$(arg ns)/stereo_calibration.json"/>
-		</include>
+		</include> -->
   	</group>
 
   	<!-- Launch moveit controller for the given arm group -->

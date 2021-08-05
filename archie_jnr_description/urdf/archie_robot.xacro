@@ -26,7 +26,7 @@
     <xacro:arg name="sim" default="false"/>
 
     <!-- load xarco files -->
-    <xacro:include filename="$(find archie_jnr_description)/urdf/common.xacro"/>
+    <xacro:include filename="$(find cares_description)/urdf/common.xacro"/>
     <xacro:include filename="$(find ur_description)/urdf/inc/ur_macro.xacro"/>
 
     <!-- Setup base_link frame -->
@@ -56,7 +56,7 @@
     <xacro:joint_xacro name="base_link_to_wall_2" parent="base_link" child="wall_2" type="fixed"/>
 
     <xacro:macro name="archie-side" params="prefix ee_sensor xyz rpy">
-        <xacro:link_xacro name="${prefix}/ur5_mount" filename="package://archie_jnr_description/meshes/ur5_mount_${prefix}.stl" scale="1 1 1"/> 
+        <xacro:link_xacro name="${prefix}/ur5_mount" filename="package://archie_jnr_description/meshes/visual/ur5_mount_${prefix}.stl" scale="1 1 1"/> 
         <xacro:joint_xacro name="${prefix}/frame_to_ur5_mount" parent="frame" child="${prefix}/ur5_mount" type="fixed" xyz="${xyz}" rpy="${rpy}"/>
         
         <xacro:ur_robot prefix="${prefix}/" joint_limits_parameters_file="$(arg joint_limit_params_a)" kinematics_parameters_file="$(arg kinematics_params_a)" physical_parameters_file="$(arg physical_params)" visual_parameters_file="$(arg visual_params)" transmission_hw_interface="$(arg transmission_hw_interface)" safety_limits="$(arg safety_limits)" safety_pos_margin="$(arg safety_pos_margin)" safety_k_position="$(arg safety_k_position)"/>
@@ -67,8 +67,8 @@
 
         <!-- things attached to robot arm-->
         <xacro:if value ="${ee_sensor=='stereo'}">
-            <xacro:include filename="$(find archie_jnr_description)/urdf/ur5_stereo_mount.xacro" />
-            <xacro:stereo_pair parent="${prefix}/flange" name="stereo_pair" prefix="${prefix}/">
+            <xacro:include filename="$(find cares_description)/urdf/stereo_mount.xacro"/>
+            <xacro:stereo_pair parent="${prefix}/flange" name="stereo_pair" prefix="${prefix}/" calibration_file="$(find archie_jnr_description)/config/${prefix}/stereo_pair_handeye_calibration.yaml">
                 <origin xyz="0 0 0" rpy="0 0 0"/>
             </xacro:stereo_pair>
         </xacro:if>
@@ -83,7 +83,7 @@
     <xacro:macro name="archie" params="prefix_a prefix_b ee_sensor_a ee_sensor_b">
         <!-- Archie frame -->
         <xacro:joint_xacro name="base_link_to_frame" parent="base_link" child="frame" type="fixed" xyz="0 0.75 2.14925"/>
-        <xacro:link_xacro name="frame" filename="package://archie_jnr_description/meshes/archie_jr_main.stl" scale="1 1 1"/>
+        <xacro:link_xacro name="frame" filename="package://archie_jnr_description/meshes/visual/archie_jr_main.stl" scale="1 1 1"/>
 
         <!-- Side A -->
         <xacro:archie-side prefix="${prefix_a}" ee_sensor="${ee_sensor_a}" xyz="-0.82 -0.75 -1.3978" rpy="1.5708 0.0 3.1416"/>
