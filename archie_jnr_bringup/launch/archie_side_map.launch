@@ -7,7 +7,8 @@
 
 		<!-- Start the canopy mapping node -->
 		<include file="$(find maara_canopy_mapping)/launch/scan.launch">
-			<arg name="platform_server"  default="server"/>
+			<!-- note platform server has to be on the base namespace for archie -->
+			<arg name="platform_server"  default="/ur_arm_$(arg ns)"/>
 			
 			<arg name="sensors" value="$(arg sensors)"/>
 			<arg name="sensor_topics" value="$(arg sensor_topics)"/>

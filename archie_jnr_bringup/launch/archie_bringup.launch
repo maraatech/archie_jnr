@@ -4,11 +4,10 @@
 	<arg name="ns_a" value="a"/>
 	<arg name="ns_b" value="b"/>
 	
-	<arg name="ee_sensor_a" default="stereo"/><!--stereo realsense zivid kea stereo-kea -->
-  	<arg name="ee_sensor_b" default="stereo"/><!--stereo realsense zivid kea stereo-kea -->
-
 	<!-- Load robot description -->
 	<include file="$(find archie_jnr_bringup)/launch/load_archie.launch" pass_all_args="true">
+		<arg name="ee_sensor_a" value=""/><!--stereo realsense zivid kea stereo-kea -->
+  		<arg name="ee_sensor_b" value="stereo"/><!--stereo realsense zivid kea stereo-kea -->
   	</include>
 
   	<!-- Load UR arm on local machine -->

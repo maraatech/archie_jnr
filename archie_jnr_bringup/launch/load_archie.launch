@@ -22,7 +22,8 @@
   <arg name="ee_sensor_a"   default="stereo"/><!--stereo realsense zivid kea stereo-kea -->
   <arg name="ee_sensor_b"   default="stereo"/><!--stereo realsense zivid kea stereo-kea -->
   
-  <arg name="sim"         default="false"/>
+  <!-- Simulation -->
+  <arg name="sim" default="false"/>
 
   <param name="robot_description" command="$(find xacro)/xacro '$(find archie_jnr_description)/urdf/archie_robot.xacro'
       prefix_a:=$(arg tf_prefix_a)
