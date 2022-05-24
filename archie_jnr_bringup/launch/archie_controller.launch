@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<launch>
+  
+  <arg name="side_controllers" default="[side_a_controller]"/>
+
+  <!-- How many images to capture per step -->
+  <arg name="num_captures" default="1"/>
+
+  <!-- Capture Marker for alignment -->
+  <arg name="capture_marker" default="false"/>
+
+  <!-- Init Pose -->
+  <!-- Meters -->
+  <arg name="init_x"  value="0.0"/>
+  <arg name="init_y"  value="0.5"/>
+  <arg name="init_z"  value="0.0"/>
+  <!-- Degrees -->
+  <arg name="init_roll"  value="180.0"/>
+  <arg name="init_pitch" value="0.0"/>
+  <arg name="init_yaw"   value="90.0"/>
+
+  <arg name="planning_link" default="base_link"/>
+
+  <arg name="world_link"  default="world"/>
+
+  <!-- Path ID - path_factory -->
+  <arg name="path_id"  default="0"/>
+  
+  <!-- <group ns="platform"> -->
+  <node name="archie_controller_node" pkg="archie_jnr_control" type="archie_controller_node.py" output="screen">
+  	<rosparam param="side_controllers" subst_value="True">$(arg side_controllers)</rosparam> 
+
+    <param name="num_captures"   value="$(arg num_captures)"/>
+    <param name="capture_marker" value="$(arg capture_marker)"/>
+
+    <param name="init_x" value="$(arg init_x)"/>
+    <param name="init_y" value="$(arg init_y)"/>
+    <param name="init_z" value="$(arg init_z)"/>
+
+    <param name="init_roll"  value="$(arg init_roll)"/>
+    <param name="init_pitch" value="$(arg init_pitch)"/>
+    <param name="init_yaw"   value="$(arg init_yaw)"/>
+
+    <param name="planning_link" value="$(arg planning_link)"/>
+
+    <param name="world_link" value="$(arg world_link)"/>
+
+    <param name="path_id" value="$(arg path_id)"/>
+  </node>
+
+  <!-- Replace with Archie...testing with mini_rig -->
+  <include file="$(find mini_rig_bringup)/launch/mapping_server.launch">
+  	<arg name="mapping_server"   default="side_a_controller"/>
+	<arg name="platform_server"  default="manipulator_server"/>
+
+  	<arg name="sensors"       default="[stereo_pair]"/>
+	<arg name="sensor_topics" default="$(find mini_rig_bringup)/config/sensor_topics.yaml"/>	
+  </include>
+</launch>

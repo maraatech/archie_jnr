@@ -6,31 +6,32 @@
 	<arg name="reverse_port"       default="50001"/>
 	<arg name="script_sender_port" default="50002"/>
 
-	<arg name="kinematics_config"  default="$(find archie_jnr_description)/config/$(arg ns)/ur5_calibration.yaml"/>
-	<arg name="joint_limit_params" default="$(find archie_jnr_description)/config/$(arg ns)/joint_limits.yaml"/>
+	<arg name="kinematics_config"      default="$(find archie_jnr_description)/config/$(arg ns)/ur5_calibration.yaml"/>
+	<arg name="joint_limit_params"     default="$(find archie_jnr_description)/config/$(arg ns)/joint_limits.yaml"/>
+  	<arg name="controller_config_file" default="$(find archie_jnr_description)/config/$(arg ns)/ur5_controllers.yaml"/>
 
+  	<!-- Launch UR5 hardware interface and controller -->
 	<group ns="$(arg ns)">
-		<!-- Launch UR hardware interface and controller -->
-  		<include file="$(find archie_jnr_bringup)/launch/ur5_bringup.launch">
-  			<arg name="tf_prefix" 		   value="$(arg ns)/"/>
-  			<arg name="robot_ip" 		   value="$(arg robot_ip)"/>
-			<arg name="reverse_port"       value="$(arg reverse_port)"/>
-			<arg name="script_sender_port" value="$(arg script_sender_port)"/>
-			
+		<include file="$(find ur_robot_driver)/launch/ur_control.launch">
+			<arg name="tf_prefix"              value="$(arg ns)/"/>
+			<arg name="robot_ip"               value="$(arg robot_ip)"/>
+			<arg name="reverse_port"           value="$(arg reverse_port)"/>
+			<arg name="script_sender_port"     value="$(arg script_sender_port)"/>
 			<arg name="kinematics_config"      value="$(arg kinematics_config)"/>
-			<arg name="controller_config_file" value="$(find archie_jnr_description)/config/$(arg ns)/ur5_controllers.yaml"/>
-  		</include>
+			<arg name="controller_config_file" value="$(arg controller_config_file)"/>
 
-  		<!-- Launch pylon cameras -->
-  		<!-- <include file="$(find pylon_camera)/launch/pylon_camera_node_calibrated.launch">
-			<arg name="display"      value="false"/>
-			<arg name="loop_rate"    value="1"/>
-		    <arg name="camera_left"  value="left"/>
-		    <arg name="camera_right" value="right"/>
-		    <arg name="trigger_mode" value="1"/>
-		    <arg name="calibration"  default="$(find archie_jnr_description)/config/$(arg ns)/stereo_calibration.json"/>
-		</include> -->
+			<arg name="debug"                  value="false"/>
+			<arg name="use_tool_communication" value="false"/>
+			<arg name="controllers"            value="joint_state_controller scaled_pos_joint_traj_controller speed_scaling_state_controller force_torque_sensor_controller"/>
+			<arg name="stopped_controllers"    value="pos_joint_traj_controller joint_group_vel_controller"/>
+			<arg name="headless_mode"          value="false"/>
+		</include>
   	</group>
+
+  	<!-- Launch pylon cameras -->
+	<include file="$(find archie_jnr_bringup)/launch/archie_pylon.launch">
+		<arg name="ns" value="$(arg ns)"/>
+	</include>
 
   	<!-- Launch moveit controller for the given arm group -->
   	<!-- NOTE: this gets launch on the base namespace in order to read archies description correctly -->

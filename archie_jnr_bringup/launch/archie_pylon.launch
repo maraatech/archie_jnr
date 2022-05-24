@@ -9,7 +9,7 @@
 		    <arg name="camera_left"  value="left"/>
 		    <arg name="camera_right" value="right"/>
 		    <arg name="trigger_mode" value="1"/>
-		    <arg name="calibration"  default="$(find archie_jnr_description)/config/$(arg ns)/stereo_calibration.json"/>
+		    <arg name="calibration"  value="$(find archie_jnr_description)/config/$(arg ns)/stereo_calibration.json"/>
 		</include>
 	</group>
 </launch>

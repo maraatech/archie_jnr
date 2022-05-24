@@ -1,8 +1,0 @@
-<?xml version="1.0" ?>
-<launch>
-	<include file="$(find archie_jnr_bringup)/launch/archie_side_kea_calibrate.launch">
-        <arg name="ns" value="b"/>
-	</include>
-
-    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find archie_jnr_bringup)/rviz/archie_side_a.rviz" />
-</launch>

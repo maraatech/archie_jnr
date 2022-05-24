@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <launch>
   <!--ur5 A parameters files -->
-  <arg name="tf_prefix_a" default="a"/>
+  <arg name="tf_prefix_a"          default="a"/>
   <arg name="kinematics_config_a"  default="$(find archie_jnr_description)/config/$(arg tf_prefix_a)/ur5_calibration.yaml"/>
   <arg name="joint_limit_params_a" default="$(find archie_jnr_description)/config/$(arg tf_prefix_a)/joint_limits.yaml"/>
 
   <!--ur5 B parameters files -->
-  <arg name="tf_prefix_b" default="b"/>
+  <arg name="tf_prefix_b"          default="b"/>
   <arg name="kinematics_config_b"  default="$(find archie_jnr_description)/config/$(arg tf_prefix_b)/ur5_calibration.yaml"/>
   <arg name="joint_limit_params_b" default="$(find archie_jnr_description)/config/$(arg tf_prefix_b)/joint_limits.yaml"/>
 

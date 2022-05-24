@@ -4,5 +4,5 @@
         <arg name="ns" value="a"/>
 	</include>
 
-    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find archie_jnr_bringup)/rviz/archie_side_a.rviz" />
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find archie_jnr_bringup)/rviz/archie.rviz" />
 </launch>

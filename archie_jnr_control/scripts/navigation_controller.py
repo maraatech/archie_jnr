@@ -51,36 +51,3 @@ class NavigationController(object):
         return self.idle
 
 
-class ArchieController(object):
-    def __init__(self, navigation_server=None, mapping_servers=None):
-        self.navigation_controller = None if navigation_server == None else NavigationController(navigation_server)
-        self.task_controller       = None if mapping_servers == None else TaskModuleController(mapping_servers)
-
-    def start_task(self, task_goal):
-        # Logic to determine if mapping is able to be started
-
-        # Check if a task controller is operating
-        if self.task_controller == None:
-            print("No Task Controller Operating")
-            return False
-
-        # Check if the navigation controller is operating or not
-        if not self.navigation_controller == None and not self.navigation_controller.is_idle():
-            print(f"Navigation is still operating: {status_to_str(self.navigation_controller.get_state())}")
-            return False
-
-        # Start Task suff here
-        self.task_controller.start_task(task_goal)
-
-    def start_navigation(self, navigation_goal):
-        # Logic to determine if navigation is able to be started
-        if self.navigation_controller == None:
-            return False
-
-        # Check if the mapping controller is operating or not
-        if not self.task_controller == None and not self.task_controller.is_idle():
-            print(f"Mapping is still operating: {status_to_str(self.task_controller.get_state())}")
-            return False
-
-        # Do your navigation stuff here
-        self.navigation_controller.start_navigation(navigation_goal)

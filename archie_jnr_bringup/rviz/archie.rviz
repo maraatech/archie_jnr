@@ -4,8 +4,8 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /RobotModel1/Link Tree1
-        - /RobotModel1/Link Tree1/base_link1
+        - /RobotModel1
+        - /RobotModel1/Links1
       Splitter Ratio: 0.7425600290298462
     Tree Height: 901
   - Class: rviz/Help
@@ -61,11 +61,11 @@ Visualization Manager:
           Value: true
         a/shoulder_link:
           Value: true
+        a/stereo_pair/left_frame:
+          Value: true
+        a/stereo_pair/left_optical_frame:
+          Value: true
         a/stereo_pair_base_link:
-          Value: true
-        a/stereo_pair_left_frame:
-          Value: true
-        a/stereo_pair_left_optical_frame:
           Value: true
         a/tool0:
           Value: true
@@ -97,15 +97,13 @@ Visualization Manager:
           Value: true
         b/shoulder_link:
           Value: true
+        b/stereo_pair/left_frame:
+          Value: true
+        b/stereo_pair/left_optical_frame:
+          Value: true
         b/stereo_pair_base_link:
           Value: true
-        b/stereo_pair_left_frame:
-          Value: true
-        b/stereo_pair_left_optical_frame:
-          Value: true
         b/tool0:
-          Value: true
-        b/tool0_controller:
           Value: true
         b/upper_arm_link:
           Value: true
@@ -156,8 +154,8 @@ Visualization Manager:
                                 a/stereo_pair_base_link:
                                   a/cables:
                                     {}
-                                  a/stereo_pair_left_frame:
-                                    a/stereo_pair_left_optical_frame:
+                                  a/stereo_pair/left_frame:
+                                    a/stereo_pair/left_optical_frame:
                                       {}
                                 a/tool0:
                                   {}
@@ -166,8 +164,7 @@ Visualization Manager:
             b/ur5_mount:
               b/base_link:
                 b/base:
-                  b/tool0_controller:
-                    {}
+                  {}
                 b/base_link_inertia:
                   b/shoulder_link:
                     b/upper_arm_link:
@@ -179,8 +176,8 @@ Visualization Manager:
                                 b/stereo_pair_base_link:
                                   b/cables:
                                     {}
-                                  b/stereo_pair_left_frame:
-                                    b/stereo_pair_left_optical_frame:
+                                  b/stereo_pair/left_frame:
+                                    b/stereo_pair/left_optical_frame:
                                       {}
                                 b/tool0:
                                   {}
@@ -198,237 +195,197 @@ Visualization Manager:
       Class: rviz/RobotModel
       Collision Enabled: false
       Enabled: true
-      Link Tree:
+      Links:
         All Links Enabled: false
         Expand Joint Details: false
         Expand Link Details: false
         Expand Tree: false
-        Link Tree Style: Tree of links
+        Link Tree Style: Links in Alphabetic Order
+        a/base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        a/base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        a/base_link_inertia:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        a/cables:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        a/flange:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        a/forearm_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        a/planning_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        a/shoulder_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        a/stereo_pair/left_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        a/stereo_pair/left_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        a/stereo_pair_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        a/tool0:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        a/upper_arm_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        a/ur5_mount:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        a/wrist_1_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        a/wrist_2_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        a/wrist_3_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        b/base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        b/base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        b/base_link_inertia:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        b/cables:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        b/flange:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        b/forearm_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        b/planning_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        b/shoulder_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        b/stereo_pair/left_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        b/stereo_pair/left_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        b/stereo_pair_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        b/tool0:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        b/upper_arm_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        b/ur5_mount:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        b/wrist_1_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        b/wrist_2_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        b/wrist_3_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         base_link:
-          Details:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          canopy:
-            Details:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-            Value: false
-          frame:
-            Details:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-            Value: true
-            a/ur5_mount:
-              Details:
-                Alpha: 1
-                Show Axes: false
-                Show Trail: false
-              Value: true
-              a/base_link:
-                Details:
-                  Alpha: 1
-                  Show Axes: false
-                  Show Trail: false
-                a/base:
-                  Details:
-                    Alpha: 1
-                    Show Axes: false
-                    Show Trail: false
-                a/base_link_inertia:
-                  Details:
-                    Alpha: 1
-                    Show Axes: false
-                    Show Trail: false
-                  Value: true
-                  a/shoulder_link:
-                    Details:
-                      Alpha: 1
-                      Show Axes: false
-                      Show Trail: false
-                    Value: true
-                    a/upper_arm_link:
-                      Details:
-                        Alpha: 1
-                        Show Axes: false
-                        Show Trail: false
-                      Value: true
-                      a/forearm_link:
-                        Details:
-                          Alpha: 1
-                          Show Axes: false
-                          Show Trail: false
-                        Value: true
-                        a/wrist_1_link:
-                          Details:
-                            Alpha: 1
-                            Show Axes: false
-                            Show Trail: false
-                          Value: true
-                          a/wrist_2_link:
-                            Details:
-                              Alpha: 1
-                              Show Axes: false
-                              Show Trail: false
-                            Value: true
-                            a/wrist_3_link:
-                              Details:
-                                Alpha: 1
-                                Show Axes: false
-                                Show Trail: false
-                              Value: true
-                              a/flange:
-                                Details:
-                                  Alpha: 1
-                                  Show Axes: false
-                                  Show Trail: false
-                                a/stereo_pair_base_link:
-                                  Details:
-                                    Alpha: 1
-                                    Show Axes: false
-                                    Show Trail: false
-                                  Value: true
-                                  a/cables:
-                                    Details:
-                                      Alpha: 1
-                                      Show Axes: false
-                                      Show Trail: false
-                                    Value: true
-                                  a/stereo_pair_left_frame:
-                                    Details:
-                                      Alpha: 1
-                                      Show Axes: false
-                                      Show Trail: false
-                                    a/stereo_pair_left_optical_frame:
-                                      Details:
-                                        Alpha: 1
-                                        Show Axes: false
-                                        Show Trail: false
-                                a/tool0:
-                                  Details:
-                                    Alpha: 1
-                                    Show Axes: false
-                                    Show Trail: false
-              a/planning_link:
-                Details:
-                  Alpha: 1
-                  Show Axes: false
-                  Show Trail: false
-            b/ur5_mount:
-              Details:
-                Alpha: 1
-                Show Axes: false
-                Show Trail: false
-              Value: true
-              b/base_link:
-                Details:
-                  Alpha: 1
-                  Show Axes: false
-                  Show Trail: false
-                b/base:
-                  Details:
-                    Alpha: 1
-                    Show Axes: false
-                    Show Trail: false
-                b/base_link_inertia:
-                  Details:
-                    Alpha: 1
-                    Show Axes: false
-                    Show Trail: false
-                  Value: true
-                  b/shoulder_link:
-                    Details:
-                      Alpha: 1
-                      Show Axes: false
-                      Show Trail: false
-                    Value: true
-                    b/upper_arm_link:
-                      Details:
-                        Alpha: 1
-                        Show Axes: false
-                        Show Trail: false
-                      Value: true
-                      b/forearm_link:
-                        Details:
-                          Alpha: 1
-                          Show Axes: false
-                          Show Trail: false
-                        Value: true
-                        b/wrist_1_link:
-                          Details:
-                            Alpha: 1
-                            Show Axes: false
-                            Show Trail: false
-                          Value: true
-                          b/wrist_2_link:
-                            Details:
-                              Alpha: 1
-                              Show Axes: false
-                              Show Trail: false
-                            Value: true
-                            b/wrist_3_link:
-                              Details:
-                                Alpha: 1
-                                Show Axes: false
-                                Show Trail: false
-                              Value: true
-                              b/flange:
-                                Details:
-                                  Alpha: 1
-                                  Show Axes: false
-                                  Show Trail: false
-                                b/stereo_pair_base_link:
-                                  Details:
-                                    Alpha: 1
-                                    Show Axes: false
-                                    Show Trail: false
-                                  Value: true
-                                  b/cables:
-                                    Details:
-                                      Alpha: 1
-                                      Show Axes: false
-                                      Show Trail: false
-                                    Value: true
-                                  b/stereo_pair_left_frame:
-                                    Details:
-                                      Alpha: 1
-                                      Show Axes: false
-                                      Show Trail: false
-                                    b/stereo_pair_left_optical_frame:
-                                      Details:
-                                        Alpha: 1
-                                        Show Axes: false
-                                        Show Trail: false
-                                b/tool0:
-                                  Details:
-                                    Alpha: 1
-                                    Show Axes: false
-                                    Show Trail: false
-              b/planning_link:
-                Details:
-                  Alpha: 1
-                  Show Axes: false
-                  Show Trail: false
-          ground:
-            Details:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-            Value: false
-          wall_1:
-            Details:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-            Value: false
-          wall_2:
-            Details:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-            Value: false
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        canopy:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
+        frame:
+          Alpha: 0.10000000149011612
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        ground:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
+        wall_1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
+        wall_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
       Name: RobotModel
       Robot Description: robot_description
       TF Prefix: ""
@@ -451,7 +408,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 3.3579647541046143
+      Distance: 1.6796245574951172
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -459,17 +416,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: -0.31403976678848267
-        Y: 0.6246181726455688
-        Z: -4.856701707467437e-09
+        X: -1.1213217973709106
+        Y: -0.2386385202407837
+        Z: -1.673786755418405e-06
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5197969675064087
+      Pitch: 0.40479573607444763
       Target Frame: base_link
-      Yaw: 1.5317671298980713
+      Yaw: 0.9417803287506104
     Saved: ~
 Window Geometry:
   Displays:

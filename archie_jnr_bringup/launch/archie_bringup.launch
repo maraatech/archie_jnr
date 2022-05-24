@@ -6,23 +6,14 @@
 	
 	<!-- Load robot description -->
 	<include file="$(find archie_jnr_bringup)/launch/load_archie.launch" pass_all_args="true">
-		<arg name="ee_sensor_a" value=""/><!--stereo realsense zivid kea stereo-kea -->
+		<arg name="ee_sensor_a" value="stereo"/><!--stereo realsense zivid kea stereo-kea -->
   		<arg name="ee_sensor_b" value="stereo"/><!--stereo realsense zivid kea stereo-kea -->
-  	</include>
-
-  	<!-- Load UR arm on local machine -->
-  	<include file="$(find archie_jnr_bringup)/launch/archie_side_bringup.launch">
-  		<arg name="ns"        		   value="$(arg ns_a)"/>
-
-		<arg name="robot_ip"           value="192.168.131.9"/>
-		<arg name="reverse_port"       value="50001"/>
-		<arg name="script_sender_port" value="50002"/>
   	</include>
 
   	<!-- Start joint_state aggregator -->
   	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
-      <param name="/use_gui" value="false"/>
-      <rosparam param="/source_list">[a/joint_states, b/joint_states]</rosparam>
+      	<param name="/use_gui" value="false"/>
+      	<rosparam param="/source_list">[a/joint_states, b/joint_states]</rosparam>
     </node>
 
     <!-- State publishers -->
@@ -36,12 +27,18 @@
 		<arg name="load_robot_description" value="false" />
 	</include>
 
-	<!-- Launch rviz -->
-	<node type="rviz" name="rviz_archie" pkg="rviz" args="-d $(find archie_jnr_bringup)/rviz/archie.rviz" />
+	<!-- Load UR arm on local machine -->
+  	<include file="$(find archie_jnr_bringup)/launch/archie_side_bringup.launch">
+  		<arg name="ns"        		   value="$(arg ns_a)"/>
+
+		<arg name="robot_ip"           value="192.168.131.9"/>
+		<arg name="reverse_port"       value="50001"/>
+		<arg name="script_sender_port" value="50002"/>
+  	</include>
 
 	<!-- load UR arm on secondary machine -->
 	<!-- NOTE: anything after the machine tag is run on the remote machine - hence this being at the bottom of the launch file -->
-	<!-- <machine name="side-$(arg ns_b)" user="anyone" address="stormtrooper" env-loader="~/archie-environment.sh" default="true"/> -->
+	<!-- <machine name="side-$(arg ns_b)" user="anyone" address="stormtrooper" env-loader="~/archie-environment.sh" default="true"/>
 	<include file="$(find archie_jnr_bringup)/launch/archie_side_bringup.launch">
   		<arg name="ns"        		   value="$(arg ns_b)"/>
 
@@ -49,10 +46,9 @@
   		<arg name="reverse_port"       value="50003"/>
 		<arg name="script_sender_port" value="50004"/>
 
-		<!-- Testing at UoA with UR10 -->
-		<arg name="kinematics_config"  value="$(find archie_jnr_description)/config/$(arg ns_b)/ur10_calibration.yaml"/>
+		<arg name="kinematics_config"  value="$(find archie_jnr_description)/config/$(arg ns_b)/ur5_calibration.yaml"/>
 		<arg name="joint_limit_params" value="$(find archie_jnr_description)/config/$(arg ns_b)/joint_limits.yaml"/>
-  	</include>
+  	</include> -->
 </launch>
 
 <!-- <machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/> -->
