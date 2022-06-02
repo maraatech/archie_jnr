@@ -1,7 +1,23 @@
 <?xml version="1.0"?>
 <launch>
   
-  <arg name="side_controllers" default="[side_a_controller]"/>
+  <!-- Mapping Task Server -->
+  <arg name="mapping_server" default="mapping_server"/>
+  
+  <!-- Scanning Server -->
+  <arg name="scanning_server"  default="scanning_server"/>
+  <arg name="scanning_servers" default="[$(arg scanning_server)]"/>
+
+  <!-- Metric Server -->
+  <arg name="metric_server"  default="metrics/stereo_pair_metric_server"/>
+  <arg name="metric_servers" default="[$(arg metric_server)]"/>
+
+  <!-- UR Arm Control Servers -->
+  <arg name="platform_server"  default="manipulator_server"/>
+  <arg name="platform_servers" default="[$(arg platform_server)]"/>
+
+  <!-- Which control frame will be used to move the arms around-->
+  <arg name="robot_control_frame" value="stereo_pair/left_frame" />
 
   <!-- How many images to capture per step -->
   <arg name="num_captures" default="1"/>
@@ -28,7 +44,10 @@
   
   <!-- <group ns="platform"> -->
   <node name="archie_controller_node" pkg="archie_jnr_control" type="archie_controller_node.py" output="screen">
-  	<rosparam param="side_controllers" subst_value="True">$(arg side_controllers)</rosparam> 
+    <rosparam param="platform_servers"  subst_value="True">$(arg platform_servers)</rosparam>
+    <param name="robot_control_frame" value="$(arg robot_control_frame)"/>
+
+  	<param name="mapping_server"   value="$(arg mapping_server)"/>
 
     <param name="num_captures"   value="$(arg num_captures)"/>
     <param name="capture_marker" value="$(arg capture_marker)"/>
@@ -50,10 +69,12 @@
 
   <!-- Replace with Archie...testing with mini_rig -->
   <include file="$(find mini_rig_bringup)/launch/mapping_server.launch">
-  	<arg name="mapping_server"   default="side_a_controller"/>
-	<arg name="platform_server"  default="manipulator_server"/>
+  	<arg name="mapping_server"   default="$(arg mapping_server)"/>
+    <arg name="scanning_server"  default="$(arg scanning_server)"/>
+    <arg name="metric_server"    default="$(arg metric_server)"/>
+	  <arg name="platform_server"  default="$(arg platform_server)"/>
 
   	<arg name="sensors"       default="[stereo_pair]"/>
-	<arg name="sensor_topics" default="$(find mini_rig_bringup)/config/sensor_topics.yaml"/>	
+	  <arg name="sensor_topics" default="$(find mini_rig_bringup)/config/sensor_topics.yaml"/>	
   </include>
 </launch>
