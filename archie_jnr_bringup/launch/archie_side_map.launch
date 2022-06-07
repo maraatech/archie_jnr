@@ -1,48 +1,50 @@
 <?xml version="1.0" ?>
 <launch>
 	<arg name="ns" default="a"/>
-	<group ns="$(arg ns)">
-		<arg name="sensors" default="[stereo_pair]"/>
-		<arg name="sensor_topics" default="$(find archie_jnr_description)/config/$(arg ns)/archie_sensor_topics.yaml"/>
 
-		<!-- Start the canopy mapping node -->
-		<include file="$(find maara_canopy_mapping)/launch/scan.launch">
-			<!-- note platform server has to be on the base namespace for archie -->
-			<arg name="platform_server"  default="/ur_arm_$(arg ns)"/>
+	<arg name="scanning_server"  default="scanning_server"/>
+	<arg name="platform_server"  default="manipulator_server"/>
+	
+	<arg name="sensors"       default="[stereo_pair]"/>
+	<arg name="sensor_topics" default="$(find archie_jnr_description)/config/$(arg ns)/archie_sensor_topics.yaml"/>
+
+	<group ns="$(arg ns)">
+		<!-- Start the scanning server -->
+		<include file="$(find maara_canopy_mapping)/launch/scanning_server.launch">
+			<arg name="scanning_server"  value="$(arg scanning_server)"/>
+			<arg name="platform_server"  value="$(arg platform_server)"/>
 			
-			<arg name="sensors" value="$(arg sensors)"/>
+			<arg name="sensors"       value="$(arg sensors)"/>
 			<arg name="sensor_topics" value="$(arg sensor_topics)"/>
 			
-			<arg name="num_captures" default="1"/>
-
-			<arg name="world_link"  default="world"/>
-
-			<arg name="init_x"  default="-0.3"/>
-			<arg name="init_y"  default="0.30"/>
-			<arg name="init_z"  default="0.1"/>
+			<arg name="num_captures"  value="1"/>
 		</include>
 
-		<include file="$(find traditional_stereo_ros)/launch/stereo_depth_silent.launch">
-		<!-- <include file="$(find traditional_stereo_ros)/launch/stereo_depth.launch"> -->
-		    <arg name="sensor"        value="stereo_pair"/>
-		    <arg name="sensor_topics" value="$(arg sensor_topics)"/>
+		<!-- Set Weight of the Sensor Mount -->
+		<arg name="payload_arg" default="2.0 [0.0,0.0,0.0]" />
+		<node pkg="rosservice" type="rosservice" name="payload" args='call --wait /ur_hardware_interface/set_payload $(arg payload_arg)' />
 
-		    <arg name="scale"         value="1.0"/>
+		<include file="$(find stereo_inference_ros)/launch/matcher_hsmnet.launch">
+	    	<arg name="stereo_ns" default="stereo_pair"/>
 		</include>
 
-		<include file="$(find aruco_detector)/launch/stereo_detector.launch">
-			  <arg name="ns"            default="stereo_pair"/>
-			  <arg name="image_left"    default="left/image_rect_color"/>
-			  <arg name="image_right"   default="right/image_rect_color"/>
-			  <arg name="markers"       default="markers"/>
-			  <arg name="stereo_info"   default="stereo_info"/>
-			  <arg name="display"       default="false"/>
-			  <arg name="tf_prefix"     default="$(arg ns)/stereo_pair"/>
-			  <!-- <arg name="centre"    default="11"/>
-			  <arg name="top_left"  default="6"/>
-			  <arg name="top_right" default="7"/>
-			  <arg name="bot_right" default="16"/>
-			  <arg name="bot_left"  default="15"/> -->
+		<include file="$(find aruco_detector)/launch/mono_charuco_detector.launch">
+			<arg name="display"     default="true"/>
+
+			<arg name="ns"          default="stereo_pair"/>
+			<arg name="tf_prefix"   default="stereo_pair"/>
+			
+			<arg name="image"       default="left/image_rect_color"/>
+			<arg name="camera_info" default="left/rec_camera_info"/>
+
+			<!-- corners to be consistent with checker board - squares minus one -->
+			<arg name="board_width"   value="7"/><!--Number of corners-->
+			<arg name="board_height"  value="10"/><!--Number of corners-->
+			<arg name="square_length" value="100.0"/><!--mm-->
+			<arg name="marker_length" value="78.0"/><!--mm-->
+
+			<arg name="markers"     default="markers"/>
+			<arg name="dictionary"  default="3"/>
 		</include>
 	</group>
 </launch>

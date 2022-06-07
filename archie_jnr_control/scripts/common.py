@@ -83,11 +83,11 @@ def create_navigation_goal(command):
     navigation_goal = NavigationGoal()
     return navigation_goal
 
-def create_mapping_goal(command, scanning_goal, metric_goal):
+def create_mapping_goal(command, scanning_goals, metric_goal):
     mapping_goal = MappingGoal()
     mapping_goal.command = command
-    mapping_goal.scanning_goal = scanning_goal
-    mapping_goal.metric_goal   = metric_goal
+    mapping_goal.scanning_goals = scanning_goals
+    mapping_goal.metric_goal    = metric_goal
     return mapping_goal
 
 def create_scanning_goal(command, pose, planning_link=None, world_link="world", get_marker=False, path_id=255, file_path=""):

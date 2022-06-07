@@ -56,7 +56,7 @@ class ArchieController(object):
             return True
         return False
 
-    def home(self, home_pose, control_link):
+    def home(self, home_poses, control_links):
         # Check if a task controller is operating
         if self.module_controller == None:
             print("No Task Controller Operating")
@@ -67,7 +67,7 @@ class ArchieController(object):
             print(f"Navigation is still operating")
             return False
 
-        self.module_controller.home(home_pose, control_link)            
+        self.module_controller.home(home_poses, control_links)
         return True
     
     def start_mapping(self, mapping_goal):
@@ -87,7 +87,7 @@ class ArchieController(object):
         self.module_controller.start_mapping(mapping_goal)
         return True
 
-    def start_navigation(self, navigation_goal, home_pose, control_link):
+    def start_navigation(self, navigation_goal, home_poses, control_links):
         # Logic to determine if navigation is able to be started
         if self.navigation_controller == None:
             return False
@@ -97,7 +97,7 @@ class ArchieController(object):
             print(f"Module is still operating")
             return False
         elif not self.module_controller == None:
-            self.home(home_pose, control_link)
+            self.home(home_poses, control_links)
 
         # Do your navigation stuff here
         self.navigation_controller.start_navigation(navigation_goal)
@@ -111,7 +111,12 @@ class ArchieController(object):
             self.module_controller.stop()
 
     def get_state(self):
-        return None if self.navigation_controller == None else self.navigation_controller.get_state(), None if self.module_controller == None else self.module_controller.get_state()
+        navigation_state = None if self.navigation_controller == None else self.navigation_controller.get_state()
+        module_state     = None if self.module_controller == None else self.module_controller.get_state()
+        return navigation_state, module_state 
+
+def arm_ui(key):
+    return [[sg.Text(f"Arm:"), sg.Text(size=(40,1), key=key)]]
 
 def scanning_ui(key):
     return [[sg.Text(f"Scan:"), sg.Text(size=(40,1), key=key)]]
@@ -119,11 +124,13 @@ def scanning_ui(key):
 def metric_ui(key):
     return [[sg.Text(f"Metric:"), sg.Text(size=(40,1), key=key)]]
 
-def create_layout(navigation_ui, mapping_ui):
+def create_layout(navigation_ui, mapping_ui, arm_servers):
     # Use these as defaults but read them from the UI for future runs
     world_link          = rospy.get_param('~world_link')
-    planning_link       = rospy.get_param('~planning_link')
-    robot_control_frame = rospy.get_param('~robot_control_frame')
+    
+    planning_links       = rospy.get_param('~planning_links')
+    robot_control_frames = rospy.get_param('~robot_control_frames')
+
     get_marker          = rospy.get_param('~capture_marker', False)
     path_id             = rospy.get_param('~path_id', 0)
 
@@ -133,16 +140,16 @@ def create_layout(navigation_ui, mapping_ui):
     init_roll     = rospy.get_param('~init_roll', 0)
     init_pitch    = rospy.get_param('~init_pitch', 0)
     init_yaw      = rospy.get_param('~init_yaw', 90)
-    init_pose     = utils.create_pose_stamped_msg(init_x, init_y, init_z, planning_link, rpy_deg=[init_roll,init_pitch,init_yaw])
 
     # Improve UI
-    layout = []
-    
+    layout = []    
     if navigation_ui:
+        layout.append([sg.Text(f"Navigation Interface")])
         layout.append([sg.Text('Nav-State:'), sg.Text(size=(45,1), key='-NAV-STATE-')])
 
     if mapping_ui:
         size = (5,1)
+        layout.append([sg.Text(f"Arm Interface")])
         layout.append([sg.Text(f"Home Pose")])
         layout.append([sg.Text("Init X"), sg.InputText(init_x, size=size, key='-INIT-X-'), 
             sg.Text("Init Y"), sg.InputText(init_y, size=size, key='-INIT-Y-'), 
@@ -154,8 +161,14 @@ def create_layout(navigation_ui, mapping_ui):
 
         size = (20,1)
         layout.append([sg.Text(f"World: "),    sg.InputText(world_link, size=size, key="-WORLD-")])
-        layout.append([sg.Text(f"Planning: "), sg.InputText(planning_link, size=size, key="-PLANNING-")])
-        layout.append([sg.Text(f"Control: "),  sg.InputText(robot_control_frame, size=size, key="-CONTROL-")])
+    
+        for i, arm_server in enumerate(arm_servers):
+            layout.append([sg.Text(f"Planning: "), sg.InputText(planning_links[i],       size=size, key=f"-PLANNING-{i}-")])
+            layout.append([sg.Text(f"Control: "),  sg.InputText(robot_control_frames[i], size=size, key=f"-CONTROL-{i}-")])
+            layout.append(arm_ui(arm_server))
+
+        size = (20,1)
+        layout.append([sg.Text(f"Task Interface")])
         layout.append([sg.Text(f"Marker: "),   sg.InputText(get_marker, size=size, key="-MARKER-")])
         layout.append([sg.Text(f"Path: "),     sg.InputText(path_id, size=size, key="-PATH-")])
 
@@ -181,7 +194,7 @@ def main():
 
     archie_controller = ArchieController(navigation_server=navigation_server, arm_servers=arm_servers, mapping_server=mapping_server)
 
-    layout = create_layout(navigation_server is not None, mapping_server is not None)
+    layout = create_layout(navigation_server is not None, mapping_server is not None, arm_servers)
     window = sg.Window('Archie Control Interface', layout)
 
     r = rospy.Rate(10)
@@ -196,17 +209,20 @@ def main():
         if event == 'Map':
             # Generate file_path to save data into
             file_path = get_filepath()
-            scanning_goal = common.create_scanning_goal(ScanningGoal.MAP, init_pose, 
-                                                        planning_link=str(values["-PLANNING-"]), 
-                                                        world_link=str(values["-WORLD-"]), 
-                                                        get_marker=bool(int(values["-MARKER-"])), 
-                                                        path_id=int(values["-PATH-"]), 
-                                                        file_path=file_path)
+            scanning_goals = []
+            for i in range(len(arm_servers)):
+                scanning_goal = common.create_scanning_goal(ScanningGoal.MAP, init_pose,
+                                                            planning_link=str(values[f"-PLANNING-{i}-"]), 
+                                                            world_link=str(values["-WORLD-"]), 
+                                                            get_marker=bool(int(values["-MARKER-"])), 
+                                                            path_id=int(values["-PATH-"]), 
+                                                            file_path=file_path)
+                scanning_goals.append(scanning_goal)
             
             metric_goal = common.create_metric_goal(MetricExtractionGoal.RESET, 
                                                     file_path=file_path)
 
-            mapping_goal = common.create_mapping_goal(MappingGoal.MAP, scanning_goal, metric_goal)
+            mapping_goal = common.create_mapping_goal(MappingGoal.MAP, scanning_goals, metric_goal)
 
             if archie_controller.start_mapping(mapping_goal):
                 print("Mapping Task Started")
@@ -215,13 +231,13 @@ def main():
 
         elif event == 'Navigate':
             navigation_goal = common.create_navigation_goal(0)
-            if archie_controller.start_navigation(navigation_goal, home_pose=init_pose, control_link=str(values['-CONTROL-'])):
+            if archie_controller.start_navigation(navigation_goal, home_poses=init_poses, control_links=control_links):
                 print("Navigation Task Started")
             else:
                 print("Navigation Request Failed")            
 
         elif event == 'Home':
-            if archie_controller.home(init_pose, str(values['-CONTROL-'])):
+            if archie_controller.home(home_poses=init_poses, control_links=control_links):
                 print("Home Task Started")
             else:
                 print("Home Request Failed")   
@@ -237,9 +253,16 @@ def main():
             window['-NAV-STATE-'].update(navigation_status)
         
         if "-TASK-STATE-" in window.AllKeysDict:
-            navigation_status, task_status = archie_controller.get_state()
+            navigation_status, module_status = archie_controller.get_state()
 
-            mapping_task_status, mapping_feedback = task_status
+            task_status, arm_states = module_status
+
+            for key in arm_servers:
+                status, feedback = arm_states[key]
+                status = common.goal_to_str(status)
+                window[key].update(f"{status}")
+
+            mapping_status, mapping_feedback = task_status
             for i, feedback in enumerate(mapping_feedback.scanning_feedback):
                 if not f"-MAP-{i}" in window.AllKeysDict:
                     window.extend_layout(window['-Column-'], scanning_ui(f"-MAP-{i}"))
@@ -260,18 +283,23 @@ def main():
                 window[f"-METRIC-{i}"].update(f"{status} {processed}/{queued}")
 
 
-            mapping_task_status = common.goal_to_str(mapping_task_status)
+            task_status    = common.goal_to_str(mapping_status)
             mapping_status = common.mapping_to_str(mapping_feedback.status)
-            window["-TASK-STATE-"].update(f"{mapping_task_status} {mapping_status}")
+            window["-TASK-STATE-"].update(f"{task_status} {mapping_status}")
 
             #Update init_pose from UI
-            init_pose = utils.create_pose_stamped_msg(float(values["-INIT-X-"]), 
-                                                     float(values["-INIT-Y-"]), 
-                                                     float(values["-INIT-Z-"]), 
-                                                     str(values["-PLANNING-"]), 
-                                                     rpy_deg=[float(values["-INIT-R-"]), 
-                                                              float(values["-INIT-P-"]),
-                                                              float(values["-INIT-Y-"])])
+            init_poses = {}
+            control_links = {}
+            for i, arm_server in enumerate(arm_servers):
+                init_pose = utils.create_pose_stamped_msg(float(values["-INIT-X-"]), 
+                                                        float(values["-INIT-Y-"]), 
+                                                        float(values["-INIT-Z-"]), 
+                                                        str(values[f"-PLANNING-{i}-"]),
+                                                        rpy_deg=[float(values["-INIT-R-"]), 
+                                                                float(values["-INIT-P-"]),
+                                                                float(values["-INIT-Y-"])])
+                init_poses[arm_server]    = init_pose
+                control_links[arm_server] = str(values[f"-CONTROL-{i}-"])
 
         r.sleep()
 

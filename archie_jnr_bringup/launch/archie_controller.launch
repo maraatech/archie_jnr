@@ -2,22 +2,25 @@
 <launch>
   
   <!-- Mapping Task Server -->
-  <arg name="mapping_server" default="mapping_server"/>
-  
-  <!-- Scanning Server -->
-  <arg name="scanning_server"  default="scanning_server"/>
-  <arg name="scanning_servers" default="[$(arg scanning_server)]"/>
-
-  <!-- Metric Server -->
-  <arg name="metric_server"  default="metrics/stereo_pair_metric_server"/>
-  <arg name="metric_servers" default="[$(arg metric_server)]"/>
+  <arg name="mapping_server" value="mapping_server"/>
 
   <!-- UR Arm Control Servers -->
-  <arg name="platform_server"  default="manipulator_server"/>
-  <arg name="platform_servers" default="[$(arg platform_server)]"/>
-
+  <arg name="platform_server_a"  value="/ur_arm_a_server"/>
+	<arg name="platform_server_b"  value="/ur_arm_b_server"/>
+  <arg name="platform_servers"   value="[$(arg platform_server_a), $(arg platform_server_b)]"/>
+  
+  <!-- Planning Link to define poses from -->
+  <arg name="planning_link_a" value="a/planning_link"/>
+  <arg name="planning_link_b" value="b/planning_link"/>
+  <arg name="planning_links"  value="[$(arg planning_link_a), $(arg planning_link_b)]"/>
+  
   <!-- Which control frame will be used to move the arms around-->
-  <arg name="robot_control_frame" value="stereo_pair/left_frame" />
+  <arg name="robot_control_frame_a" value="a/stereo_pair/left_frame" />
+  <arg name="robot_control_frame_b" value="b/stereo_pair/left_frame" />
+  <arg name="robot_control_frames"  value="[$(arg robot_control_frame_a), $(arg robot_control_frame_b)]"/>
+
+  <!-- World Link -->
+  <arg name="world_link"  default="world"/>
 
   <!-- How many images to capture per step -->
   <arg name="num_captures" default="1"/>
@@ -35,19 +38,18 @@
   <arg name="init_pitch" value="0.0"/>
   <arg name="init_yaw"   value="90.0"/>
 
-  <arg name="planning_link" default="base_link"/>
-
-  <arg name="world_link"  default="world"/>
-
   <!-- Path ID - path_factory -->
   <arg name="path_id"  default="0"/>
   
   <!-- <group ns="platform"> -->
   <node name="archie_controller_node" pkg="archie_jnr_control" type="archie_controller_node.py" output="screen">
-    <rosparam param="platform_servers"  subst_value="True">$(arg platform_servers)</rosparam>
-    <param name="robot_control_frame" value="$(arg robot_control_frame)"/>
+    <rosparam param="platform_servers"     subst_value="True">$(arg platform_servers)</rosparam>
+    <rosparam param="robot_control_frames" subst_value="True">$(arg robot_control_frames)</rosparam>
+    <rosparam param="planning_links"       subst_value="True">$(arg planning_links)</rosparam>
+  
+    <param name="world_link"           value="$(arg world_link)"/>
 
-  	<param name="mapping_server"   value="$(arg mapping_server)"/>
+  	<param name="mapping_server" value="$(arg mapping_server)"/>
 
     <param name="num_captures"   value="$(arg num_captures)"/>
     <param name="capture_marker" value="$(arg capture_marker)"/>
@@ -60,21 +62,6 @@
     <param name="init_pitch" value="$(arg init_pitch)"/>
     <param name="init_yaw"   value="$(arg init_yaw)"/>
 
-    <param name="planning_link" value="$(arg planning_link)"/>
-
-    <param name="world_link" value="$(arg world_link)"/>
-
     <param name="path_id" value="$(arg path_id)"/>
   </node>
-
-  <!-- Replace with Archie...testing with mini_rig -->
-  <include file="$(find mini_rig_bringup)/launch/mapping_server.launch">
-  	<arg name="mapping_server"   default="$(arg mapping_server)"/>
-    <arg name="scanning_server"  default="$(arg scanning_server)"/>
-    <arg name="metric_server"    default="$(arg metric_server)"/>
-	  <arg name="platform_server"  default="$(arg platform_server)"/>
-
-  	<arg name="sensors"       default="[stereo_pair]"/>
-	  <arg name="sensor_topics" default="$(find mini_rig_bringup)/config/sensor_topics.yaml"/>	
-  </include>
 </launch>

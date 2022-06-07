@@ -56,20 +56,23 @@ class ModuleController(object):
         self.mapping_client.send_goal(mapping_goal)
 
     # Pass through link_id
-    def home(self, home_pose, control_link):
+    def home(self, home_poses, control_links):
         if not self.mapping_client.is_idle():
             self.stop_mapping()
         
-        platform_goal = PlatformGoalGoal()
-        platform_goal.command = PlatformGoalGoal.MOVE
-        platform_goal.link_id.data = control_link
-        platform_goal.target_pose  = home_pose
-        for arm_client in self.arm_clients.values():
-            arm_client.send_goal(platform_goal) 
+        for key in home_poses.keys():
+            platform_goal = PlatformGoalGoal()
+            platform_goal.command = PlatformGoalGoal.MOVE
+            platform_goal.link_id.data = control_links[key]
+            platform_goal.target_pose  = home_poses[key]
+            self.arm_clients[key].send_goal(platform_goal) 
 
     # Extend state to return arm states as well
     def get_state(self):
-        return self.mapping_client.get_state()
+        arm_states = {}
+        for key, value in self.arm_clients.items():
+            arm_states[key] = value.get_state()
+        return self.mapping_client.get_state(), arm_states
 
     def idle(self):
         return self.mapping_client.is_idle()
