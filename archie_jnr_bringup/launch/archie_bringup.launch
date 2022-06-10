@@ -4,6 +4,10 @@
 	<arg name="ns_a" value="a"/>
 	<arg name="ns_b" value="b"/>
 	
+	<!-- load Archie systems on primary machine -->
+	<!-- NOTE: anything after the machine tag is run on the remote machine - hence this being at the bottom of the launch file -->
+	<machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/>
+
 	<!-- Load robot description -->
 	<include file="$(find archie_jnr_bringup)/launch/load_archie.launch" pass_all_args="true">
 		<arg name="ee_sensor_a" value="stereo"/><!--stereo realsense zivid kea stereo-kea -->
@@ -26,7 +30,7 @@
 		<arg name="publish_monitored_planning_scene" value="true" />
 	</include>
 
-	<!-- Load UR arm on local machine -->
+	<!-- Load UR arm -->
   	<include file="$(find archie_jnr_bringup)/launch/archie_side_bringup.launch">
   		<arg name="ns"        		   value="$(arg ns_a)"/>
 
@@ -37,14 +41,14 @@
 
 	<!-- load UR arm on secondary machine -->
 	<!-- NOTE: anything after the machine tag is run on the remote machine - hence this being at the bottom of the launch file -->
-	<!-- <machine name="side-$(arg ns_b)" user="anyone" address="stormtrooper" env-loader="~/archie-environment.sh" default="true"/>
+	<machine name="side-$(arg ns_b)" user="anyone" address="stormtrooper" env-loader="~/archie-environment.sh" default="true"/>
 	<include file="$(find archie_jnr_bringup)/launch/archie_side_bringup.launch">
   		<arg name="ns"        		   value="$(arg ns_b)"/>
 
   		<arg name="robot_ip"           value="192.168.131.8"/>
   		<arg name="reverse_port"       value="50003"/>
 		<arg name="script_sender_port" value="50004"/>
-  	</include> -->
+  	</include>
 </launch>
 
 <!-- <machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/> -->

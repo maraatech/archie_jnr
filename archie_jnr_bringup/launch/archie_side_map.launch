@@ -21,7 +21,7 @@
 		</include>
 
 		<!-- Set Weight of the Sensor Mount -->
-		<arg name="payload_arg" default="2.0 [0.0,0.0,0.0]" />
+		<arg name="payload_arg" default="1.0 [0.0,0.0,0.0]" />
 		<node pkg="rosservice" type="rosservice" name="payload" args='call --wait /ur_hardware_interface/set_payload $(arg payload_arg)' />
 
 		<include file="$(find stereo_inference_ros)/launch/matcher_hsmnet.launch">
