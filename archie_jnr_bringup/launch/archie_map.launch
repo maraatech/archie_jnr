@@ -9,8 +9,7 @@
 	<!-- Scanning Server -->
 	<arg name="scanning_server_a"  default="scanning_server_$(arg ns_a)"/>
 	<arg name="scanning_server_b"  default="scanning_server_$(arg ns_b)"/>
-	<!-- <arg name="scanning_servers"   value="[$(arg ns_a)/$(arg scanning_server_a), $(arg ns_b)/$(arg scanning_server_b)]"/> -->
-	<arg name="scanning_servers"   value="[$(arg ns_a)/$(arg scanning_server_a)]"/>
+	<arg name="scanning_servers"   value="[$(arg ns_a)/$(arg scanning_server_a), $(arg ns_b)/$(arg scanning_server_b)]"/>
 
 	<!-- UR Arm Control Servers -->
 	<arg name="platform_server_a"  default="/ur_arm_$(arg ns_a)_server"/>
@@ -34,20 +33,21 @@
 	</include>
 
 	<!-- Start Scanning Servers on each arm -->
+	<!--<machine name="side-$(arg ns_b)" user="anyone" address="stormtrooper" env-loader="~/archie-environment.sh" default="true"/>-->
+	<include file="$(find archie_jnr_bringup)/launch/archie_side_map.launch">
+		<arg name="ns" value="$(arg ns_b)"/>
+		
+		<arg name="scanning_server"  default="$(arg scanning_server_b)"/>
+		<arg name="platform_server"  default="$(arg platform_server_b)"/>
+	</include>
+	
+	<machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/>
 	<include file="$(find archie_jnr_bringup)/launch/archie_side_map.launch">
 		<arg name="ns" value="$(arg ns_a)"/>
 		
 		<arg name="scanning_server"  default="$(arg scanning_server_a)"/>
 		<arg name="platform_server"  default="$(arg platform_server_a)"/>
 	</include>
-
-	<!-- <machine name="side-$(arg ns_b)" user="anyone" address="stormtrooper" env-loader="~/archie-environment.sh" default="true"/>
-	<include file="$(find archie_jnr_bringup)/launch/archie_side_map.launch">
-		<arg name="ns" value="$(arg ns_b)"/>
-		
-		<arg name="scanning_server"  default="$(arg scanning_server_b)"/>
-		<arg name="platform_server"  default="$(arg platform_server_b)"/>
-	</include> -->
 </launch>
 
 <!-- <machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/> -->

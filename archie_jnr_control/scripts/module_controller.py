@@ -65,7 +65,9 @@ class ModuleController(object):
             platform_goal.command = PlatformGoalGoal.MOVE
             platform_goal.link_id.data = control_links[key]
             platform_goal.target_pose  = home_poses[key]
-            self.arm_clients[key].send_goal(platform_goal) 
+            self.arm_clients[key].send_goal(platform_goal)
+            while not self.arm_clients[key].is_idle():
+                pass
 
     # Extend state to return arm states as well
     def get_state(self):

@@ -155,9 +155,9 @@ def create_layout(navigation_ui, mapping_ui, arm_servers):
             sg.Text("Init Y"), sg.InputText(init_y, size=size, key='-INIT-Y-'), 
             sg.Text("Init Z"), sg.InputText(init_z, size=size, key='-INIT-Z-')])
 
-        layout.append([sg.Text("Init R"), sg.InputText(init_roll, size=size, key='-INIT-R-'), 
-            sg.Text("Init P"), sg.InputText(init_pitch, size=size, key='-INIT-P-'), 
-            sg.Text("Init Y"), sg.InputText(init_yaw, size=size, key='-INIT-Y-')])
+        layout.append([sg.Text("Init R"), sg.InputText(init_roll, size=size, key='-INIT-ROLL-'), 
+            sg.Text("Init P"), sg.InputText(init_pitch, size=size, key='-INIT-PITCH-'), 
+            sg.Text("Init Y"), sg.InputText(init_yaw, size=size, key='-INIT-YAW-')])
 
         size = (20,1)
         layout.append([sg.Text(f"World: "),    sg.InputText(world_link, size=size, key="-WORLD-")])
@@ -198,6 +198,7 @@ def main():
     window = sg.Window('Archie Control Interface', layout)
 
     r = rospy.Rate(10)
+    init_pose = None
     while not rospy.is_shutdown():
         #Process any UI inputs
         event, values = window.read(timeout=100)
@@ -210,19 +211,22 @@ def main():
             # Generate file_path to save data into
             file_path = get_filepath()
             scanning_goals = []
-            for i in range(len(arm_servers)):
-                scanning_goal = common.create_scanning_goal(ScanningGoal.MAP, init_pose,
+            for i, arm_server in enumerate(arm_servers):
+                scanning_goal = common.create_scanning_goal(ScanningGoal.MAP,
                                                             planning_link=str(values[f"-PLANNING-{i}-"]), 
-                                                            world_link=str(values["-WORLD-"]), 
-                                                            get_marker=bool(int(values["-MARKER-"])), 
-                                                            path_id=int(values["-PATH-"]), 
                                                             file_path=file_path)
                 scanning_goals.append(scanning_goal)
             
-            metric_goal = common.create_metric_goal(MetricExtractionGoal.RESET, 
+            metric_goal = common.create_metric_goal(MetricExtractionGoal.RESET,
                                                     file_path=file_path)
 
-            mapping_goal = common.create_mapping_goal(MappingGoal.MAP, scanning_goals, metric_goal)
+            mapping_goal = common.create_mapping_goal(MappingGoal.MAP, 
+                                                      init_pose,
+                                                      bool(int(values["-MARKER-"])), 
+                                                      int(values["-PATH-"]),
+                                                      scanning_goals, 
+                                                      metric_goal,
+                                                      world_link=str(values["-WORLD-"]))
 
             if archie_controller.start_mapping(mapping_goal):
                 print("Mapping Task Started")
@@ -263,15 +267,16 @@ def main():
                 window[key].update(f"{status}")
 
             mapping_status, mapping_feedback = task_status
+            count = mapping_feedback.count
+            total = mapping_feedback.total
+            
             for i, feedback in enumerate(mapping_feedback.scanning_feedback):
                 if not f"-MAP-{i}" in window.AllKeysDict:
                     window.extend_layout(window['-Column-'], scanning_ui(f"-MAP-{i}"))
                 
                 status     = common.scanning_to_str(feedback.status)
                 arm_status = common.scanning_to_str(feedback.arm_status)
-                count      = feedback.count
-                total      = feedback.total
-                window[f"-MAP-{i}"].update(f"{status} Arm: {arm_status} Scan: {count}/{total}")
+                window[f"-MAP-{i}"].update(f"{status} Arm: {arm_status} Count: {count}/{total}")
 
             for i, feedback in enumerate(mapping_feedback.metric_feedback):
                 if not f"-METRIC-{i}" in window.AllKeysDict:
@@ -295,9 +300,9 @@ def main():
                                                         float(values["-INIT-Y-"]), 
                                                         float(values["-INIT-Z-"]), 
                                                         str(values[f"-PLANNING-{i}-"]),
-                                                        rpy_deg=[float(values["-INIT-R-"]), 
-                                                                float(values["-INIT-P-"]),
-                                                                float(values["-INIT-Y-"])])
+                                                        rpy_deg=[float(values["-INIT-ROLL-"]), 
+                                                                float(values["-INIT-PITCH-"]),
+                                                                float(values["-INIT-YAW-"])])
                 init_poses[arm_server]    = init_pose
                 control_links[arm_server] = str(values[f"-CONTROL-{i}-"])
 

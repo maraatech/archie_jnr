@@ -20,28 +20,24 @@
 			<arg name="num_captures"  value="1"/>
 		</include>
 
-		<!-- Set Weight of the Sensor Mount -->
-		<arg name="payload_arg" default="1.0 [0.0,0.0,0.0]" />
-		<node pkg="rosservice" type="rosservice" name="payload" args='call --wait /ur_hardware_interface/set_payload $(arg payload_arg)' />
-
 		<include file="$(find stereo_inference_ros)/launch/matcher_hsmnet.launch">
 	    	<arg name="stereo_ns" default="stereo_pair"/>
 		</include>
 
 		<include file="$(find aruco_detector)/launch/mono_charuco_detector.launch">
-			<arg name="display"     default="true"/>
+			<arg name="display"     default="false"/>
 
-			<arg name="ns"          default="stereo_pair"/>
-			<arg name="tf_prefix"   default="stereo_pair"/>
+			<arg name="sensor"      default="stereo_pair"/>
+			<arg name="tf_prefix"   default="$(arg ns)/stereo_pair"/>
 			
 			<arg name="image"       default="left/image_rect_color"/>
 			<arg name="camera_info" default="left/rec_camera_info"/>
 
 			<!-- corners to be consistent with checker board - squares minus one -->
-			<arg name="board_width"   value="7"/><!--Number of corners-->
-			<arg name="board_height"  value="10"/><!--Number of corners-->
-			<arg name="square_length" value="100.0"/><!--mm-->
-			<arg name="marker_length" value="78.0"/><!--mm-->
+			<arg name="board_width"   value="5"/><!--Number of corners-->
+			<arg name="board_height"  value="3"/><!--Number of corners-->
+			<arg name="square_length" value="65.0"/><!--mm-->
+			<arg name="marker_length" value="51.0"/><!--mm-->
 
 			<arg name="markers"     default="markers"/>
 			<arg name="dictionary"  default="3"/>

@@ -37,21 +37,21 @@
       <xacro:cube xyz="0.0 0.0 -0.005" size="2.0 2.0 0.01"/>
     </link>
     <xacro:joint_xacro name="base_link_to_ground" parent="base_link" child="ground" type="fixed"/>
-    
-    <!-- Canopy  -->
+   
+     <!-- Canopy  -->
     <link name="canopy">
-      <xacro:cube xyz="0.0 0.0 0.8" size="0.25 2.0 1.6"/>
+        <xacro:cube xyz="0.0 0.0 0.8" size="0.25 2.0 1.6"/>
     </link>
     <xacro:joint_xacro name="base_link_to_canopy" parent="base_link" child="canopy" type="fixed"/>
     
     <!-- Protective Walls 1 and 2 -->
     <link name="wall_1">
-      <xacro:cube xyz="0.0 0.63 1.0" size="2.0 0.01 2.0"/>
+      <xacro:cube xyz="0.0 0.63 1.0" size="2.0 0.05 2.0"/>
     </link>
     <xacro:joint_xacro name="base_link_to_wall_1" parent="base_link" child="wall_1" type="fixed"/>
 
     <link name="wall_2">
-      <xacro:cube xyz="0.0 -0.63 1.0" size="2.0 0.01 2.0"/>
+      <xacro:cube xyz="0.0 -0.63 1.0" size="2.0 0.05 2.0"/>
     </link>
     <xacro:joint_xacro name="base_link_to_wall_2" parent="base_link" child="wall_2" type="fixed"/>
 

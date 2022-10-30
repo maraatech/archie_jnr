@@ -8,10 +8,9 @@ stereo_pair/stereo_info_topic: "stereo_info"
 stereo_pair/image_topic: "stereo/image_color"
 stereo_pair/depth_image_topic: "stereo/depth"
 stereo_pair/camera_info_topic: "stereo/camera_info"
-stereo_pair/xyzrgb_topic: "stereo/points"
+stereo_pair/xyzrgb_topic: ""
 
-stereo_pair/sensor_link: "b/stereo_pair/base_link"
-# stereo_pair/sensor_link: "b/stereo_pair/left_frame"
+stereo_pair/sensor_link: "b/stereo_pair/left_frame"
 
 # Zivid Topic Names == "zivid"
 zivid_camera/image_topic: "color/image_color"

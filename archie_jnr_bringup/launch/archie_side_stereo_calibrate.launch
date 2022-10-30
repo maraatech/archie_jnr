@@ -1,66 +1,68 @@
 <?xml version="1.0" ?>
 <launch>
+    <arg name="display" default="true"/>
+
     <arg name="ns" default="a"/>
     <arg name="tf_prefix" default="$(arg ns)/"/>
+
+    <!-- Init Pose -->
+    <!-- Meters -->
+    <arg name="init_x"  value="0.0"/>
+    <arg name="init_y"  value="0.3"/>
+    <arg name="init_z"  value="0.1"/>
+    <!-- Degrees -->
+    <arg name="init_roll"  value="180.0"/>
+    <arg name="init_pitch" value="0.0"/>
+    <arg name="init_yaw"   value="0.0"/>
+
+    <arg name="planning_link" value="$(arg ns)/planning_link"/>
+
+    <arg name="platform_server" value="/ur_arm_$(arg ns)_server"/>
+
+    <!-- Calibration frame IDs -->
+    <arg name="robot_base_frame"      default="$(arg tf_prefix)base_link" />
+    <arg name="robot_effector_frame"  default="$(arg tf_prefix)stereo_pair_base_link" />
+    <arg name="tracking_base_frame"   default="$(arg tf_prefix)stereo_pair/left_frame"/>
+
+    <!-- Which control frame will be used to move the sensor around during calibration -->
+    <arg name="robot_control_frame" value="$(arg tf_prefix)stereo_pair_base_link"/>
+
+    <arg name="sensor" default="stereo_pair"/>
+    <arg name="sensor_topics" default="$(find archie_jnr_description)/config/$(arg ns)/archie_sensor_topics_calibration.yaml"/>
+
+    <!--Charuco Board Parameters-->
+    <arg name="dictionary"    value="3"/>
+    <arg name="board_width"   value="7"/><!--Number of corners-->
+    <arg name="board_height"  value="10"/><!--Number of corners-->
+    <arg name="square_length" value="100.0"/><!--mm-->
+    <arg name="marker_length" value="78.0"/><!--mm-->
+
+    <!-- Big Big Board -->
+    <!-- 7 10 100 78 -->
+    <!-- Big Board -->
+    <!-- 14 23 48 36 -->
+    <!-- Little Board -->
+    <!-- 3 5 65 51 -->
+
+    <arg name="image_width"  value="2464"/>
+    <arg name="image_height" value="2056"/>
+
+    <!-- Aruco Diamond IDs -->
+    <arg name="marker_type" default="diamond"/>
+    <arg name="centre"    default="22"/>
+    <arg name="top_left"  default="25"/>
+    <arg name="top_right" default="17"/>
+    <arg name="bot_right" default="18"/>
+    <arg name="bot_left"  default="26"/>
+    <arg name="target_marker_id" default="$(arg centre)"/>
+
+    <!-- <arg name="marker_type" default="charuco"/>
+    <arg name="target_marker_id" default="0"/> -->
+
+    <arg name="is_depth_in_meters" default="true" />
+
     <group ns="$(arg ns)">
-        <!-- Init Pose -->
-        <!-- Meters -->
-        <arg name="init_x"  value="0.0"/>
-        <arg name="init_y"  value="0.6"/>
-        <arg name="init_z"  value="0.0"/>
-        <!-- Degrees -->
-        <arg name="init_roll"  value="180.0"/>
-        <arg name="init_pitch" value="0.0"/>
-        <arg name="init_yaw"   value="90.0"/>
-
-        <arg name="planning_link" value="base_link"/>
-
-        <arg name="platform_server" value="/ur_arm_$(arg ns)_server"/>
-
-        <!-- Calibration frame IDs -->
-        <arg name="robot_base_frame"      default="$(arg tf_prefix)base_link" />
-        <arg name="robot_effector_frame"  default="$(arg tf_prefix)stereo_pair_base_link" />
-        <arg name="tracking_base_frame"   default="$(arg tf_prefix)stereo_pair/left_frame"/>
-
-        <!-- Which control frame will be used to move the sensor around during calibration -->
-        <arg name="robot_control_frame" value="$(arg tf_prefix)stereo_pair_base_link"/>
-
-        <arg name="sensor" default="stereo_pair"/>
-        <arg name="sensor_topics" default="$(find archie_jnr_description)/config/$(arg ns)/archie_sensor_topics_calibration.yaml"/>
-
-        <!--Charuco Board Parameters-->
-        <arg name="dictionary"    value="3"/>
-        <arg name="board_width"   value="5"/><!--Number of corners-->
-        <arg name="board_height"  value="3"/><!--Number of corners-->
-        <arg name="square_length" value="65.0"/><!--mm-->
-        <arg name="marker_length" value="51.0"/><!--mm-->
-
-        <!-- Big Big Board -->
-        <!-- 7 10 100 78 -->
-        <!-- Big Board -->
-        <!-- 14 23 48 36 -->
-        <!-- Little Board -->
-        <!-- 3 5 65 51 -->
-
-        <arg name="image_width"  value="2464"/>
-        <arg name="image_height" value="2056"/>
-
-        <!-- Aruco Diamond IDs -->
-        <arg name="marker_type" default="diamond"/>
-        <arg name="centre"    default="22"/>
-        <arg name="top_left"  default="25"/>
-        <arg name="top_right" default="17"/>
-        <arg name="bot_right" default="18"/>
-        <arg name="bot_left"  default="26"/>
-        <arg name="target_marker_id" default="$(arg centre)"/>
-
-        <!-- <arg name="marker_type" default="charuco"/>
-        <arg name="target_marker_id" default="0"/> -->
-
-        <arg name="is_depth_in_meters" default="true" />
-
     	<include file="$(find cares_hand_eye_calibration)/launch/stereo_auto_calibration.launch" pass_all_args="true">
-        
         </include>
         
         <!-- Set Weight of the Sensor Mount -->

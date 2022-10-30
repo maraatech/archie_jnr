@@ -20,23 +20,23 @@
   <arg name="robot_control_frames"  value="[$(arg robot_control_frame_a), $(arg robot_control_frame_b)]"/>
 
   <!-- World Link -->
-  <arg name="world_link"  default="world"/>
+  <arg name="world_link"  default="ground"/>
 
   <!-- How many images to capture per step -->
   <arg name="num_captures" default="1"/>
 
   <!-- Capture Marker for alignment -->
-  <arg name="capture_marker" default="false"/>
+  <arg name="capture_marker" default="true"/>
 
   <!-- Init Pose -->
   <!-- Meters -->
   <arg name="init_x"  value="0.0"/>
-  <arg name="init_y"  value="0.5"/>
-  <arg name="init_z"  value="0.0"/>
+  <arg name="init_y"  value="0.3"/>
+  <arg name="init_z"  value="0.1"/>
   <!-- Degrees -->
   <arg name="init_roll"  value="180.0"/>
   <arg name="init_pitch" value="0.0"/>
-  <arg name="init_yaw"   value="90.0"/>
+  <arg name="init_yaw"   value="0.0"/>
 
   <!-- Path ID - path_factory -->
   <arg name="path_id"  default="0"/>

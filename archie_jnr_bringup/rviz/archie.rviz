@@ -4,10 +4,9 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /RobotModel1
         - /RobotModel1/Links1
-      Splitter Ratio: 0.7425600290298462
-    Tree Height: 901
+      Splitter Ratio: 0.4404761791229248
+    Tree Height: 227
   - Class: rviz/Help
     Name: Help
   - Class: rviz/Views
@@ -67,6 +66,8 @@ Visualization Manager:
           Value: true
         a/stereo_pair_base_link:
           Value: true
+        a/stereo_pair_charuco_0:
+          Value: true
         a/tool0:
           Value: true
         a/tool0_controller:
@@ -103,7 +104,11 @@ Visualization Manager:
           Value: true
         b/stereo_pair_base_link:
           Value: true
+        b/stereo_pair_charuco_0:
+          Value: true
         b/tool0:
+          Value: true
+        b/tool0_controller:
           Value: true
         b/upper_arm_link:
           Value: true
@@ -156,7 +161,8 @@ Visualization Manager:
                                     {}
                                   a/stereo_pair/left_frame:
                                     a/stereo_pair/left_optical_frame:
-                                      {}
+                                      a/stereo_pair_charuco_0:
+                                        {}
                                 a/tool0:
                                   {}
               a/planning_link:
@@ -164,7 +170,8 @@ Visualization Manager:
             b/ur5_mount:
               b/base_link:
                 b/base:
-                  {}
+                  b/tool0_controller:
+                    {}
                 b/base_link_inertia:
                   b/shoulder_link:
                     b/upper_arm_link:
@@ -178,7 +185,8 @@ Visualization Manager:
                                     {}
                                   b/stereo_pair/left_frame:
                                     b/stereo_pair/left_optical_frame:
-                                      {}
+                                      b/stereo_pair_charuco_0:
+                                        {}
                                 b/tool0:
                                   {}
               b/planning_link:
@@ -392,11 +400,125 @@ Visualization Manager:
       Update Interval: 0
       Value: true
       Visual Enabled: true
+    - Class: rviz/Camera
+      Enabled: true
+      Image Rendering: background and overlay
+      Image Topic: /a/stereo_pair/left/image_rect_color
+      Name: Side-A-Camera
+      Overlay Alpha: 0.5
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: true
+      Visibility:
+        Grid: false
+        RobotModel: true
+        Side-A-PC: false
+        Side-A-Path: false
+        Side-B-Camera: false
+        Side-B-PC: false
+        Side-B-Path: false
+        TF: true
+        Value: true
+      Zoom Factor: 1
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /a/path_marker
+      Name: Side-A-Path
+      Namespaces:
+        "": true
+      Queue Size: 100
+      Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Min Color: 0; 0; 0
+      Name: Side-A-PC
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0010000000474974513
+      Style: Spheres
+      Topic: /a/stereo_pair/stereo/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
+    - Class: rviz/Camera
+      Enabled: true
+      Image Rendering: background and overlay
+      Image Topic: /b/stereo_pair/left/image_rect_color
+      Name: Side-B-Camera
+      Overlay Alpha: 0.5
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: true
+      Visibility:
+        Grid: false
+        RobotModel: true
+        Side-A-Camera: false
+        Side-A-PC: false
+        Side-A-Path: false
+        Side-B-PC: false
+        Side-B-Path: false
+        TF: true
+        Value: true
+      Zoom Factor: 1
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /b/path_marker
+      Name: Side-B-Path
+      Namespaces:
+        "": true
+      Queue Size: 100
+      Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Min Color: 0; 0; 0
+      Name: Side-B-PC
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0010000000474974513
+      Style: Spheres
+      Topic: /b/stereo_pair/stereo/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: base_link
+    Fixed Frame: ground
     Frame Rate: 30
   Name: root
   Tools:
@@ -408,7 +530,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 1.6796245574951172
+      Distance: 2.868380546569824
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -416,27 +538,31 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: -1.1213217973709106
-        Y: -0.2386385202407837
-        Z: -1.673786755418405e-06
+        X: -0.026640459895133972
+        Y: 0.04890245199203491
+        Z: -4.082186933374032e-06
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.40479573607444763
+      Pitch: 0.5397964119911194
       Target Frame: base_link
-      Yaw: 0.9417803287506104
+      Yaw: 1.8086237907409668
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 1136
+  Height: 1016
   Help:
     collapsed: false
   Hide Left Dock: false
   Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000002a200000416fc0200000007fb000000100044006900730070006c006100790073010000003d00000416000000c900fffffffb0000000800480065006c00700000000342000000bb0000006e00fffffffb0000000a0056006900650077007300000003b0000000b0000000a400fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000000000000000fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006700000002b40000019f0000000000000000000004900000041600000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000100000000000002a20000039efc020000000bfb000000100044006900730070006c006100790073010000003d00000174000000c900fffffffb0000001a0053006900640065002d0041002d00430061006d00650072006101000001b7000001000000001600fffffffb0000000800480065006c00700000000342000000bb0000006e00fffffffb0000000a0056006900650077007300000003b0000000b0000000a400fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000000000000000fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006700000002b40000019f0000000000000000fb0000000a0049006d0061006700650000000310000000cb0000000000000000fb0000001a0053006900640065002d0042002d00430061006d00650072006101000002bd0000011e0000001600fffffffb0000000a0049006d0061006700650000000311000000ca0000000000000000000004900000039e00000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Side-A-Camera:
+    collapsed: false
+  Side-B-Camera:
+    collapsed: false
   Views:
     collapsed: false
   Width: 1848
