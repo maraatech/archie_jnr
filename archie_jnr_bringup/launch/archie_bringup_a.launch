@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<launch>
+    <arg name="ns_a" value="a"/>
+
+    <include file="$(find archie_jnr_bringup)/launch/archie_side_bringup.launch">
+        <arg name="ns"        		value="$(arg ns_a)"/>
+		<arg name="robot_ip"           value="192.168.131.9"/>
+		<arg name="reverse_port"       value="50001"/>
+		<arg name="script_sender_port" value="50002"/>
+		<arg name="kinematics_config"  default="$(find archie_jnr_description)/config/$(arg ns_a)/uoa_cares_ur5_calibration.yaml"/>
+    </include>
+</launch>
