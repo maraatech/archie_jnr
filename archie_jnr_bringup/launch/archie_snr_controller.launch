@@ -4,6 +4,11 @@
   <!-- Mapping Task Server -->
   <arg name="mapping_server" value="mapping_server"/>
 
+  <!-- Rail Control Servers -->
+  <arg name="rail_server_a"  value="/rail_a_server"/>
+	<arg name="rail_server_b"  value="/rail_b_server"/>
+  <arg name="rail_servers"   value="[$(arg rail_server_a), $(arg rail_server_b)]"/>
+
   <!-- UR Arm Control Servers -->
   <arg name="platform_server_a"  value="/ur_arm_a_server"/>
 	<arg name="platform_server_b"  value="/ur_arm_b_server"/>
@@ -38,11 +43,16 @@
   <arg name="init_pitch" value="0.0"/>
   <arg name="init_yaw"   value="0.0"/>
 
+  <!-- Rail Pose -->
+  <arg name="rail_x"  value="0.0"/>
+  <arg name="rail_z"  value="0.0"/>
+
   <!-- Path ID - path_factory -->
   <arg name="path_id"  default="0"/>
   
   <!-- <group ns="platform"> -->
   <node name="archie_controller_node" pkg="archie_jnr_control" type="archie_controller_node.py" output="screen">
+    <rosparam param="rail_servers"         subst_value="True">$(arg rail_servers)</rosparam>
     <rosparam param="platform_servers"     subst_value="True">$(arg platform_servers)</rosparam>
     <rosparam param="robot_control_frames" subst_value="True">$(arg robot_control_frames)</rosparam>
     <rosparam param="planning_links"       subst_value="True">$(arg planning_links)</rosparam>
@@ -61,6 +71,9 @@
     <param name="init_roll"  value="$(arg init_roll)"/>
     <param name="init_pitch" value="$(arg init_pitch)"/>
     <param name="init_yaw"   value="$(arg init_yaw)"/>
+
+    <param name="rail_x" value="$(arg rail_x)"/>
+    <param name="rail_z" value="$(arg rail_z)"/>
 
     <param name="path_id" value="$(arg path_id)"/>
   </node>

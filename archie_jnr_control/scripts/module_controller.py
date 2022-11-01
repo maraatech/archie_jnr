@@ -35,8 +35,9 @@ class ModuleController(object):
             self.arm_clients[arm_server] = ActionClient(arm_server, PlatformGoalAction, PlatformGoalFeedback)
 
         self.rail_clients = {}
-        for rail_server in rail_servers:
-            self.rail_clients[rail_server] = ActionClient(rail_server, ArchieRailCmdAction, ArchieRailCmdFeedback)
+        if rail_servers is not None:
+            for rail_server in rail_servers:
+                self.rail_clients[rail_server] = ActionClient(rail_server, ArchieRailCmdAction, ArchieRailCmdFeedback)
 
     def stop(self):
         if not self.mapping_client.is_idle():
@@ -46,7 +47,10 @@ class ModuleController(object):
             self.stop_arms()
     
     def stop_rails(self):
-        pass
+        rail_goal = ArchieRailCmdGoal()
+        rail_goal.command = ArchieRailCmdGoal.STOP
+        for rail_client in self.rail_clients:
+            rail_client.send_goal(rail_goal)
 
     def stop_arms(self):
         platform_goal = PlatformGoalGoal()
@@ -65,8 +69,9 @@ class ModuleController(object):
         self.mapping_client.send_goal(mapping_goal)
 
     # Pass through link_id
-    def home(self, home_poses, control_links):
+    def home(self, home_poses, control_links, rail_home):
         if not self.mapping_client.is_idle():
+            print("Stopping Mapping")
             self.stop_mapping()
         
         for key in home_poses.keys():
@@ -75,7 +80,19 @@ class ModuleController(object):
             platform_goal.link_id.data = control_links[key]
             platform_goal.target_pose  = home_poses[key]
             self.arm_clients[key].send_goal(platform_goal)
+            print(f"Moving Arm: {key}")
             while not self.arm_clients[key].is_idle():
+                pass
+        
+        for rail_client in self.rail_clients:
+            rail_goal = ArchieRailCmdGoal()
+            rail_goal.command = ArchieRailCmdGoal.MOVE
+            rail_goal.target_pose = rail_home
+            rail_client.send_goal(rail_goal)
+
+        print(f"Wiating for rails to reach home")
+        for rail_client in self.rail_clients:
+            while not rail_client.is_idle():
                 pass
 
     # Extend state to return arm states as well
@@ -83,7 +100,12 @@ class ModuleController(object):
         arm_states = {}
         for key, value in self.arm_clients.items():
             arm_states[key] = value.get_state()
-        return self.mapping_client.get_state(), arm_states
+
+        rail_states = {}
+        for key, value in self.rail_clients.items():
+            rail_states[key] = value.get_state()
+
+        return self.mapping_client.get_state(), arm_states, rail_states
 
     def idle(self):
         return self.mapping_client.is_idle()

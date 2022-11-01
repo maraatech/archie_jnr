@@ -56,7 +56,7 @@ class ArchieController(object):
             return True
         return False
 
-    def home(self, home_poses, control_links):
+    def home(self, home_poses, control_links, rail_home):
         # Check if a task controller is operating
         if self.module_controller == None:
             print("No Task Controller Operating")
@@ -67,7 +67,7 @@ class ArchieController(object):
             print(f"Navigation is still operating")
             return False
 
-        self.module_controller.home(home_poses, control_links)
+        self.module_controller.home(home_poses, control_links, rail_home)
         return True
     
     def start_mapping(self, mapping_goal):
@@ -115,6 +115,9 @@ class ArchieController(object):
         module_state     = None if self.module_controller == None else self.module_controller.get_state()
         return navigation_state, module_state 
 
+def rail_ui(key):
+    return [[sg.Text(f"Rail:"), sg.Text(size=(40,1), key=key)]]
+
 def arm_ui(key):
     return [[sg.Text(f"Arm:"), sg.Text(size=(40,1), key=key)]]
 
@@ -124,7 +127,7 @@ def scanning_ui(key):
 def metric_ui(key):
     return [[sg.Text(f"Metric:"), sg.Text(size=(40,1), key=key)]]
 
-def create_layout(navigation_ui, mapping_ui, arm_servers):
+def create_layout(navigation_ui, mapping_ui, arm_servers, rail_servers):
     # Use these as defaults but read them from the UI for future runs
     world_link          = rospy.get_param('~world_link')
     
@@ -134,12 +137,15 @@ def create_layout(navigation_ui, mapping_ui, arm_servers):
     get_marker          = rospy.get_param('~capture_marker', False)
     path_id             = rospy.get_param('~path_id', 0)
 
-    init_x        = rospy.get_param('~init_x')
-    init_y        = rospy.get_param('~init_y')
-    init_z        = rospy.get_param('~init_z')
+    init_x        = rospy.get_param('~init_x', 0)
+    init_y        = rospy.get_param('~init_y', 0)
+    init_z        = rospy.get_param('~init_z', 0)
     init_roll     = rospy.get_param('~init_roll', 0)
     init_pitch    = rospy.get_param('~init_pitch', 0)
     init_yaw      = rospy.get_param('~init_yaw', 90)
+
+    rail_x        = rospy.get_param('~rail_x', 0)
+    rail_z        = rospy.get_param('~rail_z', 0)
 
     # Improve UI
     layout = []    
@@ -162,18 +168,30 @@ def create_layout(navigation_ui, mapping_ui, arm_servers):
         size = (20,1)
         layout.append([sg.Text(f"World: "),    sg.InputText(world_link, size=size, key="-WORLD-")])
     
-        for i, arm_server in enumerate(arm_servers):
-            layout.append([sg.Text(f"Planning: "), sg.InputText(planning_links[i],       size=size, key=f"-PLANNING-{i}-")])
-            layout.append([sg.Text(f"Control: "),  sg.InputText(robot_control_frames[i], size=size, key=f"-CONTROL-{i}-")])
-            layout.append(arm_ui(arm_server))
+        if rail_servers is not None:
+            layout.append([sg.Text(f"Rail Pose")])
+            size = (5,1)
+            layout.append([sg.Text("Rail X"), sg.InputText(rail_x, size=size, key='-RAIL-X-'), 
+            sg.Text("Rail Z"), sg.InputText(rail_z, size=size, key='-RAIL-Z-')])
 
-        size = (20,1)
-        layout.append([sg.Text(f"Task Interface")])
-        layout.append([sg.Text(f"Marker: "),   sg.InputText(get_marker, size=size, key="-MARKER-")])
-        layout.append([sg.Text(f"Path: "),     sg.InputText(path_id, size=size, key="-PATH-")])
+            for i, arm_server in enumerate(rail_servers):            
+                layout.append(rail_ui(arm_server))
 
-        layout.append([sg.Text(f"Task: "), sg.Text(size=(30,1), key="-TASK-STATE-")])
-        layout.append([sg.Column([[]], key='-Column-')])
+        if arm_server is not None:
+            layout.append([sg.Text(f"Task Information")])
+            size = (20,1)
+            for i, arm_server in enumerate(arm_servers):
+                layout.append([sg.Text(f"Planning: "), sg.InputText(planning_links[i],       size=size, key=f"-PLANNING-{i}-")])
+                layout.append([sg.Text(f"Control: "),  sg.InputText(robot_control_frames[i], size=size, key=f"-CONTROL-{i}-")])
+                layout.append(arm_ui(arm_server))
+
+            size = (20,1)
+            layout.append([sg.Text(f"Task Interface")])
+            layout.append([sg.Text(f"Marker: "), sg.InputText(get_marker, size=size, key="-MARKER-")])
+            layout.append([sg.Text(f"Path: "),   sg.InputText(path_id,    size=size, key="-PATH-")])
+
+            layout.append([sg.Text(f"Task: "), sg.Text(size=(30,1), key="-TASK-STATE-")])
+            layout.append([sg.Column([[]], key='-Column-')])
 
     layout.append([sg.Button('Map'), sg.Button('Home'), sg.Button('Navigate'), sg.Button('Stop'), sg.Button('Exit')])
     return layout
@@ -184,20 +202,20 @@ def main():
     print("Setting up Task Controllers")
 
     rail_servers = rospy.get_param('~rail_servers', None)
-    print(rail_servers)
+    print(f"Rail Servers: {rail_servers}")
 
     arm_servers = rospy.get_param('~platform_servers', None)
-    print(arm_servers)
+    print(f"Arm Servers: {arm_servers}")
 
     mapping_server = rospy.get_param('~mapping_server', None)
-    print(mapping_server)
+    print(f"Mapping Server: {mapping_server}")
 
     navigation_server = rospy.get_param('~navigation_server', None)
-    print(navigation_server)
+    print(f"Navigation Server: {navigation_server}")
 
     archie_controller = ArchieController(navigation_server=navigation_server, arm_servers=arm_servers, mapping_server=mapping_server, rail_servers=rail_servers)
 
-    layout = create_layout(navigation_server is not None, mapping_server is not None, arm_servers)
+    layout = create_layout(navigation_server is not None, mapping_server is not None, arm_servers, rail_servers)
     window = sg.Window('Archie Control Interface', layout)
 
     r = rospy.Rate(10)
@@ -244,25 +262,33 @@ def main():
                 print("Navigation Request Failed")            
 
         elif event == 'Home':
-            if archie_controller.home(home_poses=init_poses, control_links=control_links):
+            if archie_controller.home(home_poses=init_poses, control_links=control_links, rail_home=rail_home):
                 print("Home Task Started")
             else:
-                print("Home Request Failed")   
+                print("Home Request Failed")
 
         elif event == 'Stop':
             archie_controller.stop()
             print("Stop Sent")
         
         #Update UI with state
-        
         if "-NAV-STATE-" in window.AllKeysDict:
             navigation_status = common.goal_to_str(navigation_status)
             window['-NAV-STATE-'].update(navigation_status)
         
+        rail_home = utils.create_pose_msg(0, 0, 0)
+        if "-RAIL-X-" in window.AllKeysDict:
+            rail_home = utils.create_pose_msg(float(values["-RAIL-X-"]), 0, float(values["-RAIL-Z-"]))
+
         if "-TASK-STATE-" in window.AllKeysDict:
             navigation_status, module_status = archie_controller.get_state()
 
-            task_status, arm_states = module_status
+            task_status, arm_states, rail_states = module_status
+
+            for key in rail_states:
+                status, feedback = rail_states[key]
+                status = common.goal_to_str(status)
+                window[key].update(f"{status}")
 
             for key in arm_servers:
                 status, feedback = arm_states[key]
