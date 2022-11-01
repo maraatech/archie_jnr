@@ -19,10 +19,6 @@ Base package dependencies
 2) Pull master version of cares_msgs
    a) cd ~/catkin_ws/src
    b) git clone https://github.com/UoA-CARES/cares_msgs.git
-
-3) Pull master version of platform_msgs
-	a) cd ~/catkin_ws/src
-	b) git clone https://github.com/maraatech/platform_msgs
 ```
 
 ### Installing
