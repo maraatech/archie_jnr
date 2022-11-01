@@ -42,9 +42,9 @@ def get_filepath():
     return filepath
 
 class ArchieController(object):
-    def __init__(self, navigation_server=None, arm_servers=None, mapping_server=None):
+    def __init__(self, navigation_server=None, arm_servers=None, mapping_server=None, rail_servers=None):
         self.navigation_controller = None if navigation_server == None else NavigationController(navigation_server)
-        self.module_controller     = None if mapping_server    == None else ModuleController(arm_servers, mapping_server)
+        self.module_controller     = None if mapping_server    == None else ModuleController(arm_servers, mapping_server, rail_servers)
 
     def navigation_active(self):
         if self.navigation_controller is not None and not self.navigation_controller.is_idle():
@@ -183,6 +183,9 @@ def main():
 
     print("Setting up Task Controllers")
 
+    rail_servers = rospy.get_param('~rail_servers', None)
+    print(rail_servers)
+
     arm_servers = rospy.get_param('~platform_servers', None)
     print(arm_servers)
 
@@ -192,7 +195,7 @@ def main():
     navigation_server = rospy.get_param('~navigation_server', None)
     print(navigation_server)
 
-    archie_controller = ArchieController(navigation_server=navigation_server, arm_servers=arm_servers, mapping_server=mapping_server)
+    archie_controller = ArchieController(navigation_server=navigation_server, arm_servers=arm_servers, mapping_server=mapping_server, rail_servers=rail_servers)
 
     layout = create_layout(navigation_server is not None, mapping_server is not None, arm_servers)
     window = sg.Window('Archie Control Interface', layout)

@@ -13,8 +13,9 @@ import actionlib
 from actionlib_msgs.msg import GoalStatus
 from cares_msgs.msg import PlatformGoalAction, PlatformGoalGoal, PlatformGoalFeedback, PlatformGoalResult
 from cares_msgs.msg import MappingAction, MappingGoal, MappingFeedback, MappingResult
-from cares_msgs.msg import ScanningAction, ScanningGoal, ScanningFeedback, ScanningResult
-from cares_msgs.msg import MetricExtractionAction, MetricExtractionGoal, MetricExtractionFeedback, MetricExtractionResult
+from cares_msgs.msg import ArchieRailCmdAction, ArchieRailCmdGoal, ArchieRailCmdFeedback, ArchieRailCmdResult
+# from cares_msgs.msg import ScanningAction, ScanningGoal, ScanningFeedback, ScanningResult
+# from cares_msgs.msg import MetricExtractionAction, MetricExtractionGoal, MetricExtractionFeedback, MetricExtractionResult
 
 from geometry_msgs.msg import Pose, PoseStamped
 
@@ -25,7 +26,7 @@ from cares_lib_ros.action_client import ActionClient
 
 # Task ModuleController will be extended to carry out more than just the mapping task in the future for Archie?
 class ModuleController(object):
-    def __init__(self, arm_servers, mapping_server):
+    def __init__(self, arm_servers, mapping_server, rail_servers):
         # Task Clients
         self.mapping_client = ActionClient(mapping_server, MappingAction, MappingFeedback)
         
@@ -33,11 +34,19 @@ class ModuleController(object):
         for arm_server in arm_servers:
             self.arm_clients[arm_server] = ActionClient(arm_server, PlatformGoalAction, PlatformGoalFeedback)
 
+        self.rail_clients = {}
+        for rail_server in rail_servers:
+            self.rail_clients[rail_server] = ActionClient(rail_server, ArchieRailCmdAction, ArchieRailCmdFeedback)
+
     def stop(self):
         if not self.mapping_client.is_idle():
             self.stop_mapping()
         else:
+            self.stop_rails()
             self.stop_arms()
+    
+    def stop_rails(self):
+        pass
 
     def stop_arms(self):
         platform_goal = PlatformGoalGoal()
