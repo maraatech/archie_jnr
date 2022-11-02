@@ -14,14 +14,7 @@ from actionlib_msgs.msg import GoalStatus
 from cares_msgs.msg import PlatformGoalAction, PlatformGoalGoal, PlatformGoalFeedback, PlatformGoalResult
 from cares_msgs.msg import MappingAction, MappingGoal, MappingFeedback, MappingResult
 from cares_msgs.msg import ArchieRailCmdAction, ArchieRailCmdGoal, ArchieRailCmdFeedback, ArchieRailCmdResult
-# from cares_msgs.msg import ScanningAction, ScanningGoal, ScanningFeedback, ScanningResult
-# from cares_msgs.msg import MetricExtractionAction, MetricExtractionGoal, MetricExtractionFeedback, MetricExtractionResult
 
-from geometry_msgs.msg import Pose, PoseStamped
-
-from std_msgs.msg import Header
-
-import cares_lib_ros.utils as utils
 from cares_lib_ros.action_client import ActionClient
 
 # Task ModuleController will be extended to carry out more than just the mapping task in the future for Archie?
