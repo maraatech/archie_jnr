@@ -287,8 +287,9 @@ def main():
 
             for key in rail_states:
                 status, feedback = rail_states[key]
-                status = common.goal_to_str(status)
-                window[key].update(f"{status}")
+                status      = common.goal_to_str(status)
+                rail_status = common.rail_to_str(feedback.status)
+                window[key].update(f"{status} {rail_status}")
 
             for key in arm_servers:
                 status, feedback = arm_states[key]

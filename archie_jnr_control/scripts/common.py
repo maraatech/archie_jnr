@@ -11,13 +11,14 @@ import PySimpleGUI as sg
 
 import actionlib
 from actionlib_msgs.msg import GoalStatus
-from cares_msgs.msg import PlatformGoalAction, PlatformGoalGoal
 
+from cares_msgs.msg import PlatformGoalAction, PlatformGoalGoal
 from cares_msgs.msg import NavigationAction, NavigationGoal
 
 from cares_msgs.msg import MappingAction, MappingGoal, MappingFeedback, MappingResult
 from cares_msgs.msg import ScanningAction, ScanningGoal, ScanningFeedback, ScanningResult
 from cares_msgs.msg import MetricExtractionAction, MetricExtractionGoal, MetricExtractionFeedback, MetricExtractionResult
+from cares_msgs.msg import ArchieRailCmdAction, ArchieRailCmdGoal, ArchieRailCmdFeedback, ArchieRailCmdResult
 
 from geometry_msgs.msg import Pose, PoseStamped
 
@@ -77,6 +78,19 @@ def metric_to_str(status):
         return "Capturing"
     if status == MetricExtractionFeedback.MEASURING:
         return "Measuring"
+    return f"Unkown: {status}"
+
+def rail_to_str(status):
+    if status == ArchieRailCmdFeedback.INIT:
+        return "Init"
+    elif status == ArchieRailCmdFeedback.MOVING:
+        return "Moving"
+    elif status == ArchieRailCmdFeedback.RESETTING:
+        return "Resetting"
+    elif status == ArchieRailCmdFeedback.STARTING:
+        return "Starting"
+    elif status == ArchieRailCmdFeedback.HOMING:
+        return "Homing"
     return f"Unkown: {status}"
 
 def create_navigation_goal(command):
