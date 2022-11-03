@@ -42,7 +42,7 @@ class ModuleController(object):
     def stop_rails(self):
         rail_goal = ArchieRailCmdGoal()
         rail_goal.command = ArchieRailCmdGoal.STOP
-        for rail_client in self.rail_clients:
+        for rail_client in self.rail_clients.values():
             rail_client.send_goal(rail_goal)
 
     def stop_arms(self):
@@ -77,14 +77,14 @@ class ModuleController(object):
             while not self.arm_clients[key].is_idle():
                 pass
         
-        for rail_client in self.rail_clients:
+        for rail_client in self.rail_clients.values():
             rail_goal = ArchieRailCmdGoal()
             rail_goal.command = ArchieRailCmdGoal.MOVE
             rail_goal.target_pose = rail_home
             rail_client.send_goal(rail_goal)
 
         print(f"Wiating for rails to reach home")
-        for rail_client in self.rail_clients:
+        for rail_client in self.rail_clients.values():
             while not rail_client.is_idle():
                 pass
 

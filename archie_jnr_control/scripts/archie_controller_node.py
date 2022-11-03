@@ -276,9 +276,9 @@ def main():
             navigation_status = common.goal_to_str(navigation_status)
             window['-NAV-STATE-'].update(navigation_status)
         
-        rail_home = utils.create_pose_msg(0, 0, 0)
+        rail_home = utils.create_pose_stamped_msg(0, 0, 0, "rail_frame")
         if "-RAIL-X-" in window.AllKeysDict:
-            rail_home = utils.create_pose_msg(float(values["-RAIL-X-"]), 0, float(values["-RAIL-Z-"]))
+            rail_home = utils.create_pose_stamped_msg(float(values["-RAIL-X-"]), 0, float(values["-RAIL-Z-"]), "rail_frame")
 
         if "-TASK-STATE-" in window.AllKeysDict:
             navigation_status, module_status = archie_controller.get_state()

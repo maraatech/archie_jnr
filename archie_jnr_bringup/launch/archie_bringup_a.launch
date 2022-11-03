@@ -3,7 +3,7 @@
     <arg name="ns_a" value="a"/>
 
     <include file="$(find archie_jnr_bringup)/launch/archie_side_bringup.launch">
-        <arg name="ns"        		value="$(arg ns_a)"/>
+        <arg name="ns"        		   value="$(arg ns_a)"/>
 		<arg name="robot_ip"           value="192.168.131.9"/>
 		<arg name="reverse_port"       value="50001"/>
 		<arg name="script_sender_port" value="50002"/>

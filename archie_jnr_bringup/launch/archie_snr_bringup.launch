@@ -1,0 +1,68 @@
+<?xml version="1.0" ?>
+<launch>
+	<!-- Default namespace topics: DO NOT EDIT -->
+	<arg name="ns_a" value="a"/>
+	<arg name="ns_b" value="b"/>
+	<arg name="use_side_b" value="false"/>
+	
+	<!-- load Archie systems on primary machine -->
+
+	<!-- Load robot description -->
+	<include file="$(find archie_jnr_bringup)/launch/load_archie.launch" pass_all_args="true">
+		<arg name="ee_sensor_a" value="stereo"/><!--stereo realsense zivid kea stereo-kea -->
+  		<arg name="ee_sensor_b" value="stereo"/><!--stereo realsense zivid kea stereo-kea -->
+  	</include>
+
+  	<!-- Start joint_state aggregator -->
+  	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+      	<param name="/use_gui" value="false"/>
+      	<rosparam param="/source_list">[a/joint_states, b/joint_states]</rosparam>
+    </node>
+
+    <!-- State publishers -->
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
+
+	<!-- Launch moveit -->
+	<include file="$(find archie_jnr_moveit_config)/launch/move_group.launch">
+		<arg name="debug" value="false" />
+		<arg name="load_robot_description" value="false" />
+		<arg name="publish_monitored_planning_scene" value="true" />
+	</include>
+
+	<!-- <machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/> -->
+	<!-- <machine name="side-$(arg ns_b)" user="anyone" address="stormtrooper" env-loader="~/archie-environment.sh" default="true"/> -->
+	<include file="$(find archie_jnr_bringup)/launch/archie_bringup_a.launch">
+	</include>
+
+	<!-- <machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/> -->
+    <group if="$(eval use_side_b)">
+        <machine name="side-$(arg ns_b)" user="anyone" address="stormtrooper" env-loader="~/archie-environment.sh" default="true"/>
+        <include file="$(find archie_jnr_bringup)/launch/archie_bringup_b.launch">
+        </include>
+    </group>
+	<!-- Load UR arm -->
+  	<!-- <include file="$(find archie_jnr_bringup)/launch/archie_side_bringup.launch">
+  		<arg name="ns"        		   value="$(arg ns_a)"/>
+		<arg name="robot_ip"           value="192.168.131.9"/>
+		<arg name="reverse_port"       value="50001"/>
+		<arg name="script_sender_port" value="50002"/>
+		<arg name="kinematics_config"  default="$(find archie_jnr_description)/config/$(arg ns_a)/uoa_cares_ur5_calibration.yaml"/>
+  	</include> -->
+
+	<!-- load UR arm on secondary machine -->
+	<!-- NOTE: anything after the machine tag is run on the remote machine -->
+	<!-- <machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/>
+	<machine name="side-$(arg ns_b)" user="anyone" address="stormtrooper" env-loader="~/archie-environment.sh" default="true"/> -->
+	<!-- <group if="$(eval use_side_b)">
+		<include file="$(find archie_jnr_bringup)/launch/archie_side_bringup.launch">
+			<arg name="ns"      		   value="$(arg ns_b)"/>
+			<arg name="robot_ip"           value="192.168.131.8"/>
+			<arg name="reverse_port"       value="50005"/>
+			<arg name="script_sender_port" value="50004"/>
+			<arg name="kinematics_config"  default="$(find archie_jnr_description)/config/$(arg ns_b)/uow_ur5_calibration.yaml"/>
+		</include>
+	</group> -->
+</launch>
+
+<!-- <machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/> -->
+<!-- <machine name="side-$(arg ns_b)" user="anyone" address="stormtrooper" env-loader="~/archie-environment.sh" default="true"/> -->
