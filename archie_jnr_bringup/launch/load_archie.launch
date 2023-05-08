@@ -25,7 +25,7 @@
   <!-- Simulation -->
   <arg name="sim" default="false"/>
 
-  <param name="robot_description" command="$(find xacro)/xacro '$(find archie_snr_description)/urdf/archie_robot.xacro'
+  <param name="robot_description" command="$(find xacro)/xacro '$(find archie_jnr_description)/urdf/archie_robot.xacro'
       prefix_a:=$(arg tf_prefix_a)
       kinematics_params_a:=$(arg kinematics_config_a)
       joint_limit_params_a:=$(arg joint_limit_params_a)

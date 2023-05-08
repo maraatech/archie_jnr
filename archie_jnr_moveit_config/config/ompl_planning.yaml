@@ -156,6 +156,8 @@ ur_arm_a:
     - SPARStwo
   projection_evaluator: joints(a/shoulder_pan_joint,a/shoulder_lift_joint)
   longest_valid_segment_fraction: 0.005
+  enforce_joint_model_state_space: True
+
 ur_arm_b:
   default_planner_config: RRTstar
   planner_configs:
@@ -184,4 +186,5 @@ ur_arm_b:
     - SPARS
     - SPARStwo
   projection_evaluator: joints(b/shoulder_pan_joint,b/shoulder_lift_joint)
+  enforce_joint_model_state_space: True
   longest_valid_segment_fraction: 0.005

@@ -67,13 +67,12 @@
         <xacro:ur_robot prefix="${prefix}/" joint_limits_parameters_file="$(arg joint_limit_params_a)" kinematics_parameters_file="$(arg kinematics_params_a)" physical_parameters_file="$(arg physical_params)" visual_parameters_file="$(arg visual_params)" transmission_hw_interface="$(arg transmission_hw_interface)" safety_limits="$(arg safety_limits)" safety_pos_margin="$(arg safety_pos_margin)" safety_k_position="$(arg safety_k_position)"/>
         <xacro:joint_xacro name="${prefix}/ur5_mount_to_base" parent="${prefix}/ur5_mount" child="${prefix}/base_link" type="fixed" xyz="0 0 0" rpy="${-pi/2.0} ${3.0*pi/4.0} 0"/>
 
-        <!-- Planning link to account for the ur5 mount being 45 degree rotated around base_link -->
         <link name="${prefix}/planning_link"/>
         <xacro:joint_xacro name="${prefix}/ur5_mount_to_planning_link" parent="${prefix}/ur5_mount" child="${prefix}/planning_link" type="fixed" xyz="0 0 0" rpy="${-pi/2.0} ${pi/2.0} 0"/>
 
         <!-- sensors and things attached to robot arm-->
         <xacro:if value ="${ee_sensor=='stereo'}">
-            <xacro:include filename="$(find cares_description)/urdf/stereo_mount.xacro"/>
+            <xacro:include filename="$(find cares_description)/urdf/cutting_tool.xacro"/>
             <xacro:stereo_pair parent="${prefix}/flange" name="stereo_pair" prefix="${prefix}/" calibration_file="$(find archie_jnr_description)/config/${prefix}/stereo_pair_handeye_calibration.yaml">
                 <origin xyz="0 0 0" rpy="0 0 0"/>
             </xacro:stereo_pair>
@@ -93,10 +92,10 @@
         <xacro:link_xacro name="frame" filename="package://archie_jnr_description/meshes/visual/archie_jr_main.stl" scale="1 1 1"/>
 
         <!-- Side A -->
-        <xacro:archie-side prefix="${prefix_a}" ee_sensor="${ee_sensor_a}" xyz="-0.82 -0.75 -1.3978" rpy="1.5708 0.0 3.1416"/>
+        <xacro:archie-side prefix="${prefix_a}" ee_sensor="${ee_sensor_a}" xyz="-0.77 -0.75 -1.3978" rpy="1.5708 0.0 3.1416"/>
 
         <!-- Side B -->
-        <xacro:archie-side prefix="${prefix_b}" ee_sensor="${ee_sensor_b}" xyz="0.820 -0.75 -1.3978" rpy="1.5708 0 0"/>
+        <xacro:archie-side prefix="${prefix_b}" ee_sensor="${ee_sensor_b}" xyz="0.77 -0.75 -1.3978" rpy="1.5708 0 0"/>
     </xacro:macro>
 
     <!-- Create archie itself -->

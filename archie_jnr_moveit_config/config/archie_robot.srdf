@@ -25,6 +25,23 @@
         <joint name="b/shoulder_lift_joint"/>
         <joint name="b/elbow_joint"/>
     </group>
+    <!--GROUP STATES: Purpose: Define a named state for a particular group, in terms of joint values. This is useful to define states like 'folded arms'-->
+    <group_state name="home" group="ur_arm_b">
+        <joint name="b/elbow_joint" value="-2.5"/>
+        <joint name="b/shoulder_lift_joint" value="-1.8"/>
+        <joint name="b/shoulder_pan_joint" value="-1.5"/>
+        <joint name="b/wrist_1_joint" value="-2"/>
+        <joint name="b/wrist_2_joint" value="-1"/>
+        <joint name="b/wrist_3_joint" value="3.14"/>
+    </group_state>
+    <group_state name="home" group="ur_arm_a">
+        <joint name="a/elbow_joint" value="-2.5"/>
+        <joint name="a/shoulder_lift_joint" value="-1.8"/>
+        <joint name="a/shoulder_pan_joint" value="-1.5"/>
+        <joint name="a/wrist_1_joint" value="-2"/>
+        <joint name="a/wrist_2_joint" value="-1"/>
+        <joint name="a/wrist_3_joint" value="3.14"/>
+    </group_state>
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
     <virtual_joint name="base_link_to_world" type="fixed" parent_frame="world" child_link="base_link"/>
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
@@ -40,13 +57,14 @@
     <disable_collisions link1="a/base_link_inertia" link2="b/wrist_1_link" reason="Never"/>
     <disable_collisions link1="a/base_link_inertia" link2="b/wrist_2_link" reason="Never"/>
     <disable_collisions link1="a/base_link_inertia" link2="b/wrist_3_link" reason="Never"/>
+    <disable_collisions link1="a/base_link_inertia" link2="canopy" reason="Never"/>
+    <disable_collisions link1="a/base_link_inertia" link2="frame" reason="Never"/>
     <disable_collisions link1="a/base_link_inertia" link2="ground" reason="Never"/>
     <disable_collisions link1="a/base_link_inertia" link2="wall_1" reason="Never"/>
     <disable_collisions link1="a/base_link_inertia" link2="wall_2" reason="Never"/>
-
     <disable_collisions link1="a/cables" link2="a/stereo_pair_base_link" reason="Adjacent"/>
-    <disable_collisions link1="a/cables" link2="a/wrist_2_link" reason="Never"/>
-    <disable_collisions link1="a/cables" link2="a/wrist_3_link" reason="Never"/>
+    <disable_collisions link1="a/cables" link2="a/wrist_2_link" reason="User"/>
+    <disable_collisions link1="a/cables" link2="a/wrist_3_link" reason="Default"/>
     <disable_collisions link1="a/cables" link2="b/base_link_inertia" reason="Never"/>
     <disable_collisions link1="a/cables" link2="b/cables" reason="Never"/>
     <disable_collisions link1="a/cables" link2="b/forearm_link" reason="Never"/>
@@ -57,21 +75,19 @@
     <disable_collisions link1="a/cables" link2="b/wrist_1_link" reason="Never"/>
     <disable_collisions link1="a/cables" link2="b/wrist_2_link" reason="Never"/>
     <disable_collisions link1="a/cables" link2="b/wrist_3_link" reason="Never"/>
-
     <disable_collisions link1="a/forearm_link" link2="a/upper_arm_link" reason="Adjacent"/>
     <disable_collisions link1="a/forearm_link" link2="a/wrist_1_link" reason="Adjacent"/>
     <disable_collisions link1="a/forearm_link" link2="b/base_link_inertia" reason="Never"/>
     <disable_collisions link1="a/forearm_link" link2="b/cables" reason="Never"/>
     <disable_collisions link1="a/forearm_link" link2="b/forearm_link" reason="Never"/>
     <disable_collisions link1="a/forearm_link" link2="b/shoulder_link" reason="Never"/>
+    <disable_collisions link1="a/forearm_link" link2="b/stereo_pair_base_link" reason="Never"/>
     <disable_collisions link1="a/forearm_link" link2="b/upper_arm_link" reason="Never"/>
     <disable_collisions link1="a/forearm_link" link2="b/ur5_mount" reason="Never"/>
     <disable_collisions link1="a/forearm_link" link2="b/wrist_1_link" reason="Never"/>
     <disable_collisions link1="a/forearm_link" link2="b/wrist_2_link" reason="Never"/>
     <disable_collisions link1="a/forearm_link" link2="b/wrist_3_link" reason="Never"/>
-
     <disable_collisions link1="a/shoulder_link" link2="a/upper_arm_link" reason="Adjacent"/>
-    <disable_collisions link1="a/shoulder_link" link2="a/ur5_mount" reason="Never"/>
     <disable_collisions link1="a/shoulder_link" link2="b/base_link_inertia" reason="Never"/>
     <disable_collisions link1="a/shoulder_link" link2="b/cables" reason="Never"/>
     <disable_collisions link1="a/shoulder_link" link2="b/forearm_link" reason="Never"/>
@@ -82,11 +98,9 @@
     <disable_collisions link1="a/shoulder_link" link2="b/wrist_1_link" reason="Never"/>
     <disable_collisions link1="a/shoulder_link" link2="b/wrist_2_link" reason="Never"/>
     <disable_collisions link1="a/shoulder_link" link2="b/wrist_3_link" reason="Never"/>
+    <disable_collisions link1="a/shoulder_link" link2="ground" reason="Never"/>
     <disable_collisions link1="a/shoulder_link" link2="wall_1" reason="Never"/>
     <disable_collisions link1="a/shoulder_link" link2="wall_2" reason="Never"/>
-
-    <disable_collisions link1="a/stereo_pair_base_link" link2="a/wrist_1_link" reason="Never"/>
-    <disable_collisions link1="a/stereo_pair_base_link" link2="a/wrist_2_link" reason="Never"/>
     <disable_collisions link1="a/stereo_pair_base_link" link2="a/wrist_3_link" reason="Adjacent"/>
     <disable_collisions link1="a/stereo_pair_base_link" link2="b/base_link_inertia" reason="Never"/>
     <disable_collisions link1="a/stereo_pair_base_link" link2="b/cables" reason="Never"/>
@@ -98,8 +112,6 @@
     <disable_collisions link1="a/stereo_pair_base_link" link2="b/wrist_1_link" reason="Never"/>
     <disable_collisions link1="a/stereo_pair_base_link" link2="b/wrist_2_link" reason="Never"/>
     <disable_collisions link1="a/stereo_pair_base_link" link2="b/wrist_3_link" reason="Never"/>
-
-    <disable_collisions link1="a/upper_arm_link" link2="a/ur5_mount" reason="Never"/>
     <disable_collisions link1="a/upper_arm_link" link2="b/base_link_inertia" reason="Never"/>
     <disable_collisions link1="a/upper_arm_link" link2="b/cables" reason="Never"/>
     <disable_collisions link1="a/upper_arm_link" link2="b/forearm_link" reason="Never"/>
@@ -110,7 +122,6 @@
     <disable_collisions link1="a/upper_arm_link" link2="b/wrist_1_link" reason="Never"/>
     <disable_collisions link1="a/upper_arm_link" link2="b/wrist_2_link" reason="Never"/>
     <disable_collisions link1="a/upper_arm_link" link2="b/wrist_3_link" reason="Never"/>
-
     <disable_collisions link1="a/ur5_mount" link2="b/base_link_inertia" reason="Never"/>
     <disable_collisions link1="a/ur5_mount" link2="b/cables" reason="Never"/>
     <disable_collisions link1="a/ur5_mount" link2="b/forearm_link" reason="Never"/>
@@ -121,35 +132,33 @@
     <disable_collisions link1="a/ur5_mount" link2="b/wrist_1_link" reason="Never"/>
     <disable_collisions link1="a/ur5_mount" link2="b/wrist_2_link" reason="Never"/>
     <disable_collisions link1="a/ur5_mount" link2="b/wrist_3_link" reason="Never"/>
+    <disable_collisions link1="a/ur5_mount" link2="canopy" reason="Never"/>
     <disable_collisions link1="a/ur5_mount" link2="frame" reason="Adjacent"/>
     <disable_collisions link1="a/ur5_mount" link2="ground" reason="Never"/>
     <disable_collisions link1="a/ur5_mount" link2="wall_1" reason="Never"/>
     <disable_collisions link1="a/ur5_mount" link2="wall_2" reason="Never"/>
-
     <disable_collisions link1="a/wrist_1_link" link2="a/wrist_2_link" reason="Adjacent"/>
-    <disable_collisions link1="a/wrist_1_link" link2="a/wrist_3_link" reason="Never"/>
     <disable_collisions link1="a/wrist_1_link" link2="b/base_link_inertia" reason="Never"/>
     <disable_collisions link1="a/wrist_1_link" link2="b/cables" reason="Never"/>
     <disable_collisions link1="a/wrist_1_link" link2="b/forearm_link" reason="Never"/>
     <disable_collisions link1="a/wrist_1_link" link2="b/shoulder_link" reason="Never"/>
+    <disable_collisions link1="a/wrist_1_link" link2="b/stereo_pair_base_link" reason="Never"/>
     <disable_collisions link1="a/wrist_1_link" link2="b/upper_arm_link" reason="Never"/>
     <disable_collisions link1="a/wrist_1_link" link2="b/ur5_mount" reason="Never"/>
     <disable_collisions link1="a/wrist_1_link" link2="b/wrist_1_link" reason="Never"/>
     <disable_collisions link1="a/wrist_1_link" link2="b/wrist_2_link" reason="Never"/>
     <disable_collisions link1="a/wrist_1_link" link2="b/wrist_3_link" reason="Never"/>
-
     <disable_collisions link1="a/wrist_2_link" link2="a/wrist_3_link" reason="Adjacent"/>
     <disable_collisions link1="a/wrist_2_link" link2="b/base_link_inertia" reason="Never"/>
     <disable_collisions link1="a/wrist_2_link" link2="b/cables" reason="Never"/>
     <disable_collisions link1="a/wrist_2_link" link2="b/forearm_link" reason="Never"/>
     <disable_collisions link1="a/wrist_2_link" link2="b/shoulder_link" reason="Never"/>
-    <disable_collisions link1="a/wrist_2_link" link2="b/stereo_pair_base_link" reason="Never"/>
+    <disable_collisions link1="a/wrist_2_link" link2="b/stereo_pair_base_link" reason="User"/>
     <disable_collisions link1="a/wrist_2_link" link2="b/upper_arm_link" reason="Never"/>
     <disable_collisions link1="a/wrist_2_link" link2="b/ur5_mount" reason="Never"/>
     <disable_collisions link1="a/wrist_2_link" link2="b/wrist_1_link" reason="Never"/>
     <disable_collisions link1="a/wrist_2_link" link2="b/wrist_2_link" reason="Never"/>
     <disable_collisions link1="a/wrist_2_link" link2="b/wrist_3_link" reason="Never"/>
-
     <disable_collisions link1="a/wrist_3_link" link2="b/base_link_inertia" reason="Never"/>
     <disable_collisions link1="a/wrist_3_link" link2="b/cables" reason="Never"/>
     <disable_collisions link1="a/wrist_3_link" link2="b/forearm_link" reason="Never"/>
@@ -160,35 +169,35 @@
     <disable_collisions link1="a/wrist_3_link" link2="b/wrist_1_link" reason="Never"/>
     <disable_collisions link1="a/wrist_3_link" link2="b/wrist_2_link" reason="Never"/>
     <disable_collisions link1="a/wrist_3_link" link2="b/wrist_3_link" reason="Never"/>
-
     <disable_collisions link1="b/base_link_inertia" link2="b/shoulder_link" reason="Adjacent"/>
     <disable_collisions link1="b/base_link_inertia" link2="b/ur5_mount" reason="Adjacent"/>
+    <disable_collisions link1="b/base_link_inertia" link2="canopy" reason="Never"/>
+    <disable_collisions link1="b/base_link_inertia" link2="frame" reason="Never"/>
     <disable_collisions link1="b/base_link_inertia" link2="ground" reason="Never"/>
     <disable_collisions link1="b/base_link_inertia" link2="wall_1" reason="Never"/>
     <disable_collisions link1="b/base_link_inertia" link2="wall_2" reason="Never"/>
-
     <disable_collisions link1="b/cables" link2="b/stereo_pair_base_link" reason="Adjacent"/>
-    <disable_collisions link1="b/cables" link2="b/wrist_2_link" reason="Never"/>
-    <disable_collisions link1="b/cables" link2="b/wrist_3_link" reason="Never"/>
-
+    <disable_collisions link1="b/cables" link2="b/wrist_2_link" reason="Default"/>
+    <disable_collisions link1="b/cables" link2="b/wrist_3_link" reason="Default"/>
     <disable_collisions link1="b/forearm_link" link2="b/upper_arm_link" reason="Adjacent"/>
     <disable_collisions link1="b/forearm_link" link2="b/wrist_1_link" reason="Adjacent"/>
-
     <disable_collisions link1="b/shoulder_link" link2="b/upper_arm_link" reason="Adjacent"/>
     <disable_collisions link1="b/shoulder_link" link2="b/ur5_mount" reason="Never"/>
-    <disable_collisions link1="b/stereo_pair_base_link" link2="b/wrist_1_link" reason="Never"/>
-    <disable_collisions link1="b/stereo_pair_base_link" link2="b/wrist_2_link" reason="Never"/>
+    <disable_collisions link1="b/shoulder_link" link2="canopy" reason="Never"/>
+    <disable_collisions link1="b/shoulder_link" link2="frame" reason="Never"/>
+    <disable_collisions link1="b/shoulder_link" link2="ground" reason="Never"/>
+    <disable_collisions link1="b/shoulder_link" link2="wall_1" reason="Never"/>
+    <disable_collisions link1="b/shoulder_link" link2="wall_2" reason="Never"/>
     <disable_collisions link1="b/stereo_pair_base_link" link2="b/wrist_3_link" reason="Adjacent"/>
     <disable_collisions link1="b/upper_arm_link" link2="b/ur5_mount" reason="Never"/>
+    <disable_collisions link1="b/ur5_mount" link2="canopy" reason="Never"/>
     <disable_collisions link1="b/ur5_mount" link2="frame" reason="Adjacent"/>
     <disable_collisions link1="b/ur5_mount" link2="ground" reason="Never"/>
     <disable_collisions link1="b/ur5_mount" link2="wall_1" reason="Never"/>
     <disable_collisions link1="b/ur5_mount" link2="wall_2" reason="Never"/>
-    
     <disable_collisions link1="b/wrist_1_link" link2="b/wrist_2_link" reason="Adjacent"/>
     <disable_collisions link1="b/wrist_1_link" link2="b/wrist_3_link" reason="Never"/>
     <disable_collisions link1="b/wrist_2_link" link2="b/wrist_3_link" reason="Adjacent"/>
-
     <disable_collisions link1="canopy" link2="frame" reason="Adjacent"/>
     <disable_collisions link1="canopy" link2="ground" reason="Adjacent"/>
     <disable_collisions link1="canopy" link2="wall_1" reason="Adjacent"/>

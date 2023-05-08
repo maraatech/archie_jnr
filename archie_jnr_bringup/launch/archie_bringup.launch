@@ -3,7 +3,10 @@
 	<!-- Default namespace topics: DO NOT EDIT -->
 	<arg name="ns_a" value="a"/>
 	<arg name="ns_b" value="b"/>
-	<arg name="use_side_b" value="true"/>
+	<arg name="use_side_b" default="true"/>
+	<arg name="sim_a"  default="false"/>
+	<arg name="sim_b"  default="false"/>
+	<arg name="use_cameras"  default="true"/>
 	
 	<!-- load Archie systems on primary machine -->
 
@@ -13,54 +16,32 @@
   		<arg name="ee_sensor_b" value="stereo"/><!--stereo realsense zivid kea stereo-kea -->
   	</include>
 
-  	<!-- Start joint_state aggregator -->
-  	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
-      	<param name="/use_gui" value="false"/>
-      	<rosparam param="/source_list">[a/joint_states, b/joint_states]</rosparam>
-    </node>
-
     <!-- State publishers -->
 	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
 
-	<!-- Launch moveit -->
-	<include file="$(find archie_jnr_moveit_config)/launch/move_group.launch">
-		<arg name="debug" value="false" />
-		<arg name="load_robot_description" value="false" />
-		<arg name="publish_monitored_planning_scene" value="true" />
-	</include>
-
 	<!-- <machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/> -->
 	<!-- <machine name="side-$(arg ns_b)" user="anyone" address="stormtrooper" env-loader="~/archie-environment.sh" default="true"/> -->
-	<include file="$(find archie_jnr_bringup)/launch/archie_bringup_b.launch">
-	</include>
-
-	<machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/>
-	<!-- <machine name="side-$(arg ns_b)" user="anyone" address="stormtrooper" env-loader="~/archie-environment.sh" default="true"/> -->
+	
+	<!-- Start archie sides -->
 	<include file="$(find archie_jnr_bringup)/launch/archie_bringup_a.launch">
+		<arg name="sim" value="$(arg sim_a)"/>
+		<arg name="use_cameras" value="$(arg use_cameras)"/>
+	</include>
+	<include file="$(find archie_jnr_bringup)/launch/archie_bringup_b.launch" if="$(arg use_side_b)">
+		<arg name="sim" value="$(arg sim_b)"/>
+		<arg name="use_cameras" value="$(arg use_cameras)"/>
 	</include>
 
-	<!-- Load UR arm -->
-  	<!-- <include file="$(find archie_jnr_bringup)/launch/archie_side_bringup.launch">
-  		<arg name="ns"        		   value="$(arg ns_a)"/>
-		<arg name="robot_ip"           value="192.168.131.9"/>
-		<arg name="reverse_port"       value="50001"/>
-		<arg name="script_sender_port" value="50002"/>
-		<arg name="kinematics_config"  default="$(find archie_jnr_description)/config/$(arg ns_a)/uoa_cares_ur5_calibration.yaml"/>
-  	</include> -->
-
-	<!-- load UR arm on secondary machine -->
-	<!-- NOTE: anything after the machine tag is run on the remote machine -->
-	<!-- <machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/>
-	<machine name="side-$(arg ns_b)" user="anyone" address="stormtrooper" env-loader="~/archie-environment.sh" default="true"/> -->
-	<!-- <group if="$(eval use_side_b)">
-		<include file="$(find archie_jnr_bringup)/launch/archie_side_bringup.launch">
-			<arg name="ns"      		   value="$(arg ns_b)"/>
-			<arg name="robot_ip"           value="192.168.131.8"/>
-			<arg name="reverse_port"       value="50005"/>
-			<arg name="script_sender_port" value="50004"/>
-			<arg name="kinematics_config"  default="$(find archie_jnr_description)/config/$(arg ns_b)/uow_ur5_calibration.yaml"/>
-		</include>
-	</group> -->
+	<!-- Joint state agregator, setup to handle different sim/real combinations, remember to remap joint states in move group and control nodes -->
+	<arg name="a_joint_pub" value="a/joint_states" unless="$(arg sim_a)"/>
+	<arg name="b_joint_pub" value="b/joint_states" unless="$(arg sim_b)"/>
+	<arg name="a_joint_pub" value="a/move_group/fake_controller_joint_states/" if="$(arg sim_a)"/>
+	<arg name="b_joint_pub" value="b/move_group/fake_controller_joint_states/" if="$(arg sim_b)"/>
+	<arg name="state_publishers" value="[$(arg a_joint_pub), $(arg b_joint_pub)]"/>
+	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+		<param name="use_gui" value="false"/>
+		<rosparam param="source_list" subst_value="True">[$(arg a_joint_pub), $(arg b_joint_pub)]</rosparam>
+	</node>
 </launch>
 
 <!-- <machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/> -->

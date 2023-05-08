@@ -1,6 +1,8 @@
 <?xml version="1.0" ?>
 <launch>
 	<arg name="ns" default="a"/>
+	<arg name="sim" default="false"/>
+	<arg name="use_cameras" default="true"/>
 
 	<arg name="robot_ip"           default="192.168.131.9"/>
 	<arg name="reverse_port"       default="50001"/>
@@ -12,7 +14,7 @@
 
   	<!-- Launch UR5 hardware interface and controller -->
 	<group ns="$(arg ns)">
-		<include file="$(find ur_robot_driver)/launch/ur_control.launch">
+		<include file="$(find ur_robot_driver)/launch/ur_control.launch" unless="$(arg sim)">
 			<arg name="tf_prefix"              value="$(arg ns)/"/>
 			<arg name="robot_ip"               value="$(arg robot_ip)"/>
 			<arg name="reverse_port"           value="$(arg reverse_port)"/>
@@ -28,14 +30,26 @@
 		</include>
   	</group>
 
+	<!-- Launch moveit -->
+	<group ns="$(arg ns)">
+		<include file="$(find archie_jnr_moveit_config)/launch/move_group.launch">
+			<arg name="debug" value="false" />
+			<arg name="load_robot_description" value="false" />
+			<arg name="publish_monitored_planning_scene" value="true" />
+			<arg name="moveit_controller_manager" value="fake" if="$(arg sim)"/>
+			<arg name="moveit_controller_manager" value="simple" unless="$(arg sim)"/>
+			<arg name="controllers_list" value="$(arg ns)"/>
+		</include>
+		<node name="control_node" pkg="ur_moveit_controller" type="control_node.py" output="screen">
+			<!-- remap published joints from name spaced to global to ensure multiple robots can see each other remember to remap in move_group.launch -->
+			<remap from="joint_states/" to="/joint_states"/>
+			<param name="move_group_name" value="ur_arm_$(arg ns)" />
+		</node>
+	</group>
+
   	<!-- Launch pylon cameras -->
-	<include file="$(find archie_jnr_bringup)/launch/archie_pylon.launch">
+	<include file="$(find archie_jnr_bringup)/launch/archie_pylon.launch" if="$(arg use_cameras)">
 		<arg name="ns" value="$(arg ns)"/>
 	</include>
 
-  	<!-- Launch moveit controller for the given arm group -->
-  	<!-- NOTE: this gets launch on the base namespace in order to read archies description correctly -->
-  	<node name="control_node_$(arg ns)" pkg="ur_moveit_controller" type="control_node.py" output="screen">
-		<param name="move_group_name" value="ur_arm_$(arg ns)"/>
-	</node>
 </launch>

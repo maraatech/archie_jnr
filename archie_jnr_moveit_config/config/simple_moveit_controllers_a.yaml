@@ -1,0 +1,12 @@
+controller_list:
+  - name: /a/scaled_pos_joint_traj_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: True
+    joints:
+      - a/shoulder_pan_joint
+      - a/shoulder_lift_joint
+      - a/elbow_joint
+      - a/wrist_1_joint
+      - a/wrist_2_joint
+      - a/wrist_3_joint

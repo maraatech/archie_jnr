@@ -41,7 +41,7 @@
 		<arg name="platform_server"  default="$(arg platform_server_b)"/>
 	</include>
 	
-	<machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/>
+	<!-- <machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/> -->
 	<include file="$(find archie_jnr_bringup)/launch/archie_side_map.launch">
 		<arg name="ns" value="$(arg ns_a)"/>
 		

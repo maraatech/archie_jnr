@@ -8,7 +8,7 @@
   <arg name="rail_server_a"  value="a/rail_server"/>
 	<arg name="rail_server_b"  value="b/rail_server"/>
   <!-- <arg name="rail_servers"   value="[$(arg rail_server_a), $(arg rail_server_b)]"/> -->
-  <arg name="rail_servers"   value="[$(arg rail_server_a)]"/>
+  <arg name="rail_servers"   value=""/>
 
   <!-- UR Arm Control Servers -->
   <arg name="platform_server_a"  value="/ur_arm_a_server"/>

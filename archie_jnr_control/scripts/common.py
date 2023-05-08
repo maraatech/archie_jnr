@@ -19,6 +19,8 @@ from cares_msgs.msg import MappingAction, MappingGoal, MappingFeedback, MappingR
 from cares_msgs.msg import ScanningAction, ScanningGoal, ScanningFeedback, ScanningResult
 from cares_msgs.msg import MetricExtractionAction, MetricExtractionGoal, MetricExtractionFeedback, MetricExtractionResult
 from cares_msgs.msg import ArchieRailCmdAction, ArchieRailCmdGoal, ArchieRailCmdFeedback, ArchieRailCmdResult
+from cares_msgs.msg import ActuationAction, ActuationGoal, ActuationFeedback, ActuationResult
+from cares_msgs.msg import CutAction, CutGoal, CutFeedback, CutResult
 
 from geometry_msgs.msg import Pose, PoseStamped
 
@@ -91,6 +93,34 @@ def rail_to_str(status):
         return "Starting"
     elif status == ArchieRailCmdFeedback.HOMING:
         return "Homing"
+    return f"Unkown: {status}"
+
+def actuation_to_str(status):
+    if status == ActuationFeedback.INIT:
+        return "Init"
+    elif status == ActuationFeedback.MOVING_TO_APPROACH:
+        return "Moving To Approach"
+    elif status == ActuationFeedback.MOVING_TO_TARGET:
+        return "Moving To Target"
+    elif status == ActuationFeedback.MOVING_BACK_TO_APPROACH:
+        return "Moving Back To Approach"
+    elif status == ActuationFeedback.ACTUATING:
+        return "Actuating"
+    elif status == ActuationFeedback.STOPPING:
+        return "Stopping"
+    return f"Unkown: {status}"
+
+def cutting_to_str(status):
+    if status == CutFeedback.INIT:
+        return "Init"
+    elif status == CutFeedback.PROCESSING_CUT_POINTS:
+        return "Processing Cut Points"
+    elif status == CutFeedback.MAKING_CUT:
+        return "Making Cut"
+    elif status == CutFeedback.TRANSITIONING:
+        return "Transitioning"
+    elif status == CutFeedback.STOPPING:
+        return "Stopping"
     return f"Unkown: {status}"
 
 def create_navigation_goal(command):

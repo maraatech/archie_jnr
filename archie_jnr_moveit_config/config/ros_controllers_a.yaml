@@ -15,12 +15,6 @@ hardware_interface:
     - a/wrist_1_joint
     - a/wrist_2_joint
     - a/wrist_3_joint
-    - b/shoulder_pan_joint
-    - b/shoulder_lift_joint
-    - b/elbow_joint
-    - b/wrist_1_joint
-    - b/wrist_2_joint
-    - b/wrist_3_joint
   sim_control_mode: 1  # 0: position, 1: velocity
 # Publish all joint states
 # Creates the /joint_states topic necessary in ROS
@@ -28,7 +22,7 @@ joint_state_controller:
   type: joint_state_controller/JointStateController
   publish_rate: 50
 controller_list:
-  - name: a/scaled_pos_joint_traj_controller
+  - name: /a/scaled_pos_joint_traj_controller
     action_ns: follow_joint_trajectory
     default: True
     type: FollowJointTrajectory
@@ -39,14 +33,3 @@ controller_list:
       - a/wrist_1_joint
       - a/wrist_2_joint
       - a/wrist_3_joint
-  - name: b/scaled_pos_joint_traj_controller
-    action_ns: follow_joint_trajectory
-    default: True
-    type: FollowJointTrajectory
-    joints:
-      - b/shoulder_pan_joint
-      - b/shoulder_lift_joint
-      - b/elbow_joint
-      - b/wrist_1_joint
-      - b/wrist_2_joint
-      - b/wrist_3_joint

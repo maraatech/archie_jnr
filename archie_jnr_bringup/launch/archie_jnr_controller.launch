@@ -4,6 +4,9 @@
   <!-- Mapping Task Server -->
   <arg name="mapping_server" value="mapping_server"/>
 
+  <!-- Cutting Task Server -->
+  <arg name="cutting_server"   value="cutting_server"/>
+
   <!-- UR Arm Control Servers -->
   <arg name="platform_server_a"  value="/ur_arm_a_server"/>
 	<arg name="platform_server_b"  value="/ur_arm_b_server"/>
@@ -26,7 +29,7 @@
   <arg name="num_captures" default="1"/>
 
   <!-- Capture Marker for alignment -->
-  <arg name="capture_marker" default="true"/>
+  <arg name="capture_marker" default="false"/>
 
   <!-- Init Pose -->
   <!-- Meters -->
@@ -50,6 +53,8 @@
     <param name="world_link"           value="$(arg world_link)"/>
 
   	<param name="mapping_server" value="$(arg mapping_server)"/>
+
+    <param name="cutting_server" value="$(arg cutting_server)"/>
 
     <param name="num_captures"   value="$(arg num_captures)"/>
     <param name="capture_marker" value="$(arg capture_marker)"/>

@@ -1,0 +1,11 @@
+<launch>
+  <!-- Define the MoveIt controller manager plugin to use for trajectory execution -->
+  <arg name="controllers_list" default="a"/>
+  <!-- <arg name="simple_controllers_file_name" value="$(find archie_jnr_moveit_config)/config/simple_moveit_controllers_$(arg controllers_list).yaml"/> -->
+  <arg name="ros_controllers_file_name" value="$(find archie_jnr_moveit_config)/config/ros_controllers_$(arg controllers_list).yaml"/>
+  <param name="moveit_controller_manager" value="moveit_simple_controller_manager/MoveItSimpleControllerManager" />
+
+  <!-- Load controller list to the parameter server -->
+  <!-- <rosparam subst_value="true" file="$(arg simple_controllers_file_name)"/> -->
+  <rosparam subst_value="true" file="$(arg ros_controllers_file_name)" />
+</launch>
