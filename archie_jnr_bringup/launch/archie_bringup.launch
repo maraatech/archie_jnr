@@ -19,16 +19,11 @@
     <!-- State publishers -->
 	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
 
-	<!-- <machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/> -->
-	<!-- <machine name="side-$(arg ns_b)" user="anyone" address="stormtrooper" env-loader="~/archie-environment.sh" default="true"/> -->
+	<machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/>
 	
 	<!-- Start archie sides -->
 	<include file="$(find archie_jnr_bringup)/launch/archie_bringup_a.launch">
 		<arg name="sim" value="$(arg sim_a)"/>
-		<arg name="use_cameras" value="$(arg use_cameras)"/>
-	</include>
-	<include file="$(find archie_jnr_bringup)/launch/archie_bringup_b.launch" if="$(arg use_side_b)">
-		<arg name="sim" value="$(arg sim_b)"/>
 		<arg name="use_cameras" value="$(arg use_cameras)"/>
 	</include>
 
@@ -37,11 +32,19 @@
 	<arg name="b_joint_pub" value="b/joint_states" unless="$(arg sim_b)"/>
 	<arg name="a_joint_pub" value="a/move_group/fake_controller_joint_states/" if="$(arg sim_a)"/>
 	<arg name="b_joint_pub" value="b/move_group/fake_controller_joint_states/" if="$(arg sim_b)"/>
-	<arg name="state_publishers" value="[$(arg a_joint_pub), $(arg b_joint_pub)]"/>
+	<arg name="state_publishers" value="[$(arg a_joint_pub), $(arg b_joint_pub)]" if="$(arg use_side_b)"/>	
+	<arg name="state_publishers" value="[$(arg a_joint_pub)]" unless="$(arg use_side_b)"/>
+
 	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
 		<param name="use_gui" value="false"/>
-		<rosparam param="source_list" subst_value="True">[$(arg a_joint_pub), $(arg b_joint_pub)]</rosparam>
+		<rosparam param="source_list" subst_value="True">$(arg state_publishers)</rosparam>
 	</node>
+<!-- 
+	<machine name="side-$(arg ns_b)" user="anyone" address="stormtrooper" env-loader="~/archie-environment.sh" default="true"/>
+	<include file="$(find archie_jnr_bringup)/launch/archie_bringup_b.launch" if="$(arg use_side_b)">
+		<arg name="sim" value="$(arg sim_b)"/>
+		<arg name="use_cameras" value="$(arg use_cameras)"/>
+	</include> -->
 </launch>
 
 <!-- <machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/> -->

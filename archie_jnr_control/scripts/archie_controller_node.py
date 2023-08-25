@@ -33,13 +33,12 @@ from os.path import expanduser
 import time
 home = expanduser("~")
 
-def get_filepath():
+def get_filepath(scan_prefix):
     now = datetime.now()
     now = now.strftime("%Y-%m-%d-%H-%M-%S")
     scans_directory = "~/canopy_scans/" # Note the "~" gets expanded on the host machine
 
-    number_of_scans = len(list(os.listdir(expanduser(scans_directory))))
-    filepath = scans_directory+str(number_of_scans+1)+"_"+now+"/"
+    filepath = scans_directory+str(scan_prefix)+"_"+now+"/"
 
     return filepath
 
@@ -91,9 +90,7 @@ class ArchieController(object):
         self.module_controller.start_mapping(mapping_goal)
         return True
     
-    def start_cutting(self):
-        # Logic to determine if mapping is able to be started
-
+    def start_cutting(self, cutting_server, cutting_control_frame, arm_planning_link):
         # Check if a task controller is operating
         if self.module_controller == None:
             print("No Task Controller Operating")
@@ -105,7 +102,7 @@ class ArchieController(object):
             return False
 
         # Start Module suff here
-        self.module_controller.start_cutting()
+        self.module_controller.start_cutting(cutting_server, cutting_control_frame, arm_planning_link)
         return True
 
     def start_navigation(self, navigation_goal, home_poses, control_links):
@@ -131,12 +128,12 @@ class ArchieController(object):
         if not self.module_controller == None:
             self.module_controller.stop()
 
-    def modules_idle(self):
-        return self.module_controller.idle()
+    def modules_idle(self, active_cutting_server):
+        return self.module_controller.idle(active_cutting_server)
 
-    def get_state(self):
+    def get_state(self, active_cutting_server):
         navigation_state = None if self.navigation_controller == None else self.navigation_controller.get_state()
-        module_state     = None if self.module_controller == None else self.module_controller.get_state()
+        module_state     = None if self.module_controller == None else self.module_controller.get_state(active_cutting_server)
         return navigation_state, module_state 
 
 def rail_ui(key):
@@ -158,13 +155,15 @@ def create_layout(servers):
     navigation_ui = servers["navigation_server"] is not None
     mapping_ui = servers["mapping_server"] is not None
     has_rail_servers = servers["rail_servers"] is not None
-    cutting_ui = servers["cutting_server"] is not None
+    cutting_ui = servers["cutting_servers"]
     arm_servers = servers["arm_servers"]
+    cutting_servers = servers["cutting_servers"]
     # Use these as defaults but read them from the UI for future runs
     world_link          = rospy.get_param('~world_link')
     
     planning_links       = rospy.get_param('~planning_links')
     robot_control_frames = rospy.get_param('~robot_control_frames')
+    cutting_control_frames = rospy.get_param('~cutting_control_frames')
 
     get_marker          = rospy.get_param('~capture_marker', False)
     path_id             = rospy.get_param('~path_id', 0)
@@ -183,6 +182,9 @@ def create_layout(servers):
     planning_time = rospy.get_param('~allowed_planning_time', 0.0)
     fix_end_effector = rospy.get_param('~fix_end_effector', False)
     constraint_type = rospy.get_param('~default_constraint_type', PathPlanningConstraints.NONE)
+
+    #index corresponding to cutting server, assume cutting server and arm servers have same index TODO: Based on name
+    active_cutting_server = cutting_servers[0] if cutting_servers else ""
 
     # Improve UI
     layout = []    
@@ -221,6 +223,7 @@ def create_layout(servers):
         if arm_servers is not None:
             layout.append([sg.Text(f"Task Information")])
             size = (20,1)
+            layout.append([sg.Text("Scan Prefix: "), sg.InputText("", size=size, key='-SCAN-PREFIX-')])
             for i, arm_server in enumerate(arm_servers):
                 layout.append([sg.Text(f"Planning: "), sg.InputText(planning_links[i],       size=size, key=f"-PLANNING-{i}-")])
                 layout.append([sg.Text(f"Control: "),  sg.InputText(robot_control_frames[i], size=size, key=f"-CONTROL-{i}-")])
@@ -228,6 +231,14 @@ def create_layout(servers):
 
             size = (20,1)
             layout.append([sg.Text(f"Task Interface")])
+
+            for i, cutting_server in enumerate(cutting_servers):
+                layout.append([sg.Text(f"Cutting Control: "), sg.InputText(cutting_control_frames[i], size=size, key=f"-CUTTING-FRAME-{i}-")])
+                # layout.append(cutting_ui(cutting_server))
+            
+            if cutting_servers:
+                layout.append([sg.Text(f"Active Cut Server: "), sg.InputText(active_cutting_server, size=size, key="-ACTIVE-CUTTING-SERVER-")])
+
             layout.append([sg.Text(f"Marker: "), sg.InputText(get_marker, size=size, key="-MARKER-")])
             layout.append([sg.Text(f"Path: "),   sg.InputText(path_id,    size=size, key="-PATH-")])
 
@@ -259,14 +270,14 @@ def main():
     navigation_server = rospy.get_param('~navigation_server', None)
     print(f"Navigation Server: {navigation_server}")
 
-    cutting_server = rospy.get_param('~cutting_server', None)
-    print(f"Cutting Server: {cutting_server}")
+    cutting_servers = rospy.get_param('~cutting_servers', None)
+    print(f"Cutting Servers: {cutting_servers}")
 
     servers = {
         "rail_servers": rail_servers,
         "arm_servers": arm_servers,
         "mapping_server": mapping_server,
-        "cutting_server": cutting_server,
+        "cutting_servers": cutting_servers,
         "navigation_server": navigation_server
     }
 
@@ -287,7 +298,7 @@ def main():
 
         if event == 'Map':
             # Generate file_path to save data into
-            file_path = get_filepath()
+            file_path = get_filepath(str(values[f"-SCAN-PREFIX-"]))
             scanning_goals = []
             for i, arm_server in enumerate(arm_servers):
                 scanning_goal = common.create_scanning_goal(ScanningGoal.MAP,
@@ -333,8 +344,14 @@ def main():
                 print("Home Request Failed")
 
         elif event == 'Cut':
-            archie_controller.start_cutting()
-            print("Cutting Task Started")
+            cutting_server = values['-ACTIVE-CUTTING-SERVER-']
+            arm_planning_link = values[f"-PLANNING-{cutting_servers.index(values['-ACTIVE-CUTTING-SERVER-'])}-"]
+            cutting_control_frame = values[f"-CUTTING-FRAME-{cutting_servers.index(values['-ACTIVE-CUTTING-SERVER-'])}-"]
+            archie_controller.start_cutting(cutting_server=cutting_server, 
+                                            cutting_control_frame=cutting_control_frame,
+                                            arm_planning_link=arm_planning_link)
+                    
+            print(f"Cutting Task Started: {values['-ACTIVE-CUTTING-SERVER-']}")
         
         elif event == 'Stop':
             archie_controller.stop()
@@ -346,7 +363,7 @@ def main():
             window['-NAV-STATE-'].update(navigation_status)
         
         if "-TASK-STATE-" in window.AllKeysDict:
-            navigation_status, module_status = archie_controller.get_state()
+            navigation_status, module_status = archie_controller.get_state(active_cutting_server=values["-ACTIVE-CUTTING-SERVER-"])
 
             module_status, arm_states  = module_status
 
@@ -355,7 +372,7 @@ def main():
                 status = common.goal_to_str(status)
                 window[key].update(f"{status}")
 
-            modules_idle = archie_controller.modules_idle()
+            modules_idle = archie_controller.modules_idle(active_cutting_server=values["-ACTIVE-CUTTING-SERVER-"])
             if mapping_server and not modules_idle["mapping_client"]:
                 mapping_status, mapping_feedback = module_status["mapping_client"]
                 count = mapping_feedback.count
@@ -382,19 +399,18 @@ def main():
                 task_status    = common.goal_to_str(mapping_status)
                 mapping_status = common.mapping_to_str(mapping_feedback.status)
                 window["-TASK-STATE-"].update(f"Mapping: {task_status} {mapping_status}")
-            elif cutting_server and not modules_idle["cutting_client"]:
+            elif cutting_servers and not modules_idle["cutting_client"]:
                 cutting_status, cutting_feedback = module_status["cutting_client"]
                 count = cutting_feedback.count
                 total = cutting_feedback.total
 
-                if not f"-CUT-{i}" in window.AllKeysDict:
-                        window.extend_layout(window['-Column-'], cutting_ui(f"-CUT-{i}"))
+                if not f"-CUT-" in window.AllKeysDict:
+                        window.extend_layout(window['-Column-'], cutting_ui(f"-CUT-"))
                 
-
                 task_status    = common.goal_to_str(cutting_status)
                 cutting_status = common.cutting_to_str(cutting_feedback.status)
                 actuation_status = common.actuation_to_str(cutting_feedback.actuation_feedback.feedback)
-                window[f"-CUT-{i}"].update(f"Actuation: {actuation_status} Count: {count}/{total}")
+                window[f"-CUT-"].update(f"Actuation: {actuation_status} Count: {count}/{total}")
                 window["-TASK-STATE-"].update(f"Cutting: {task_status} {cutting_status}")
                 
 

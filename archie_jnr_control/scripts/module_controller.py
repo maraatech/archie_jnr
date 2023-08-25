@@ -24,8 +24,10 @@ from cares_lib_ros.action_client import ActionClient
 class ModuleController(object):
     def __init__(self, servers):
         # Task Clients
-        self.modules = {}
+        self.modules = {"cutting_client": None}
         self.arm_clients = {}
+        self.cutting_clients = {}
+        self.mapping_clients = {}
         for arm_server in servers["arm_servers"]:
             self.arm_clients[arm_server] = ActionClient(arm_server, PlatformGoalAction, PlatformGoalFeedback)
 
@@ -38,12 +40,14 @@ class ModuleController(object):
             mapping_server = servers["mapping_server"]
             self.mapping_client = ActionClient(mapping_server, MappingAction, MappingFeedback)
             self.modules["mapping_client"] = self.mapping_client
-        if "cutting_server" in servers.keys() and servers["cutting_server"] is not None:
-            cutting_server = servers["cutting_server"]
+        
+        if "cutting_servers" in servers.keys() and servers["cutting_servers"] is not None:
             extract_cut_points_service = rospy.get_param("~extract_cut_points_service", "vine_decision_making_server/extractCutPoints")
-            self.cutting_client = ActionClient(cutting_server, CutAction, CutFeedback)
             self.extract_cut_points_service_proxy = rospy.ServiceProxy(extract_cut_points_service, ExtractCutPoints)
-            self.modules["cutting_client"] = self.cutting_client
+            self.cutting_clients_indexed = []
+            for cutting_server in servers["cutting_servers"]:
+                self.cutting_clients[cutting_server] = ActionClient(cutting_server, CutAction, CutFeedback)
+                self.cutting_clients_indexed.append(self.cutting_clients[cutting_server])
 
     def stop(self):
         if not self.modules["mapping_client"].is_idle():
@@ -76,35 +80,38 @@ class ModuleController(object):
     def stop_cutting(self):
         cutting_goal = CutGoal()
         cutting_goal.command = CutGoal.STOP
-        self.modules["cutting_client"].send_goal(cutting_goal)
-        while not self.modules["cutting_client"].is_idle():
-            pass
+        for cutting_client in self.cutting_clients.values():
+            cutting_client.send_goal(cutting_goal)
+            while not cutting_client.is_idle():
+                pass
 
     def start_mapping(self, mapping_goal):
         self.mapping_client.send_goal(mapping_goal)
 
-    def start_cutting(self):
+    def start_cutting(self, cutting_server, cutting_control_frame, arm_planning_link):
         cutting_goal = CutGoal()
         cutting_goal.command = CutGoal.CUT
-        cutting_goal.cut_points = self.extract_cut_points_service_proxy(ExtractCutPointsRequest()).cut_points
-
-        self.cutting_client.send_goal(cutting_goal)
+        cutting_goal.cutting_frame = cutting_control_frame
+        cutting_goal.planning_frame = arm_planning_link
+        cutting_goal.cut_points = self.extract_cut_points_service_proxy(ExtractCutPointsRequest(planning_link=arm_planning_link)).cut_points
+        self.cutting_clients[cutting_server].send_goal(cutting_goal)
 
 
     # Pass through link_id
-    def home(self, home_poses, control_links, rail_home):
+    # Pass through link_id
+    def home(self, home_poses, control_links, planning_time, fix_end_effector, constraint_type):
         if not self.mapping_client.is_idle():
             print("Stopping Mapping")
             self.stop_mapping()
-        elif not self.modules["cutting_client"].is_idle():
-            print("Stopping Cutting")
-            self.stop_cutting
         
         for key in home_poses.keys():
             platform_goal = PlatformGoalGoal()
             platform_goal.command = PlatformGoalGoal.MOVE
             platform_goal.link_id.data = control_links[key]
             platform_goal.target_pose  = home_poses[key]
+            platform_goal.path_constraints.allowed_planning_time = planning_time
+            platform_goal.path_constraints.volume_constraint = constraint_type
+            platform_goal.path_constraints.fix_end_effector = fix_end_effector
             self.arm_clients[key].send_goal(platform_goal)
             print(f"Moving Arm: {key}")
             while not self.arm_clients[key].is_idle():
@@ -113,34 +120,23 @@ class ModuleController(object):
         for key, arm_client in self.arm_clients.items():
             goal_state, _ = arm_client.get_state()
             if goal_state != GoalStatus.SUCCEEDED:
-                print(f"{key} failed to home not moving rail!")
                 return
-
-        for rail_client in self.rail_clients.values():
-            rail_goal = ArchieRailCmdGoal()
-            rail_goal.command = ArchieRailCmdGoal.MOVE
-            rail_goal.target_pose = rail_home
-            rail_client.send_goal(rail_goal)
-
-        print(f"Wiating for rails to reach home")
-        for rail_client in self.rail_clients.values():
-            while not rail_client.is_idle():
-                pass
-
     # Extend state to return arm states as well
     # Extend state to return arm states as well
-    def get_state(self):
+    def get_state(self, active_cutting_client):
         arm_states = {}
         for key, value in self.arm_clients.items():
             arm_states[key] = value.get_state()
 
         module_states = {}
+        self.modules["cutting_client"] = self.cutting_clients[active_cutting_client]
         for module_name, module in self.modules.items():
             module_states[module_name] = module.get_state()
         return module_states, arm_states 
 
-    def idle(self):
+    def idle(self, active_cutting_client):
         idle_status = {}
+        self.modules["cutting_client"] = self.cutting_clients[active_cutting_client]
         for module_name, module in self.modules.items():
             idle_status[module_name] = True
             if not module.is_idle():

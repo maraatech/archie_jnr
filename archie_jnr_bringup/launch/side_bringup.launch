@@ -50,7 +50,9 @@
   	</group>
 
   	<!-- Launch pylon cameras -->
-	<include file="$(find archie_jnr_bringup)/launch/archie_pylon.launch">
-		<arg name="ns" value="$(arg ns)"/>
-	</include>
+	<group ns="$(arg ns)">	
+		<include file="$(find archie_jnr_bringup)/launch/archie_pylon.launch">
+			<arg name="ns" value="$(arg ns)"/>
+		</include>
+	</group>
 </launch>

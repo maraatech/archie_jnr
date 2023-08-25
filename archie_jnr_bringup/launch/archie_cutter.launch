@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<launch>
+	<arg name="ns"        default="a"/>
+
+	<arg name="actuator_link"                   default="$(arg ns)/stereo_pair/cutting_tool"/>
+    <arg name="planning_link"                   default="$(arg ns)/base_link"/>
+    <arg name="actuator_server"                 default="actuator_server"/>
+    <arg name="arm_server"                      default="/ur_arm_$(arg ns)_server"/>
+
+	<group ns="$(arg ns)">	
+		<include file="$(find maara_task_controller)/launch/cutting_server.launch">
+			<!-- <arg name="actuator_link"                  value="$(arg actuator_link)"/> -->
+			<arg name="arm_server"                     value="$(arg arm_server)"/>
+			<!-- <arg name="planning_link"                  value="$(arg planning_link)" /> -->
+			<arg name="actuator_server"                value="$(arg actuator_server)" />
+		</include>
+	</group>
+	
+	<group ns="$(arg ns)">
+		<include file="$(find maara_task_controller)/launch/actuation_server.launch">
+			<arg name="arm_server"                  value="$(arg arm_server)"/>
+		</include>
+	</group>
+
+</launch>

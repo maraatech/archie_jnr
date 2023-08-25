@@ -2,45 +2,33 @@
 <launch>
 	<arg name="ns_a" value="a"/>
 	<arg name="ns_b" value="b"/>
+	<arg name="use_side_b" default="true"/> 
 
 	<!-- Mapping Task Server -->
 	<arg name="mapping_server"    default="mapping_server"/>
 	
-	<!-- Scanning Server -->
+	<!-- Set Up Servers for each side -->
 	<arg name="scanning_server_a"  default="scanning_server_$(arg ns_a)"/>
-	<arg name="scanning_server_b"  default="scanning_server_$(arg ns_b)"/>
-	<arg name="scanning_servers"   value="[$(arg ns_a)/$(arg scanning_server_a), $(arg ns_b)/$(arg scanning_server_b)]"/>
-
-	<!-- UR Arm Control Servers -->
 	<arg name="platform_server_a"  default="/ur_arm_$(arg ns_a)_server"/>
+	<arg name="metric_server_a"      default="a/stereo_pair_metric_server"/>
+	
+	<arg name="scanning_server_b"  default="scanning_server_$(arg ns_b)"/>
 	<arg name="platform_server_b"  default="/ur_arm_$(arg ns_b)_server"/>
+	<arg name="metric_server_b"		 default="b/stereo_pair_metric_server"/>
 
-	<!-- Metric Server -->
-	<arg name="metric_server"      default="metrics/stereo_pair_metric_server"/>
+	<!-- Determine servers based through based on whether on not using side_b+ -->
+	<arg name="metric_servers"   value="[$(arg metric_server_a)]" unless="$(arg use_side_b)"/>
+	<arg name="scanning_servers"   value="[$(arg ns_a)/$(arg scanning_server_a)]" unless="$(arg use_side_b)"/>
+	<arg name="metric_servers"   value="[$(arg metric_server_a), $(arg metric_server_b)]" if="$(arg use_side_b)"/>
+	<arg name="scanning_servers"   value="[$(arg ns_a)/$(arg scanning_server_a), $(arg ns_b)/$(arg scanning_server_b)]" if="$(arg use_side_b)"/>
 
 	<!-- Start the mapping server -->
 	<include file="$(find maara_canopy_mapping)/launch/mapping_server.launch">
 		<arg name="mapping_server"   default="$(arg mapping_server)"/>
 		<arg name="scanning_servers" default="$(arg scanning_servers)"/>
-		<arg name="metric_servers"   default="[$(arg metric_server)]"/>
+		<arg name="metric_servers"   default="$(arg metric_servers)"/>
 	</include>
 
-	<!-- Start Metric Server -->
-	<include file="$(find maara_metric_extraction)/launch/metric_server.launch"> 
-		<arg name="ns"            value="metrics"/>
-		<arg name="sensor_name"   value="stereo_pair"/>
-		<arg name="metric_server" value="$(arg metric_server)"/>
-	</include>
-
-	<!-- Start Scanning Servers on each arm -->
-	<!--<machine name="side-$(arg ns_b)" user="anyone" address="stormtrooper" env-loader="~/archie-environment.sh" default="true"/>-->
-	<include file="$(find archie_jnr_bringup)/launch/archie_side_map.launch">
-		<arg name="ns" value="$(arg ns_b)"/>
-		
-		<arg name="scanning_server"  default="$(arg scanning_server_b)"/>
-		<arg name="platform_server"  default="$(arg platform_server_b)"/>
-	</include>
-	
 	<!-- <machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/> -->
 	<include file="$(find archie_jnr_bringup)/launch/archie_side_map.launch">
 		<arg name="ns" value="$(arg ns_a)"/>
@@ -48,6 +36,20 @@
 		<arg name="scanning_server"  default="$(arg scanning_server_a)"/>
 		<arg name="platform_server"  default="$(arg platform_server_a)"/>
 	</include>
+	
+	<node type="rviz" name="rviz" pkg="rviz" args="--opengl 310 -d $(find archie_jnr_bringup)/rviz/archie.rviz" />
+	<!-- Start Scanning Servers on each arm -->
+	<machine name="side-$(arg ns_b)" user="anyone" address="stormtrooper" env-loader="~/archie-environment.sh" default="true"/>
+	<include file="$(find archie_jnr_bringup)/launch/archie_side_map.launch" if="$(arg use_side_b)">
+		<arg name="ns" value="$(arg ns_b)"/>
+		
+		<arg name="scanning_server"  default="$(arg scanning_server_b)"/>
+		<arg name="platform_server"  default="$(arg platform_server_b)"/>
+	</include>
+	
+
+
+    <!-- <node name="vine_decision_making_server" pkg="maara_metric_extraction" type="vine_decision_rviz.py" output="screen"/> -->
 </launch>
 
 <!-- <machine name="side-$(arg ns_a)" user="anyone" address="kylo-ren" env-loader="~/archie-environment.sh" default="true"/> -->

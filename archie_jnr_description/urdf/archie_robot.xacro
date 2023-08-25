@@ -39,10 +39,10 @@
     <xacro:joint_xacro name="base_link_to_ground" parent="base_link" child="ground" type="fixed"/>
    
      <!-- Canopy  -->
-    <link name="canopy">
+    <!-- <link name="canopy">
         <xacro:cube xyz="0.0 0.0 0.8" size="0.25 2.0 1.6"/>
     </link>
-    <xacro:joint_xacro name="base_link_to_canopy" parent="base_link" child="canopy" type="fixed"/>
+    <xacro:joint_xacro name="base_link_to_canopy" parent="base_link" child="canopy" type="fixed"/> -->
     
     <!-- Protective Walls 1 and 2 -->
     <link name="wall_1">

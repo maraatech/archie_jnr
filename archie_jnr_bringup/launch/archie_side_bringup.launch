@@ -44,6 +44,9 @@
 			<!-- remap published joints from name spaced to global to ensure multiple robots can see each other remember to remap in move_group.launch -->
 			<remap from="joint_states/" to="/joint_states"/>
 			<param name="move_group_name" value="ur_arm_$(arg ns)" />
+			<param name="max_planning_retries" value="3" />
+			<param name="max_planning_time" value="20" />
+			<param name="planning_time_retry_multiplier" value="2" />
 		</node>
 	</group>
 
@@ -52,4 +55,11 @@
 		<arg name="ns" value="$(arg ns)"/>
 	</include>
 
+	<include file="$(find archie_jnr_bringup)/launch/archie_cutter.launch">
+		<arg name="ns" value="$(arg ns)"/>
+	</include>
+
+  	<!-- <arg name="ur5_file_arg" default="external_control.urp" />
+	<node pkg="rosservice" type="rosservice" name="ur5_file" args='call wait $(arg ns)/ur_hardware_interface/dashboard/load_program $(arg ur5_file_arg)' />
+	<node pkg="rosservice" type="rosservice" name="ur5_play" args='call wait $(arg ns)/ur_hardware_interface/dashboard/play "{}"'/> -->
 </launch>

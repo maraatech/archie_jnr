@@ -4,6 +4,7 @@
 
 	<arg name="scanning_server"  default="scanning_server"/>
 	<arg name="platform_server"  default="manipulator_server"/>
+	<arg name="metric_server"  default="stereo_pair_metric_server"/>
 	
 	<arg name="sensors"       default="[stereo_pair]"/>
 	<arg name="sensor_topics" default="$(find archie_jnr_description)/config/$(arg ns)/archie_sensor_topics.yaml"/>
@@ -42,5 +43,12 @@
 			<arg name="markers"     default="markers"/>
 			<arg name="dictionary"  default="3"/>
 		</include>
+
+		<include file="$(find maara_metric_extraction)/launch/metric_server.launch"> 
+			<arg name="ns"            value="$(arg ns)"/>
+			<arg name="sensor_name"   value="stereo_pair"/>
+			<arg name="metric_server" value="$(arg metric_server)"/>
+		</include>
+
 	</group>
 </launch>

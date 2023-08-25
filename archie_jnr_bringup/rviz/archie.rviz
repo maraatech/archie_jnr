@@ -4,10 +4,12 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /RobotModel1
+        - /TF1/Frames1
+        - /TF1/Tree1
         - /RobotModel1/Links1
-      Splitter Ratio: 0.4404761791229248
-    Tree Height: 901
+        - /VinePCD1
+      Splitter Ratio: 0.5362694263458252
+    Tree Height: 781
   - Class: rviz/Help
     Name: Help
   - Class: rviz/Views
@@ -41,10 +43,100 @@ Visualization Manager:
       Reference Frame: <Fixed Frame>
       Value: true
     - Class: rviz/TF
-      Enabled: false
+      Enabled: true
       Frame Timeout: 15
       Frames:
-        All Enabled: true
+        All Enabled: false
+        a/base:
+          Value: true
+        a/base_link:
+          Value: true
+        a/base_link_inertia:
+          Value: true
+        a/flange:
+          Value: true
+        a/forearm_link:
+          Value: true
+        a/planning_link:
+          Value: true
+        a/shoulder_link:
+          Value: true
+        a/stereo_pair/cutting_tool:
+          Value: true
+        a/stereo_pair/left_frame:
+          Value: true
+        a/stereo_pair/left_optical_frame:
+          Value: true
+        a/stereo_pair_base_link:
+          Value: true
+        a/stereo_pair_charuco:
+          Value: true
+        a/stereo_pair_charuco_0:
+          Value: true
+        a/tool0:
+          Value: true
+        a/tool0_controller:
+          Value: true
+        a/upper_arm_link:
+          Value: true
+        a/ur5_mount:
+          Value: true
+        a/wrist_1_link:
+          Value: true
+        a/wrist_2_link:
+          Value: true
+        a/wrist_3_link:
+          Value: true
+        b/base:
+          Value: true
+        b/base_link:
+          Value: true
+        b/base_link_inertia:
+          Value: true
+        b/flange:
+          Value: true
+        b/forearm_link:
+          Value: true
+        b/planning_link:
+          Value: true
+        b/shoulder_link:
+          Value: true
+        b/stereo_pair/cutting_tool:
+          Value: true
+        b/stereo_pair/left_frame:
+          Value: true
+        b/stereo_pair/left_optical_frame:
+          Value: true
+        b/stereo_pair_base_link:
+          Value: true
+        b/stereo_pair_charuco:
+          Value: true
+        b/stereo_pair_charuco_0:
+          Value: true
+        b/tool0:
+          Value: true
+        b/tool0_controller:
+          Value: true
+        b/upper_arm_link:
+          Value: true
+        b/ur5_mount:
+          Value: true
+        b/wrist_1_link:
+          Value: true
+        b/wrist_2_link:
+          Value: true
+        b/wrist_3_link:
+          Value: true
+        base_link:
+          Value: true
+        frame:
+          Value: true
+        ground:
+          Value: true
+        wall_1:
+          Value: true
+        wall_2:
+          Value: true
       Marker Alpha: 1
       Marker Scale: 0.10000000149011612
       Name: TF
@@ -52,9 +144,67 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        {}
+        base_link:
+          frame:
+            a/ur5_mount:
+              a/base_link:
+                a/base:
+                  a/tool0_controller:
+                    {}
+                a/base_link_inertia:
+                  a/shoulder_link:
+                    a/upper_arm_link:
+                      a/forearm_link:
+                        a/wrist_1_link:
+                          a/wrist_2_link:
+                            a/wrist_3_link:
+                              a/flange:
+                                a/stereo_pair_base_link:
+                                  a/stereo_pair/cutting_tool:
+                                    {}
+                                  a/stereo_pair/left_frame:
+                                    a/stereo_pair/left_optical_frame:
+                                      a/stereo_pair_charuco_0:
+                                        {}
+                                a/tool0:
+                                  {}
+              a/planning_link:
+                {}
+            b/ur5_mount:
+              b/base_link:
+                b/base:
+                  b/tool0_controller:
+                    {}
+                b/base_link_inertia:
+                  b/shoulder_link:
+                    b/upper_arm_link:
+                      b/forearm_link:
+                        b/wrist_1_link:
+                          b/wrist_2_link:
+                            b/wrist_3_link:
+                              b/flange:
+                                b/stereo_pair_base_link:
+                                  b/stereo_pair/cutting_tool:
+                                    {}
+                                  b/stereo_pair/left_frame:
+                                    b/stereo_pair/left_optical_frame:
+                                      b/stereo_pair_charuco_0:
+                                        {}
+                                b/tool0:
+                                  {}
+              b/planning_link:
+                {}
+          ground:
+            a/stereo_pair_charuco:
+              {}
+            b/stereo_pair_charuco:
+              {}
+          wall_1:
+            {}
+          wall_2:
+            {}
       Update Interval: 0
-      Value: false
+      Value: true
     - Alpha: 1
       Class: rviz/RobotModel
       Collision Enabled: false
@@ -74,11 +224,6 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
         a/base_link_inertia:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        a/cables:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -160,11 +305,6 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        b/cables:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         b/flange:
           Alpha: 1
           Show Axes: false
@@ -233,11 +373,6 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        canopy:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: false
         frame:
           Alpha: 0.10000000149011612
           Show Axes: false
@@ -261,7 +396,7 @@ Visualization Manager:
       Name: RobotModel
       Robot Description: robot_description
       TF Prefix: ""
-      Update Interval: 0
+      Update Interval: 1
       Value: true
       Visual Enabled: true
     - Class: rviz/Camera
@@ -275,7 +410,10 @@ Visualization Manager:
       Unreliable: false
       Value: false
       Visibility:
+        "": true
         Grid: false
+        Internodes: true
+        Nodes: true
         RobotModel: true
         Side-A-PC: false
         Side-A-Path: false
@@ -284,13 +422,14 @@ Visualization Manager:
         Side-B-Path: false
         TF: true
         Value: true
+        VinePCD: true
       Zoom Factor: 1
     - Class: rviz/Marker
       Enabled: true
       Marker Topic: /a/path_marker
       Name: Side-A-Path
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
       Value: true
     - Alpha: 1
@@ -305,7 +444,7 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: RGB8
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Min Color: 0; 0; 0
@@ -320,7 +459,7 @@ Visualization Manager:
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
     - Class: rviz/Camera
       Enabled: false
       Image Rendering: background and overlay
@@ -332,7 +471,10 @@ Visualization Manager:
       Unreliable: false
       Value: false
       Visibility:
+        "": true
         Grid: false
+        Internodes: true
+        Nodes: true
         RobotModel: true
         Side-A-Camera: false
         Side-A-PC: false
@@ -341,14 +483,60 @@ Visualization Manager:
         Side-B-Path: false
         TF: true
         Value: true
+        VinePCD: true
       Zoom Factor: 1
     - Class: rviz/Marker
       Enabled: true
       Marker Topic: /b/path_marker
       Name: Side-B-Path
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
+      Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Min Color: 0; 0; 0
+      Name: Side-B-PC
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0010000000474974513
+      Style: Spheres
+      Topic: /b/stereo_pair/stereo/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /vine_decision_making_server/vine_connections
+      Name: Internodes
+      Namespaces:
+        vine_connections: true
+      Queue Size: 100
+      Value: true
+    - Class: rviz/InteractiveMarkers
+      Enable Transparency: true
+      Enabled: true
+      Name: Nodes
+      Show Axes: false
+      Show Descriptions: true
+      Show Visual Aids: false
+      Update Topic: /vine_decision_making_server/vine_nodes/update
       Value: true
     - Alpha: 1
       Autocompute Intensity Bounds: true
@@ -366,17 +554,25 @@ Visualization Manager:
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Min Color: 0; 0; 0
-      Name: Side-B-PC
+      Name: VinePCD
       Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.0010000000474974513
-      Style: Spheres
-      Topic: /b/stereo_pair/stereo/points
+      Size (m): 0.00039999998989515007
+      Style: Flat Squares
+      Topic: /vine_decision_making_server/vine_pcd
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /cut_points
+      Name: Marker
+      Namespaces:
+        {}
+      Queue Size: 100
       Value: true
   Enabled: true
   Global Options:
@@ -390,11 +586,14 @@ Visualization Manager:
       Hide Inactive Objects: true
     - Class: rviz/MoveCamera
     - Class: rviz/Select
+    - Class: rviz/PublishPoint
+      Single click: true
+      Topic: /vine_decision_making_server/add_manual_node
   Value: true
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 3.184522867202759
+      Distance: 1.0493450164794922
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -402,27 +601,27 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 0.14731666445732117
-        Y: -0.07179582118988037
-        Z: -1.5337909644586034e-06
+        X: 0.582899808883667
+        Y: -0.05219950154423714
+        Z: -5.652154868585058e-07
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7047964334487915
+      Pitch: 0.6997965574264526
       Target Frame: base_link
-      Yaw: 1.8536038398742676
+      Yaw: 3.098116874694824
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 1136
+  Height: 1016
   Help:
     collapsed: false
   Hide Left Dock: false
   Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000002a200000416fc020000000bfb000000100044006900730070006c006100790073010000003d00000416000000c900fffffffb0000001a0053006900640065002d0041002d00430061006d00650072006100000001e8000001210000001600fffffffb0000000800480065006c00700000000342000000bb0000006e00fffffffb0000000a0056006900650077007300000003b0000000b0000000a400fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000000000000000fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006700000002b40000019f0000000000000000fb0000000a0049006d0061006700650000000310000000cb0000000000000000fb0000001a0053006900640065002d0042002d00430061006d006500720061000000028f000001c40000001600fffffffb0000000a0049006d0061006700650000000311000000ca0000000000000000000004900000041600000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000100000000000001840000039efc020000000dfb000000100044006900730070006c006100790073010000003d0000039e000000c900fffffffb0000001a0053006900640065002d0041002d00430061006d00650072006100000001e8000001210000001600fffffffb0000000800480065006c00700000000342000000bb0000006e00fffffffb0000000a0056006900650077007300000003b0000000b0000000a400fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000000000000000fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006700000002b40000019f0000000000000000fb0000000a0049006d0061006700650000000310000000cb0000000000000000fb0000001a0053006900640065002d0042002d00430061006d006500720061000000028f000001c40000001600fffffffb0000000a0049006d0061006700650000000311000000ca0000000000000000fb0000001600720069006700680074005f0049006d0061006700650000000000ffffffff0000000000000000fb00000014006c006500660074005f0049006d0061006700650000000000ffffffff0000000000000000000005ae0000039e00000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Side-A-Camera:
     collapsed: false
   Side-B-Camera:
